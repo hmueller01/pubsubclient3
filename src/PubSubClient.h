@@ -139,9 +139,9 @@ private:
    bool pingOutstanding;
    MQTT_CALLBACK_SIGNATURE;
    uint32_t readPacket(uint8_t*);
-   boolean readByte(uint8_t * result);
-   boolean readByte(uint8_t * result, uint16_t * index);
-   boolean write(uint8_t header, uint8_t* buf, uint16_t length);
+   bool readByte(uint8_t * result);
+   bool readByte(uint8_t * result, uint16_t * index);
+   bool write(uint8_t header, uint8_t* buf, uint16_t length);
    uint16_t writeString(const char* string, uint8_t* buf, uint16_t pos);
    // Build up the header ready to send
    // Returns the size of the header
@@ -360,7 +360,7 @@ public:
     * @return true If the buffer was resized.
     * false If the buffer could not be resized.
     */
-   boolean setBufferSize(uint16_t size);
+   bool setBufferSize(uint16_t size);
 
    /**
     * @brief Gets the current size of the internal buffer.
@@ -374,7 +374,7 @@ public:
     * @return true If client succeeded in establishing a connection to the broker.
     * false If client failed to establish a connection to the broker.
     */
-   boolean connect(const char* id);
+   bool connect(const char* id);
 
    /**
     * @brief Connects the client.
@@ -384,7 +384,7 @@ public:
     * @return true If client succeeded in establishing a connection to the broker.
     * false If client failed to establish a connection to the broker.
     */
-   boolean connect(const char* id, const char* user, const char* pass);
+   bool connect(const char* id, const char* user, const char* pass);
 
    /**
     * @brief Connects the client.
@@ -395,7 +395,7 @@ public:
     * @return true If client succeeded in establishing a connection to the broker.
     * false If client failed to establish a connection to the broker.
     */
-   boolean connect(const char* id, const char* willTopic, uint8_t willQos, boolean willRetain, const char* willMessage);
+   bool connect(const char* id, const char* willTopic, uint8_t willQos, bool willRetain, const char* willMessage);
 
    /**
     * @brief Connects the client.
@@ -408,7 +408,7 @@ public:
     * @return true If client succeeded in establishing a connection to the broker.
     * false If client failed to establish a connection to the broker.
     */
-   boolean connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, boolean willRetain, const char* willMessage);
+   bool connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain, const char* willMessage);
 
    /**
     * @brief Connects the client.
@@ -422,7 +422,7 @@ public:
     * @return true If client succeeded in establishing a connection to the broker.
     * false If client failed to establish a connection to the broker.
     */
-   boolean connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, boolean willRetain, const char* willMessage, boolean cleanSession);
+   bool connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain, const char* willMessage, bool cleanSession);
 
    /**
     * @brief Disconnects the client.
@@ -436,7 +436,7 @@ public:
     * @return true If the publish succeeded.
     * false If the publish failed, either connection lost or message too large.
     */
-   boolean publish(const char* topic, const char* payload);
+   bool publish(const char* topic, const char* payload);
 
    /**
     * @brief Publishes a message to the specified topic.
@@ -446,7 +446,7 @@ public:
     * @return true If the publish succeeded.
     * false If the publish failed, either connection lost or message too large.
     */
-   boolean publish(const char* topic, const char* payload, boolean retained);
+   bool publish(const char* topic, const char* payload, bool retained);
 
    /**
     * @brief Publishes a message to the specified topic.
@@ -456,7 +456,7 @@ public:
     * @return true If the publish succeeded.
     * false If the publish failed, either connection lost or message too large.
     */
-   boolean publish(const char* topic, const uint8_t * payload, unsigned int plength);
+   bool publish(const char* topic, const uint8_t * payload, unsigned int plength);
 
    /**
     * @brief Publishes a message to the specified topic.
@@ -467,7 +467,7 @@ public:
     * @return true If the publish succeeded.
     * false If the publish failed, either connection lost or message too large.
     */
-   boolean publish(const char* topic, const uint8_t * payload, unsigned int plength, boolean retained);
+   bool publish(const char* topic, const uint8_t * payload, unsigned int plength, bool retained);
 
    /**
     * @brief Publishes a message stored in PROGMEM to the specified topic.
@@ -477,7 +477,7 @@ public:
     * @return true If the publish succeeded.
     * false If the publish failed, either connection lost or message too large.
     */
-   boolean publish_P(const char* topic, const char* payload, boolean retained);
+   bool publish_P(const char* topic, const char* payload, bool retained);
 
    /**
     * @brief Publishes a message stored in PROGMEM to the specified topic.
@@ -488,7 +488,7 @@ public:
     * @return true If the publish succeeded.
     * false If the publish failed, either connection lost or message too large.
     */
-   boolean publish_P(const char* topic, const uint8_t * payload, unsigned int plength, boolean retained);
+   bool publish_P(const char* topic, const uint8_t * payload, unsigned int plength, bool retained);
 
    /**
     * @brief Start to publish a message.
@@ -504,7 +504,7 @@ public:
     * @return true If the publish succeeded.
     * false If the publish failed, either connection lost or message too large.
     */
-   boolean beginPublish(const char* topic, unsigned int plength, boolean retained);
+   bool beginPublish(const char* topic, unsigned int plength, bool retained);
 
    /**
     * @brief Finish sending a message that was started with a call to beginPublish.
@@ -534,7 +534,7 @@ public:
     * @return true If sending the subscribe succeeded.
     * false If sending the subscribe failed, either connection lost or message too large.
     */
-   boolean subscribe(const char* topic);
+   bool subscribe(const char* topic);
 
    /**
     * @brief Subscribes to messages published to the specified topic.
@@ -543,7 +543,7 @@ public:
     * @return true If sending the subscribe succeeded.
     * false If sending the subscribe failed, either connection lost or message too large.
     */
-   boolean subscribe(const char* topic, uint8_t qos);
+   bool subscribe(const char* topic, uint8_t qos);
 
    /**
     * @brief Unsubscribes from the specified topic.
@@ -551,21 +551,21 @@ public:
     * @return true If sending the unsubscribe succeeded.
     * false If sending the unsubscribe failed, either connection lost or message too large.
     */
-   boolean unsubscribe(const char* topic);
+   bool unsubscribe(const char* topic);
 
    /**
     * @brief This should be called regularly to allow the client to process incoming messages and maintain its connection to the server.
     * @return true If the client is still connected.
     * false If the client is no longer connected.
     */
-   boolean loop();
+   bool loop();
 
    /**
     * @brief Checks whether the client is connected to the server.
     * @return true If the client is connected.
     * false If the client is not connected.
     */
-   boolean connected();
+   bool connected();
 
    /**
     * @brief Returns the current state of the client.
