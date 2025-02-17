@@ -7,12 +7,12 @@ a server that supports MQTT.
 
 This is a fork of the repository [knolleary/pubsubclient v2.8](https://github.com/knolleary/pubsubclient/releases/tag/v2.8), which was last updated in May 20, 2020. There was an update approach in [#1045](https://github.com/knolleary/pubsubclient/issues/1045), but it's also stale.
 
-I tried lot's of different other MQTT libs, but they need more resources than PubSubClient or are not maintained as well.
+I tried lot's of different other MQTT libs, but they need more resources than PubSubClient or lacking maintenance as well:
 
-https://github.com/256dpi/arduino-mqtt
-https://github.com/hideakitai/MQTTPubSubClient
-https://github.com/bertmelis/espMqttClient
-https://github.com/arduino-libraries/ArduinoMqttClient
+ - https://github.com/256dpi/arduino-mqtt
+ - https://github.com/hideakitai/MQTTPubSubClient
+ - https://github.com/bertmelis/espMqttClient
+ - https://github.com/arduino-libraries/ArduinoMqttClient
 
 Since there was no progress I decided to merge the most important PRs manually and publish a new major version. I also renamed to PubSubClient3 to have a similar but different name of the library.
 
