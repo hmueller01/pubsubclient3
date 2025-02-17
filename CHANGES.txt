@@ -1,3 +1,16 @@
+3.0
+   * Maintenance taken over by Holger Mueller
+   * Adds in-source documentation to PubSubClient header.
+   * Add flag for enabling debugging of library
+   * Always use PubSubClient() constructor
+   * Use bool instead of boolean
+   * Add yield() calls in connect() and write() to avoid wdt resets if either blocks for too long
+   * Fix bug in publish_P which will always treat the payload length as 0 when used with PROGMEM
+   * Fix increase `bytesToWrite` to uint16_t to prevent overflow
+   * Remove compiler warning `expectedLength` should be unsigned
+   * Extend usage of std::function on all the platforms where it's available
+   * Fix for keep alive zero
+
 2.8
    * Add setBufferSize() to override MQTT_MAX_PACKET_SIZE
    * Add setKeepAlive() to override MQTT_KEEPALIVE
@@ -52,9 +65,11 @@
     * API change: Length parameter in message callback changed
        from int to unsigned int
     * Various internal tidy-ups around types
+
 1.7
     * Improved keepalive handling
     * Updated to the Arduino-1.0 API
+
 1.6
     * Added the ability to publish a retained message
 
@@ -71,12 +86,10 @@
 1.2
     * Fixed compile error when used with arduino-0016 or later
 
-
 1.1
     * Reduced size of library
     * Added support for Will messages
     * Clarified licensing - see LICENSE.txt
-
 
 1.0
     * Only Quality of Service (QOS) 0 messaging is supported
