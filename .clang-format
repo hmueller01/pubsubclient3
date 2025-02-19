@@ -1,0 +1,7 @@
+BasedOnStyle: Google
+Language: Cpp
+IndentWidth: 4
+ColumnLimit: 155
+AllowShortFunctionsOnASingleLine: Empty
+AlignConsecutiveMacros: Consecutive
+LineEnding: LF
