@@ -6,7 +6,7 @@ shopt -s globstar
 # Make sure we are inside the github workspace
 cd $GITHUB_WORKSPACE
 # Install clang-format
-sudo apt-get -y install clang-format-20
+sudo apt-get -y install clang-format-11
 # Check clang-format output
 for f in **/*.{h,c,hpp,cpp,ino} ; do
     if [ -f "$f" ]; then
