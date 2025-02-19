@@ -1,7 +1,8 @@
 /*
- PubSubClient.h - A simple client for MQTT.
-  Nick O'Leary
+  PubSubClient.h - A simple client for MQTT.
+  Nick O'Leary, Holger Mueller
   http://knolleary.net
+  https://github.com/hmueller01/pubsubclient3
 */
 
 #ifndef PubSubClient_h
@@ -27,7 +28,7 @@
 
 // MQTT_MAX_POSSIBLE_PACKET_SIZE : Maximum packet size defined by MQTT protocol.
 #ifndef MQTT_MAX_POSSIBLE_PACKET_SIZE
-#define MQTT_MAX_POSSIBLE_PACKET_SIZE 268435455 
+#define MQTT_MAX_POSSIBLE_PACKET_SIZE 268435455
 #endif
 
 /**
