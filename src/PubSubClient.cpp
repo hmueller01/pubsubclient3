@@ -7,8 +7,6 @@
 
 #include "PubSubClient.h"
 
-#include "Arduino.h"
-
 PubSubClient::PubSubClient() {
     this->_state = MQTT_DISCONNECTED;
     this->_client = NULL;
@@ -112,11 +110,13 @@ bool PubSubClient::connect(const char* id, const char* willTopic, uint8_t willQo
     return connect(id, NULL, NULL, willTopic, willQos, willRetain, willMessage, 1);
 }
 
-bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain, const char* willMessage) {
+bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
+                           const char* willMessage) {
     return connect(id, user, pass, willTopic, willQos, willRetain, willMessage, 1);
 }
 
-bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain, const char* willMessage, bool cleanSession) {
+bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
+                           const char* willMessage, bool cleanSession) {
     if (!connected()) {
         int result = 0;
 
