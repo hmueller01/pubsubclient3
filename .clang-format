@@ -4,4 +4,5 @@ IndentWidth: 4
 ColumnLimit: 155
 AllowShortFunctionsOnASingleLine: Empty
 AlignConsecutiveMacros: Consecutive
+SkipMacroDefinitionBody: true
 LineEnding: LF
