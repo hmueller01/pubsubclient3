@@ -7,13 +7,9 @@ shopt -s globstar
 cd $GITHUB_WORKSPACE
 # Install clang-format (if not already installed)
 #command -v clang-format >/dev/null 2>&1 || sudo apt-get -y install clang-format
-command -v clang-format || sudo apt-get -y install clang-format
-clang-format --version
-sudo apt-get update
-sudo apt-cache search clang-format
+# need Ubuntu clang-format version 19.1.1 (1ubuntu1~24.04.2)
+# default Ubuntu clang-format version 18.1.3 (1ubuntu1) is not working
 sudo apt-get -y install clang-format-19
-sudo dpkg-query -L clang-format-19
-clang-format-19 --version
 # Check clang-format output
 for f in **/*.{h,c,hpp,cpp,ino} ; do
     if [ -f "$f" ] && [[ "$f" != "tests/"* ]]; then
@@ -23,5 +19,3 @@ for f in **/*.{h,c,hpp,cpp,ino} ; do
         echo -e "################################################################\n"
     fi
 done
-
-#Ubuntu clang-format version 18.1.3 (1ubuntu1)
