@@ -13,16 +13,15 @@ sudo apt-get update
 sudo apt-cache search clang-format
 sudo apt-get -y install clang-format-19
 sudo dpkg-query -L clang-format-19
-clang-format --version
+clang-format-19 --version
 # Check clang-format output
 for f in **/*.{h,c,hpp,cpp,ino} ; do
     if [ -f "$f" ] && [[ "$f" != "tests/"* ]]; then
         echo "################################################################"
         echo "Checking file ${f}"
-        diff $f <(clang-format -assume-filename=main.cpp $f) 1>&2
+        diff $f <(clang-format-19 -assume-filename=main.cpp $f) 1>&2
         echo -e "################################################################\n"
     fi
 done
 
-Ubuntu clang-format version 18.1.3 (1ubuntu1)
-Ubuntu clang-format version 18.1.3 (1ubuntu1)
+#Ubuntu clang-format version 18.1.3 (1ubuntu1)
