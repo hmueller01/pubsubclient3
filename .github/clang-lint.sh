@@ -9,6 +9,8 @@ cd $GITHUB_WORKSPACE
 #command -v clang-format >/dev/null 2>&1 || sudo apt-get -y install clang-format
 command -v clang-format || sudo apt-get -y install clang-format
 clang-format --version
+sudo apt-get update
+sudo apt-cache search clang-format
 sudo apt-get -y install clang-format
 clang-format --version
 # Check clang-format output
@@ -20,3 +22,6 @@ for f in **/*.{h,c,hpp,cpp,ino} ; do
         echo -e "################################################################\n"
     fi
 done
+
+Ubuntu clang-format version 18.1.3 (1ubuntu1)
+Ubuntu clang-format version 18.1.3 (1ubuntu1)
