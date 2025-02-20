@@ -8,6 +8,9 @@ cd $GITHUB_WORKSPACE
 # Install clang-format (if not already installed)
 #command -v clang-format >/dev/null 2>&1 || sudo apt-get -y install clang-format
 command -v clang-format || sudo apt-get -y install clang-format
+clang-format --version
+sudo apt-get -y install clang-format
+clang-format --version
 # Check clang-format output
 for f in **/*.{h,c,hpp,cpp,ino} ; do
     if [ -f "$f" ] && [[ "$f" != "tests/"* ]]; then
