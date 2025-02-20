@@ -4,11 +4,8 @@ import time
 import paho.mqtt.client as mqttclinet
 
 
-
-
-
 class mqtt_basic(unittest.TestCase):
-    def on_message(self,client , userdata , message : mqttclinet.MQTTMessage):
+    def on_message(self, client, userdata, message: mqttclinet.MQTTMessage):
         self.message_queue.append(message)
     message_queue = []
 
