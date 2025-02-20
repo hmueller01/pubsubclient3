@@ -19,6 +19,7 @@ extern "C"{
 }
 
 #define PROGMEM
+#define strnlen_P strnlen
 #define pgm_read_byte_near(x) *(x)
 
 #define yield(x) {}

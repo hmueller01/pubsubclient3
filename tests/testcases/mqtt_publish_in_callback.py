@@ -1,22 +1,22 @@
 import unittest
 import settings
 import time
-import mosquitto
+import paho.mqtt.client as mqttclinet
 
 
-def on_message(mosq, obj, msg):
-    obj.message_queue.append(msg)
 
 
 class mqtt_publish_in_callback(unittest.TestCase):
+    def on_message(self,client , userdata , message : mqttclinet.MQTTMessage):
+        self.message_queue.append(message)
 
     message_queue = []
 
     @classmethod
     def setUpClass(self):
-        self.client = mosquitto.Mosquitto("pubsubclient_ut", clean_session=True, obj=self)
+        self.client = mqttclinet.Client("pubsubclient_ut", clean_session=True)
         self.client.connect(settings.server_ip)
-        self.client.on_message = on_message
+        self.client.on_message = self.on_message
         self.client.subscribe("outTopic", 0)
 
     @classmethod

@@ -21,7 +21,7 @@ class Workspace(object):
         self.examples_dir = os.path.join(self.root_dir, "../PubSubClient/examples")
         self.examples = []
         self.tests = []
-        if not os.path.isdir("../PubSubClient"):
+        if not os.path.isdir("../src"):
             raise Exception("Cannot find PubSubClient library")
         try:
             return __import__('ino')
