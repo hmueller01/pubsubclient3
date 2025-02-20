@@ -1,3 +1,9 @@
+3.0.1
+   * Reformatted code using Google sytle (see .clang-format)
+   * Added .editorconfig
+   * Added github workflow to check code sytle on push and pull request
+   * Fix-tests: missing def for strlen_P & Python libs
+
 3.0
    * Maintenance taken over by Holger Mueller
    * Adds in-source documentation to PubSubClient header.
