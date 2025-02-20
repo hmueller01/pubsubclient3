@@ -7,7 +7,6 @@ shopt -s globstar
 cd $GITHUB_WORKSPACE
 # Install clang-format (if not already installed)
 command -v clang-format >/dev/null 2>&1 || sudo apt-get -y install clang-format
-set +e
 # Check clang-format output
 for f in **/*.{h,c,hpp,cpp,ino} ; do
     if [ -f "$f" ] && [[ "$f" != "tests/"* ]]; then
