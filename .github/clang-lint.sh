@@ -11,7 +11,7 @@ command -v clang-format || sudo apt-get -y install clang-format
 clang-format --version
 sudo apt-get update
 sudo apt-cache search clang-format
-sudo apt-get -y install clang-format
+sudo apt-get -y install clang-format-19
 clang-format --version
 # Check clang-format output
 for f in **/*.{h,c,hpp,cpp,ino} ; do
