@@ -17,7 +17,7 @@ ${OUT_PATH}/%: ${SRC_PATH}/%.cpp ${PSC_FILE} ${SHIM_FILES}
 clean:
 	@rm -rf ${OUT_PATH}
 
-test:
+test: all
 	@bin/connect_spec
 	@bin/publish_spec
 	@bin/receive_spec
