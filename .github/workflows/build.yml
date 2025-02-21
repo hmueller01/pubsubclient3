@@ -19,6 +19,11 @@ jobs:
     - name: Build tests
       # Build / Execute tests defined in tests folder
       working-directory: ${{ github.workspace }}/tests
+      run: make
+
+    - name: Execute tests
+      # Build / Execute tests defined in tests folder
+      working-directory: ${{ github.workspace }}/tests
       run: make test
 
 #    - name: Build on Arduino CLI
