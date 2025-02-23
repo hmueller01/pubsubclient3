@@ -105,7 +105,7 @@
 // Maximum size of fixed header and variable length size header
 #define MQTT_MAX_HEADER_SIZE 5
 
-#if __has_include(<functional>)
+#if __has_include(<functional>) && !defined(NOFUNCTIONAL)
 #include <functional>
 /**
  * @brief Define the signature required by any callback function.
