@@ -13,15 +13,16 @@ export PATH=$PATH:$GITHUB_WORKSPACE/bin
 curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
 arduino-cli config init
 arduino-cli core update-index
+arduino-cli core search
 # Install Arduino cores
 #arduino-cli core install arduino:avr
-arduino-cli core install esp8266com:esp8266
+arduino-cli core install esp8266:esp8266
 arduino-cli core install esp32:esp32
 arduino-cli board listall
 # Link the project to the Arduino library
 ln -s $GITHUB_WORKSPACE $HOME/Arduino/libraries/CI_Test_Library
 # Compile all *.ino files for the Arduino Uno
 for f in **/*.ino ; do
-    arduino-cli compile -b esp8266com:esp8266:generic $f
+    arduino-cli compile -b esp8266:esp8266:generic $f
     arduino-cli compile -b esp32:esp32:esp32 $f
 done
