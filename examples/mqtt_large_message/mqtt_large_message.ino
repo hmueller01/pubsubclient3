@@ -23,7 +23,14 @@
   - Select your ESP8266 in "Tools -> Board"
 */
 
+#ifdef ESP8266
 #include <ESP8266WiFi.h>
+#elif defined(ESP32)
+#include <WiFi.h>
+#define BUILTIN_LED A0
+#else
+#error Platform not supported.
+#endif
 #include <PubSubClient.h>
 
 // Update these with values suitable for your network.
