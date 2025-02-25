@@ -27,5 +27,5 @@ jobs:
       #run: make test
       run: bin/connect_spec && bin/publish_spec && bin/receive_spec && bin/subscribe_spec
 
-#    - name: Build on Arduino CLI
-#      run: bash ci/build-arduino.sh
+    - name: Build on Arduino CLI
+      run: bash .github/build-arduino.sh

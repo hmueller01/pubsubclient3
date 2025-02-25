@@ -13,7 +13,7 @@
 */
 
 #include <Ethernet.h>
-#include <PubSubCli‚ent.h>
+#include <PubSubClient.h>
 #include <SPI.h>
 
 // Update these with values suitable for your network.
