@@ -21,8 +21,10 @@
 #ifdef ESP8266
 #include <ESP8266WiFi.h>
 #elif defined(ESP32)
+#include <esp_random.h>
 #include <WiFi.h>
 #define BUILTIN_LED A0
+#define RANDOM_REG32 esp_random()
 #else
 #error Platform not supported.
 #endif
