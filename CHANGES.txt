@@ -5,6 +5,8 @@
 3.0.2
    * Added github workflow to execute tests
    * Added github workflow to compile examples using arduino-cli
+   * Examples: Use a better source of random #9
+   * Deactivate use of std::function on demand #7
 
 3.0.1
    * Reformatted code using Google sytle (see .clang-format)

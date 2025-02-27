@@ -6,7 +6,7 @@
         "type": "git",
         "url": "https://github.com/hmueller01/pubsubclient3.git"
     },
-    "version": "3.0.1",
+    "version": "3.0.2",
     "license": "MIT",
     "exclude": "tests",
     "examples": "examples/*/*.ino",
