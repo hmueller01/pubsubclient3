@@ -1,5 +1,5 @@
 /*
- Long message ESP8266 MQTT example
+ Long message ESP8266 / ESP32 MQTT example
 
  This sketch demonstrates sending arbitrarily large messages in combination
  with the ESP8266 board/library.
@@ -27,7 +27,9 @@
 #include <ESP8266WiFi.h>
 #elif defined(ESP32)
 #include <WiFi.h>
+#include <esp_random.h>
 #define BUILTIN_LED A0
+#define RANDOM_REG32 esp_random()
 #else
 #error Platform not supported.
 #endif
@@ -59,7 +61,7 @@ void setup_wifi() {
         Serial.print(".");
     }
 
-    randomSeed(micros());
+    randomSeed(RANDOM_REG32);
 
     Serial.println("");
     Serial.println("WiFi connected");
