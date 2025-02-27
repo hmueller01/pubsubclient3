@@ -11,6 +11,8 @@ PubSubClient::PubSubClient() {
     this->_state = MQTT_DISCONNECTED;
     this->_client = NULL;
     this->stream = NULL;
+    this->domain = NULL;
+    this->port = 0;
     setCallback(NULL);
     this->bufferSize = 0;
     setBufferSize(MQTT_MAX_PACKET_SIZE);
@@ -95,6 +97,7 @@ PubSubClient::PubSubClient(const char* domain, uint16_t port, MQTT_CALLBACK_SIGN
 }
 
 PubSubClient::~PubSubClient() {
+    free(this->domain);
     free(this->buffer);
 }
 
@@ -122,8 +125,8 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
 
         if (_client->connected()) {
             result = 1;
-        } else {
-            if (domain != NULL) {
+        } else if (this->port != 0) {
+            if (this->domain != NULL) {
                 result = _client->connect(this->domain, this->port);
             } else {
                 result = _client->connect(this->ip, this->port);
@@ -654,13 +657,22 @@ PubSubClient& PubSubClient::setServer(uint8_t* ip, uint16_t port) {
 PubSubClient& PubSubClient::setServer(IPAddress ip, uint16_t port) {
     this->ip = ip;
     this->port = port;
+    free(this->domain);
     this->domain = NULL;
     return *this;
 }
 
 PubSubClient& PubSubClient::setServer(const char* domain, uint16_t port) {
-    this->domain = domain;
-    this->port = port;
+    char* newDomain = (char*)realloc(this->domain, strlen(domain) + 1);
+    if (newDomain != NULL) {
+        strcpy(newDomain, domain);
+        this->domain = newDomain;
+        this->port = port;
+    } else {
+        free(this->domain);
+        this->domain = NULL;
+        this->port = 0;
+    }
     return *this;
 }
 
