@@ -17,6 +17,5 @@ for f in **/*.{h,c,hpp,cpp,ino} ; do
         echo "################################################################"
         echo "Checking file ${f}"
         diff $f <(clang-format-19 -assume-filename=main.cpp $f) 1>&2
-        echo -e "################################################################\n"
     fi
 done
