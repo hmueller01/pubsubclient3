@@ -46,7 +46,7 @@ void setup() {
 
 void loop() {
     if (!client.connected()) {
-        long now = millis();
+        unsigned long now = millis();
         if (now - lastReconnectAttempt > 5000) {
             lastReconnectAttempt = now;
             // Attempt to reconnect
