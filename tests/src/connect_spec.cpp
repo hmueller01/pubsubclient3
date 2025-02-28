@@ -6,6 +6,25 @@
 
 byte server[] = {172, 16, 0, 2};
 
+// function declarations
+void callback(char* topic, uint8_t* payload, size_t length);
+int test_connect_fails_no_network();
+int test_connect_fails_on_no_response();
+int test_connect_properly_formatted();
+int test_connect_properly_formatted_hostname();
+int test_connect_fails_on_bad_rc();
+int test_connect_non_clean_session();
+int test_connect_accepts_username_password();
+int test_connect_accepts_username_no_password();
+int test_connect_accepts_username_blank_password();
+int test_connect_ignores_password_no_username();
+int test_connect_with_will();
+int test_connect_with_will_username_password();
+int test_connect_disconnect_connect();
+int test_connect_custom_keepalive();
+int main();
+
+
 void callback(char* topic, uint8_t* payload, size_t length) {
     // handle message arrived
     topic[0];
@@ -164,6 +183,7 @@ int test_connect_accepts_username_no_password() {
 
     END_IT
 }
+
 int test_connect_accepts_username_blank_password() {
     IT("accepts a username and blank password");
     ShimClient shimClient;
