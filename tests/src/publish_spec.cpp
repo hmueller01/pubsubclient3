@@ -3,8 +3,20 @@
 #include "PubSubClient.h"
 #include "ShimClient.h"
 #include "trace.h"
+#include "publish_spec.h"
 
 byte server[] = {172, 16, 0, 2};
+
+// function declarations
+void callback(char* topic, uint8_t* payload, size_t length);
+int test_publish();
+int test_publish_bytes();
+int test_publish_retained();
+int test_publish_retained_2();
+int test_publish_not_connected();
+int test_publish_too_long();
+int test_publish_P();
+
 
 void callback(char* topic, uint8_t* payload, size_t length) {
     // handle message arrived

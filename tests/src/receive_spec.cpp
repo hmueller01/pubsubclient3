@@ -17,6 +17,18 @@ char lastTopic[1024];
 char lastPayload[1024];
 size_t lastLength;
 
+// function declarations
+void callback(char* topic, uint8_t* payload, size_t length);
+int test_receive_callback();
+int test_receive_stream();
+int test_receive_max_sized_message();
+int test_drop_invalid_remaining_length_message();
+int test_receive_oversized_message();
+int test_resize_buffer();
+int test_receive_oversized_stream_message();
+int test_receive_qos1();
+
+
 void reset_callback() {
     callback_called = false;
     lastTopic[0] = '\0';

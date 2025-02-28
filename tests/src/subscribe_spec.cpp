@@ -6,6 +6,17 @@
 
 byte server[] = {172, 16, 0, 2};
 
+// function declarations
+void callback(char* topic, uint8_t* payload, size_t length);
+int test_subscribe_no_qos();
+int test_subscribe_qos_1();
+int test_subscribe_not_connected();
+int test_subscribe_invalid_qos();
+int test_subscribe_too_long();
+int test_unsubscribe();
+int test_unsubscribe_not_connected();
+
+
 void callback(char* topic, uint8_t* payload, size_t length) {
     // handle message arrived
     topic[0];
