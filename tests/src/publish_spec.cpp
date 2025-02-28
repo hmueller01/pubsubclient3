@@ -3,7 +3,6 @@
 #include "PubSubClient.h"
 #include "ShimClient.h"
 #include "trace.h"
-#include "publish_spec.h"
 
 byte server[] = {172, 16, 0, 2};
 

@@ -22,7 +22,6 @@ int test_connect_with_will();
 int test_connect_with_will_username_password();
 int test_connect_disconnect_connect();
 int test_connect_custom_keepalive();
-int main();
 
 
 void callback(char* topic, uint8_t* payload, size_t length) {
