@@ -19,6 +19,7 @@ size_t lastLength;
 
 // function declarations
 void callback(char* topic, uint8_t* payload, size_t length);
+void reset_callback();
 int test_receive_callback();
 int test_receive_stream();
 int test_receive_max_sized_message();
