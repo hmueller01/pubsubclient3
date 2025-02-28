@@ -29,7 +29,6 @@ int test_resize_buffer();
 int test_receive_oversized_stream_message();
 int test_receive_qos1();
 
-
 void reset_callback() {
     callback_called = false;
     lastTopic[0] = '\0';

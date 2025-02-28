@@ -16,7 +16,6 @@ int test_subscribe_too_long();
 int test_unsubscribe();
 int test_unsubscribe_not_connected();
 
-
 void callback(char* topic, uint8_t* payload, size_t length) {
     // handle message arrived
     topic[0];

@@ -16,7 +16,6 @@ int test_publish_not_connected();
 int test_publish_too_long();
 int test_publish_P();
 
-
 void callback(char* topic, uint8_t* payload, size_t length) {
     // handle message arrived
     topic[0];
