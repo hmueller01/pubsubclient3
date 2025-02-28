@@ -1,4 +1,5 @@
 #include "Buffer.h"
+
 #include "Arduino.h"
 
 Buffer::Buffer() {
@@ -9,7 +10,7 @@ Buffer::Buffer() {
 Buffer::Buffer(uint8_t* buf, size_t size) {
     this->pos = 0;
     this->length = 0;
-    this->add(buf,size);
+    this->add(buf, size);
 }
 bool Buffer::available() {
     return this->pos < this->length;
@@ -28,7 +29,7 @@ void Buffer::reset() {
 
 void Buffer::add(uint8_t* buf, size_t size) {
     uint16_t i = 0;
-    for (;i<size;i++) {
+    for (; i < size; i++) {
         this->buffer[this->length++] = buf[i];
     }
 }
