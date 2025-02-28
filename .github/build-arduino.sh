@@ -29,11 +29,11 @@ ln -s $GITHUB_WORKSPACE $HOME/Arduino/libraries/CI_Test_Library
 
 # Compile all *.ino files for the Arduino
 for f in **/*.ino ; do
-    #if [[ "$f" != *"mqtt_stream.ino" ]]; then
+    if [[ "$f" != *{mqtt_esp8266,mqtt_large_message}".ino" ]]; then
         echo "################################################################"
         echo "Arduino Uno compiling file ${f}"
         arduino-cli compile -b arduino:avr:uno $f
-    #fi
+    fi
 done
 
 # Compile all *.ino files for the ESP32
