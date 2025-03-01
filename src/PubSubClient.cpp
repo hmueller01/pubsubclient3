@@ -192,7 +192,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
             while (!_client->available()) {
                 yield();
                 unsigned long t = millis();
-                if (t - lastInActivity >= ((unsigned long)this->socketTimeout * 1000UL)) {
+                if (t - lastInActivity >= static_cast<unsigned long>(this->socketTimeout * 1000UL)) {
                     DEBUG_PSC_PRINTF("connect aborting due to timeout\n");
                     _state = MQTT_CONNECTION_TIMEOUT;
                     _client->stop();
@@ -228,7 +228,7 @@ bool PubSubClient::readByte(uint8_t* result) {
     while (!_client->available()) {
         yield();
         unsigned long currentMillis = millis();
-        if (currentMillis - previousMillis >= ((unsigned long)this->socketTimeout * 1000)) {
+        if (currentMillis - previousMillis >= static_cast<unsigned long>(this->socketTimeout * 1000UL)) {
             return false;
         }
     }
@@ -500,7 +500,6 @@ size_t PubSubClient::buildHeader(uint8_t header, uint8_t* buf, size_t length) {
     uint8_t lenBuf[4];
     uint8_t llen = 0;
     uint8_t digit;
-    uint8_t pos = 0;
     size_t len = length;
     do {
         digit = len & 127;  // digit = len % 128
@@ -508,9 +507,8 @@ size_t PubSubClient::buildHeader(uint8_t header, uint8_t* buf, size_t length) {
         if (len > 0) {
             digit |= 0x80;
         }
-        lenBuf[pos++] = digit;
-        llen++;
-    } while (len > 0 && pos < 4);
+        lenBuf[llen++] = digit;
+    } while (len > 0 && llen < 4);
 
     if (len > 0) {
         DEBUG_PSC_PRINTF("length too big %u, left %u, should be 0\r\n", length, len);
@@ -616,7 +614,7 @@ void PubSubClient::disconnect() {
 
 size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos) {
     const char* idp = string;
-    size_t i = 0;
+    uint16_t i = 0;
     pos += 2;
     while (*idp) {
         buf[pos++] = (uint8_t)*idp++;
