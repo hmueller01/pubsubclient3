@@ -17,7 +17,7 @@ int bddtest_summary();
 
 #define IS_TRUE(x) TEST(x)
 #define IS_FALSE(x) TEST(!(x))
-#define IS_EQUAL(x,y) TEST(x==y)
-#define IS_NOT_EQUAL(x,y) TEST(x!=y)
+#define IS_EQUAL(x, y) TEST(x==y)
+#define IS_NOT_EQUAL(x, y) TEST(x!=y)
 
 #endif

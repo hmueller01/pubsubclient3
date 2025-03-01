@@ -1,7 +1,10 @@
 #include "Stream.h"
-#include "trace.h"
-#include <iostream>
+
 #include <Arduino.h>
+
+#include <iostream>
+
+#include "trace.h"
 
 Stream::Stream() {
     this->expectBuffer = new Buffer();
@@ -9,7 +12,7 @@ Stream::Stream() {
     this->_written = 0;
 }
 
-size_t Stream::write(uint8_t b)  {
+size_t Stream::write(uint8_t b) {
     this->_written++;
     TRACE(std::hex << (unsigned int)b);
     if (this->expectBuffer->available()) {
@@ -21,17 +24,16 @@ size_t Stream::write(uint8_t b)  {
     } else {
         this->_error = true;
     }
-    TRACE("\n"<< std::dec);
+    TRACE("\n" << std::dec);
     return 1;
 }
-
 
 bool Stream::error() {
     return this->_error;
 }
 
 void Stream::expect(uint8_t *buf, size_t size) {
-    this->expectBuffer->add(buf,size);
+    this->expectBuffer->add(buf, size);
 }
 
 uint16_t Stream::length() {

@@ -1,9 +1,11 @@
 #include "BDDTest.h"
-#include "trace.h"
-#include <sstream>
+
 #include <iostream>
-#include <string>
 #include <list>
+#include <sstream>
+#include <string>
+
+#include "trace.h"
 
 int testCount = 0;
 int testPasses = 0;
@@ -19,20 +21,20 @@ int bddtest_test(const char* file, int line, const char* assertion, int result) 
     if (!result) {
         LOG("✗\n");
         std::ostringstream os;
-        os << "   ! "<<testDescription<<"\n      " <<file << ":" <<line<<" : "<<assertion<<" ["<<result<<"]";
+        os << "   ! " << testDescription << "\n      " << file << ":" << line << " : " << assertion << " [" << result << "]";
         failureList.push_back(os.str());
     }
     return result;
 }
 
 void bddtest_start(const char* description) {
-    LOG(" - "<<description<<" ");
+    LOG(" - " << description << " ");
     testDescription = description;
-    testCount ++;
+    testCount++;
 }
 void bddtest_end() {
     LOG("✓\n");
-    testPasses ++;
+    testPasses++;
 }
 
 int bddtest_summary() {
