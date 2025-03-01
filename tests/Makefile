@@ -9,7 +9,7 @@ CC=g++
 CFLAGS=-std=c++11 -I${SRC_PATH}/lib -I../src
 CFLAGS+=-pedantic -Werror -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2
 CFLAGS+=-Winit-self -Wmissing-declarations -Wmissing-include-dirs -Woverloaded-virtual -Wredundant-decls
-CFLAGS+=-Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused
+CFLAGS+=-Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wnull-dereference
 
 all: $(TEST_BIN)
 
