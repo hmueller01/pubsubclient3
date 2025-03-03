@@ -1,21 +1,21 @@
 #ifndef Arduino_h
 #define Arduino_h
 
+#include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
+
 #include "Print.h"
 
+extern "C" {
+typedef uint8_t byte;
+typedef uint8_t boolean;
 
-extern "C"{
-    typedef uint8_t byte ;
-    typedef uint8_t boolean ;
-
-    /* sketch */
-    extern void setup( void ) ;
-    extern void loop( void ) ;
-    uint32_t millis( void );
+/* sketch */
+extern void setup(void);
+extern void loop(void);
+unsigned long millis(void);
 }
 
 #define PROGMEM
@@ -24,4 +24,4 @@ extern "C"{
 
 #define yield(x) {}
 
-#endif // Arduino_h
+#endif  // Arduino_h

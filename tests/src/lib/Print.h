@@ -21,8 +21,8 @@
 #define Print_h
 
 class Print {
-    public:
-        virtual size_t write(uint8_t) = 0;
+   public:
+    virtual size_t write(uint8_t) = 0;
 };
 
 #endif
