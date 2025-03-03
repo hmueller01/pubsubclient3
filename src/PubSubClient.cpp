@@ -189,6 +189,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
             write(MQTTCONNECT, this->buffer, length - MQTT_MAX_HEADER_SIZE);
 
             lastInActivity = lastOutActivity = millis();
+            pingOutstanding = false;
 
             while (!_client->available()) {
                 yield();
@@ -206,7 +207,6 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
             if (len == 4) {
                 if (buffer[3] == 0) {
                     lastInActivity = millis();
-                    pingOutstanding = false;
                     _state = MQTT_CONNECTED;
                     return true;
                 } else {
@@ -318,14 +318,16 @@ bool PubSubClient::loop() {
                 this->_state = MQTT_CONNECTION_TIMEOUT;
                 DEBUG_PSC_PRINTF("loop aborting due to timeout\n");
                 _client->stop();
+                pingOutstanding = false;
                 return false;
             } else {
                 this->buffer[0] = MQTTPINGREQ;
                 this->buffer[1] = 0;
-                _client->write(this->buffer, 2);
-                lastOutActivity = t;
-                lastInActivity = t;
-                pingOutstanding = true;
+                if (_client->write(this->buffer, 2) != 0) {
+                    lastOutActivity = t;
+                    lastInActivity = t;
+                    pingOutstanding = true;
+                }
             }
         }
         if (_client->available()) {
@@ -353,10 +355,11 @@ bool PubSubClient::loop() {
                             this->buffer[1] = 2;
                             this->buffer[2] = (msgId >> 8);
                             this->buffer[3] = (msgId & 0xFF);
-                            _client->write(this->buffer, 4);
-                            lastOutActivity = t;
-
+                            if (_client->write(this->buffer, 4) != 0) {
+                                lastOutActivity = t;
+                            }
                         } else {
+                            // No msgId
                             payload = this->buffer + llen + 3 + tl;
                             callback(topic, payload, len - llen - 3 - tl);
                         }
@@ -364,7 +367,9 @@ bool PubSubClient::loop() {
                 } else if (type == MQTTPINGREQ) {
                     this->buffer[0] = MQTTPINGRESP;
                     this->buffer[1] = 0;
-                    _client->write(this->buffer, 2);
+                    if (_client->write(this->buffer, 2) != 0) {
+                        lastOutActivity = t;
+                    }
                 } else if (type == MQTTPINGRESP) {
                     pingOutstanding = false;
                 }
@@ -538,6 +543,9 @@ bool PubSubClient::write(uint8_t header, uint8_t* buf, uint16_t length) {
         result = (rc == bytesToWrite);
         bytesRemaining -= rc;
         writeBuf += rc;
+        if (rc != 0) {
+            lastOutActivity = millis();
+        }
     }
     return result;
 #else
@@ -611,6 +619,7 @@ void PubSubClient::disconnect() {
     DEBUG_PSC_PRINTF("disconnect called");
     _client->stop();
     lastInActivity = lastOutActivity = millis();
+    pingOutstanding = false;
 }
 
 uint16_t PubSubClient::writeString(const char* string, uint8_t* buf, uint16_t pos) {
