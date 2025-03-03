@@ -1,3 +1,7 @@
+3.1.0-prerelease
+   * Fix setServer(domain, ...) dangling string pointer #10
+   * Refactor different buffer length types to size_t #11
+
 3.0.2
    * Added github workflow to execute tests
    * Added github workflow to compile examples using arduino-cli
