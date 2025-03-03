@@ -1,6 +1,6 @@
 3.1.0
-   * Copy domain string to own buffer (prevent potential dangling string pointer)
-   * Connect to broker only if port != 0 (e.g. in case of incorrect PubSubClient initialization)
+   * Fix setServer(domain, ...) by copy domain string to own buffer (prevent potential dangling string pointer) #10
+   * Connect to broker only if port != 0 (e.g. in case of incorrect PubSubClient initialization) #10
 
 3.0.2
    * Added github workflow to execute tests
