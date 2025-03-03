@@ -1,4 +1,4 @@
-3.1.0-prerelease
+3.1.0
    * Fix setServer(domain, ...) by copy domain string to own buffer (prevent potential dangling string pointer) #10
    * Connect to broker only if port != 0 (e.g. in case of incorrect PubSubClient initialization) #10
    * Refactor different buffer length types to size_t #11
