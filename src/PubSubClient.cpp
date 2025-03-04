@@ -528,6 +528,7 @@ size_t PubSubClient::buildHeader(uint8_t header, uint8_t* buf, uint16_t length) 
 }
 
 bool PubSubClient::write(uint8_t header, uint8_t* buf, uint16_t length) {
+    bool result = true;
     uint16_t rc;
     uint8_t hlen = buildHeader(header, buf, length);
 
@@ -535,7 +536,6 @@ bool PubSubClient::write(uint8_t header, uint8_t* buf, uint16_t length) {
     uint8_t* writeBuf = buf + (MQTT_MAX_HEADER_SIZE - hlen);
     uint16_t bytesRemaining = length + hlen;  // Match the length type
     uint16_t bytesToWrite;
-    bool result = true;
     while ((bytesRemaining > 0) && result) {
         yield();
         bytesToWrite = (bytesRemaining > MQTT_MAX_TRANSFER_SIZE) ? MQTT_MAX_TRANSFER_SIZE : bytesRemaining;
@@ -547,14 +547,14 @@ bool PubSubClient::write(uint8_t header, uint8_t* buf, uint16_t length) {
             lastOutActivity = millis();
         }
     }
-    return result;
 #else
     rc = _client->write(buf + (MQTT_MAX_HEADER_SIZE - hlen), length + hlen);
-    if (rc == hlen + length) {
+    result = (rc == length + hlen);
+    if (result) {
         lastOutActivity = millis();
     }
-    return (rc == hlen + length);
 #endif
+    return result;
 }
 
 bool PubSubClient::subscribe(const char* topic) {
