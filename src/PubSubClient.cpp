@@ -323,7 +323,7 @@ bool PubSubClient::loop() {
             } else {
                 this->buffer[0] = MQTTPINGREQ;
                 this->buffer[1] = 0;
-                if (_client->write(this->buffer, 2) != 0) {
+                if (_client->write(this->buffer, 2) == 2) {
                     lastOutActivity = t;
                     lastInActivity = t;
                     pingOutstanding = true;
@@ -355,7 +355,7 @@ bool PubSubClient::loop() {
                             this->buffer[1] = 2;
                             this->buffer[2] = (msgId >> 8);
                             this->buffer[3] = (msgId & 0xFF);
-                            if (_client->write(this->buffer, 4) != 0) {
+                            if (_client->write(this->buffer, 4) == 4) {
                                 lastOutActivity = t;
                             }
                         } else {
@@ -367,7 +367,7 @@ bool PubSubClient::loop() {
                 } else if (type == MQTTPINGREQ) {
                     this->buffer[0] = MQTTPINGRESP;
                     this->buffer[1] = 0;
-                    if (_client->write(this->buffer, 2) != 0) {
+                    if (_client->write(this->buffer, 2) == 2) {
                         lastOutActivity = t;
                     }
                 } else if (type == MQTTPINGRESP) {
@@ -543,14 +543,16 @@ bool PubSubClient::write(uint8_t header, uint8_t* buf, uint16_t length) {
         result = (rc == bytesToWrite);
         bytesRemaining -= rc;
         writeBuf += rc;
-        if (rc != 0) {
+        if (result) {
             lastOutActivity = millis();
         }
     }
     return result;
 #else
     rc = _client->write(buf + (MQTT_MAX_HEADER_SIZE - hlen), length + hlen);
-    lastOutActivity = millis();
+    if (rc == hlen + length) {
+        lastOutActivity = millis();
+    }
     return (rc == hlen + length);
 #endif
 }
