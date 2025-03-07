@@ -663,7 +663,10 @@ PubSubClient& PubSubClient::setServer(IPAddress ip, uint16_t port) {
 }
 
 PubSubClient& PubSubClient::setServer(const char* domain, uint16_t port) {
-    char* newDomain = (char*)realloc(this->domain, strlen(domain) + 1);
+    char* newDomain = NULL;
+    if (domain != NULL) {
+        newDomain = (char*)realloc(this->domain, strlen(domain) + 1);
+    }
     if (newDomain != NULL) {
         strcpy(newDomain, domain);
         this->domain = newDomain;
