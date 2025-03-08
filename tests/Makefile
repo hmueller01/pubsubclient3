@@ -8,8 +8,8 @@ PSC_FILE=../src/PubSubClient.cpp
 CC=g++
 CFLAGS=-std=c++11 -I${SRC_PATH}/lib -I../src
 CFLAGS+=-pedantic -Werror -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2
-CFLAGS+=-Winit-self -Wmissing-declarations -Wmissing-include-dirs -Woverloaded-virtual -Wredundant-decls
-CFLAGS+=-Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wnull-dereference
+CFLAGS+=-Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wno-unused -Wnull-dereference -Woverloaded-virtual
+CFLAGS+=-Wredundant-decls -Wreorder -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef
 
 all: $(TEST_BIN)
 
