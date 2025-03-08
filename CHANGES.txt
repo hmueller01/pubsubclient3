@@ -2,6 +2,10 @@
    * Fix setServer(domain, ...) by copy domain string to own buffer (prevent potential dangling string pointer) #10
    * Connect to broker only if port != 0 (e.g. in case of incorrect PubSubClient initialization) #10
    * Refactor different buffer length types to size_t #11
+   * Added a bunch of warnings and -Werror to tests Makefile #11
+   * Reformatted tests code using Google sytle (see .clang-format) #11
+   * Fix keepalive handling, thanks to @uschnindler providing this to thingsboard #14
+   * Use initializer lists instead of assigning global members in constructor #15
 
 3.0.2
    * Added github workflow to execute tests
