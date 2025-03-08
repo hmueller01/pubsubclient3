@@ -9,14 +9,14 @@
 
 PubSubClient::PubSubClient()
     : _client(nullptr),
-      _state(MQTT_DISCONNECTED),
       bufferSize(0),
+      keepAlive(MQTT_KEEPALIVE),
+      socketTimeout(MQTT_SOCKET_TIMEOUT),
       callback(nullptr),
       domain(nullptr),
-      keepAlive(MQTT_KEEPALIVE),
       port(0),
-      socketTimeout(MQTT_SOCKET_TIMEOUT),
-      stream(nullptr) {
+      stream(nullptr),
+      _state(MQTT_DISCONNECTED) {
     setBufferSize(MQTT_MAX_PACKET_SIZE);
 }
 
