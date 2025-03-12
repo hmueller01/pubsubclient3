@@ -4,12 +4,12 @@
 #include "Arduino.h"
 
 class Buffer {
-private:
+   private:
     uint8_t buffer[2048];
     uint16_t pos;
     uint16_t length;
 
-public:
+   public:
     Buffer();
     Buffer(uint8_t* buf, size_t size);
 
