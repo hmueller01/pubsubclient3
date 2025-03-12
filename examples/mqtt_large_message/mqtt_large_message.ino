@@ -69,11 +69,11 @@ void setup_wifi() {
     Serial.println(WiFi.localIP());
 }
 
-void callback(char* topic, byte* payload, unsigned int length) {
+void callback(char* topic, uint8_t* payload, size_t length) {
     Serial.print("Message arrived [");
     Serial.print(topic);
     Serial.print("] ");
-    for (int i = 0; i < length; i++) {
+    for (size_t i = 0; i < length; i++) {
         Serial.print((char)payload[i]);
     }
     Serial.println();
@@ -90,8 +90,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
     if (bottleCount > 0) {
         // Work out how big our resulting message will be
-        int msgLen = 0;
-        for (int i = bottleCount; i > 0; i--) {
+        size_t msgLen = 0;
+        for (size_t i = bottleCount; i > 0; i--) {
             String numBottles(i);
             msgLen += 2 * numBottles.length();
             if (i == 1) {

@@ -21,11 +21,11 @@ IPAddress server(172, 16, 0, 2);
 
 SRAM sram(4, SRAM_1024);
 
-void callback(char* topic, byte* payload, unsigned int length) {
+void callback(char* topic, uint8_t* payload, size_t length) {
     sram.seek(1);
 
     // do something with the message
-    for (uint8_t i = 0; i < length; i++) {
+    for (size_t i = 0; i < length; i++) {
         Serial.write(sram.read());
     }
     Serial.println();
