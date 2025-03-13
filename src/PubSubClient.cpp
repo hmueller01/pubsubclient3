@@ -253,7 +253,7 @@ bool PubSubClient::readByte(uint8_t* result) {
 bool PubSubClient::readByte(uint8_t* result, size_t* index) {
     uint8_t* write_address = &(result[*index]);
     if (readByte(write_address)) {
-        (*index)++;;
+        (*index)++;
         return true;
     }
     return false;
