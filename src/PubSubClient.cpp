@@ -413,10 +413,7 @@ bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t ple
         }
 
         // Write the header
-        uint8_t header = MQTTPUBLISH;
-        if (retained) {
-            header |= 1;
-        }
+        uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
         return write(header, this->buffer, length - MQTT_MAX_HEADER_SIZE);
     }
     return false;
@@ -442,10 +439,7 @@ bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t p
 
     tlen = strnlen(topic, this->bufferSize);
 
-    header = MQTTPUBLISH;
-    if (retained) {
-        header |= 1;
-    }
+    header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
     this->buffer[pos++] = header;
     len = plength + 2 + tlen;
     do {
@@ -478,10 +472,7 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained
         // Send the header and variable length field
         size_t length = MQTT_MAX_HEADER_SIZE;
         length = writeString(topic, this->buffer, length);
-        uint8_t header = MQTTPUBLISH;
-        if (retained) {
-            header |= 1;
-        }
+        uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
         size_t hlen = buildHeader(header, this->buffer, plength + length - MQTT_MAX_HEADER_SIZE);
         size_t rc = _client->write(this->buffer + (MQTT_MAX_HEADER_SIZE - hlen), length - (MQTT_MAX_HEADER_SIZE - hlen));
         lastOutActivity = millis();
