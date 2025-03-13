@@ -82,6 +82,7 @@
 #define MQTT_CONNECT_BAD_CREDENTIALS 4
 #define MQTT_CONNECT_UNAUTHORIZED    5
 
+#define MQTTRETAINED    1        // Retained flag in the header
 #define MQTTCONNECT     1 << 4   // Client request to connect to Server
 #define MQTTCONNACK     2 << 4   // Connect Acknowledgment
 #define MQTTPUBLISH     3 << 4   // Publish message
@@ -96,7 +97,7 @@
 #define MQTTPINGREQ     12 << 4  // PING Request
 #define MQTTPINGRESP    13 << 4  // PING Response
 #define MQTTDISCONNECT  14 << 4  // Client is Disconnecting
-#define MQTTReserved    15 << 4  // Reserved
+#define MQTTRESERVED    15 << 4  // Reserved
 
 #define MQTTQOS0 (0 << 1)
 #define MQTTQOS1 (1 << 1)
@@ -105,7 +106,7 @@
 // Maximum size of fixed header and variable length size header
 #define MQTT_MAX_HEADER_SIZE 5
 
-#if __has_include(<functional>) && !defined(NOFUNCTIONAL)
+#if defined(__has_include) && __has_include(<functional>) && !defined(NOFUNCTIONAL)
 #include <functional>
 /**
  * @brief Define the signature required by any callback function.
@@ -123,7 +124,9 @@
     }
 
 #ifdef DEBUG_PUBSUBCLIENT
+#ifndef DEBUG_PSC_PRINTF
 #define DEBUG_PSC_PRINTF(fmt, ...) Serial.printf(("PUBSUBCLIENT:" fmt), ##__VA_ARGS__)
+#endif
 #else
 #define DEBUG_PSC_PRINTF(...)
 #endif
@@ -144,21 +147,19 @@ class PubSubClient : public Print {
     unsigned long lastInActivity;
     bool pingOutstanding;
     MQTT_CALLBACK_SIGNATURE;
-    uint32_t readPacket(uint8_t*);
-    bool readByte(uint8_t* result);
-    bool readByte(uint8_t* result, uint16_t* index);
-    bool write(uint8_t header, uint8_t* buf, size_t length);
-    size_t writeString(const char* string, uint8_t* buf, size_t pos);
-    // Build up the header ready to send
-    // Returns the size of the header
-    // Note: the header is built at the end of the first MQTT_MAX_HEADER_SIZE bytes, so will start
-    //       (MQTT_MAX_HEADER_SIZE - <returned size>) bytes into the buffer
-    size_t buildHeader(uint8_t header, uint8_t* buf, size_t length);
     IPAddress ip;
     char* domain;
     uint16_t port;
     Stream* stream;
     int _state;
+
+    void handlePacket(uint8_t llen, size_t len);
+    size_t readPacket(uint8_t*);
+    bool readByte(uint8_t* result);
+    bool readByte(uint8_t* result, size_t* index);
+    bool write(uint8_t header, uint8_t* buf, size_t length);
+    size_t writeString(const char* string, uint8_t* buf, size_t pos);
+    uint8_t buildHeader(uint8_t header, uint8_t* buf, size_t length);
 
    public:
     /**
