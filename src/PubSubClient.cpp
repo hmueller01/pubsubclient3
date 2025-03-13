@@ -204,7 +204,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
                 }
             }
             uint8_t llen;
-            uint32_t len = readPacket(&llen);
+            size_t len = readPacket(&llen);
 
             if (len == 4) {
                 if (buffer[3] == 0) {
@@ -225,7 +225,12 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
     return true;
 }
 
-// reads a byte into result
+/**
+ * @brief  Reads a byte into result.
+ *
+ * @param  result Pointer to result buffer.
+ * @return true if byte was read, false if socketTimeout occurred.
+ */
 bool PubSubClient::readByte(uint8_t* result) {
     unsigned long previousMillis = millis();
     while (!_client->available()) {
@@ -239,29 +244,39 @@ bool PubSubClient::readByte(uint8_t* result) {
     return true;
 }
 
-// reads a byte into result[*index] and increments index
-bool PubSubClient::readByte(uint8_t* result, uint16_t* index) {
-    uint16_t current_index = *index;
-    uint8_t* write_address = &(result[current_index]);
+/**
+ * @brief  Reads a byte into result[*index] and increments *index.
+ * Note: *index may go out of bounds of result. This must be checked outside of this function!
+ *
+ * @return true if a byte was read, otherwise false (socketTimeout).
+ */
+bool PubSubClient::readByte(uint8_t* result, size_t* index) {
+    uint8_t* write_address = &(result[*index]);
     if (readByte(write_address)) {
-        *index = current_index + 1;
+        (*index)++;;
         return true;
     }
     return false;
 }
 
-uint32_t PubSubClient::readPacket(uint8_t* lengthLength) {
-    uint16_t len = 0;
+/**
+ * @brief  Reads a complete packet (header, topic, payload) into this->buffer.
+ *
+ * @param  *lenLen Returns the variable header length send by MQTT broker (1 .. MQTT_MAX_HEADER_SIZE - 1)
+ * @return Number of read bytes, 0 in case of an error (socketTimeout, buffer overflow)
+ */
+size_t PubSubClient::readPacket(uint8_t* lenLen) {
+    size_t len = 0;
     if (!readByte(this->buffer, &len)) return 0;
     bool isPublish = (this->buffer[0] & 0xF0) == MQTTPUBLISH;
     uint32_t multiplier = 1;
-    uint32_t length = 0;
+    size_t length = 0;
     uint8_t digit = 0;
     uint16_t skip = 0;
-    uint32_t start = 0;
+    uint8_t start = 0;
 
     do {
-        if (len == 5) {
+        if (len == MQTT_MAX_HEADER_SIZE) {
             // Invalid remaining length encoding - kill the connection
             _state = MQTT_DISCONNECTED;
             DEBUG_PSC_PRINTF("readPacket detected packet of invalid length\n");
@@ -273,40 +288,39 @@ uint32_t PubSubClient::readPacket(uint8_t* lengthLength) {
         length += (digit & 127) * multiplier;
         multiplier <<= 7;  // multiplier *= 128
     } while ((digit & 128) != 0);
-    *lengthLength = len - 1;
+    *lenLen = (uint8_t)(len - 1);
 
-    DEBUG_PSC_PRINTF("readPacket received packet of length %u (isPublish = %u)\n", length, isPublish);
+    DEBUG_PSC_PRINTF("readPacket received packet of length %zu (isPublish = %u)\n", length, isPublish);
 
     if (isPublish) {
         // Read in topic length to calculate bytes to skip over for Stream writing
         if (!readByte(this->buffer, &len)) return 0;
         if (!readByte(this->buffer, &len)) return 0;
-        skip = (this->buffer[*lengthLength + 1] << 8) + this->buffer[*lengthLength + 2];
+        skip = (this->buffer[*lenLen + 1] << 8) + this->buffer[*lenLen + 2];
         start = 2;
         if (this->buffer[0] & MQTTQOS1) {
             // skip message id
             skip += 2;
         }
     }
-    uint32_t idx = len;
+    size_t idx = len;
 
-    for (uint32_t i = start; i < length; i++) {
+    for (size_t i = start; i < length; i++) {
         if (!readByte(&digit)) return 0;
         if (this->stream) {
-            if (isPublish && idx - *lengthLength - 2 > skip) {
+            if (isPublish && idx - *lenLen - 2 > skip) {
                 this->stream->write(digit);
             }
         }
 
         if (len < this->bufferSize) {
-            this->buffer[len] = digit;
-            len++;
+            this->buffer[len++] = digit;
         }
         idx++;
     }
 
     if (!this->stream && idx > this->bufferSize) {
-        DEBUG_PSC_PRINTF("readPacket ignoring packet of size %d exceeding buffer of size %zu\n", length, this->bufferSize);
+        DEBUG_PSC_PRINTF("readPacket ignoring packet of size %zu exceeding buffer of size %zu\n", length, this->bufferSize);
         len = 0;  // This will cause the packet to be ignored.
     }
     return len;
@@ -334,7 +348,7 @@ bool PubSubClient::loop() {
         }
         if (_client->available()) {
             uint8_t llen;
-            uint32_t len = readPacket(&llen);
+            size_t len = readPacket(&llen);
             uint16_t msgId = 0;
             uint8_t* payload;
             if (len > 0) {
