@@ -196,7 +196,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
             while (!_client->available()) {
                 yield();
                 unsigned long t = millis();
-                if (t - lastInActivity >= static_cast<unsigned long>(this->socketTimeout * 1000UL)) {
+                if (t - lastInActivity >= this->socketTimeout * 1000UL) {
                     DEBUG_PSC_PRINTF("connect aborting due to timeout\n");
                     _state = MQTT_CONNECTION_TIMEOUT;
                     _client->stop();
@@ -231,7 +231,7 @@ bool PubSubClient::readByte(uint8_t* result) {
     while (!_client->available()) {
         yield();
         unsigned long currentMillis = millis();
-        if (currentMillis - previousMillis >= static_cast<unsigned long>(this->socketTimeout * 1000UL)) {
+        if (currentMillis - previousMillis >= this->socketTimeout * 1000UL) {
             return false;
         }
     }
@@ -644,7 +644,7 @@ bool PubSubClient::connected() {
     if (_client == NULL) {
         rc = false;
     } else {
-        rc = (int)_client->connected();
+        rc = (bool)_client->connected();
         if (!rc) {
             if (this->_state == MQTT_CONNECTED) {
                 this->_state = MQTT_CONNECTION_LOST;
