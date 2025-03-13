@@ -290,7 +290,7 @@ size_t PubSubClient::readPacket(uint8_t* lenLen) {
     } while ((digit & 128) != 0);
     *lenLen = (uint8_t)(len - 1);
 
-    DEBUG_PSC_PRINTF("readPacket received packet of length %u (isPublish = %d)\n", length, isPublish);
+    DEBUG_PSC_PRINTF("readPacket received packet of length %u (isPublish = %u)\n", length, isPublish);
 
     if (isPublish) {
         // Read in topic length to calculate bytes to skip over for Stream writing
@@ -320,7 +320,7 @@ size_t PubSubClient::readPacket(uint8_t* lenLen) {
     }
 
     if (!this->stream && idx > this->bufferSize) {
-        DEBUG_PSC_PRINTF("readPacket ignoring packet of size %d exceeding buffer of size %lu\n", length, this->bufferSize);
+        DEBUG_PSC_PRINTF("readPacket ignoring packet of size %d exceeding buffer of size %zu\n", length, this->bufferSize);
         len = 0;  // This will cause the packet to be ignored.
     }
     return len;
@@ -549,7 +549,7 @@ uint8_t PubSubClient::buildHeader(uint8_t header, uint8_t* buf, size_t length) {
     } while (len > 0 && lenLen < MQTT_MAX_HEADER_SIZE - 1);
 
     if (len > 0) {
-        DEBUG_PSC_PRINTF("length too big %lu, left %lu, should be 0\n", length, len);
+        DEBUG_PSC_PRINTF("length too big %zu, left %zu, should be 0\r\n", length, len);
     }
 
     buf[MQTT_MAX_HEADER_SIZE - 1 - lenLen] = header;

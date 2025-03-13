@@ -125,7 +125,7 @@
 
 #ifdef DEBUG_PUBSUBCLIENT
 #ifndef DEBUG_PSC_PRINTF
-#define DEBUG_PSC_PRINTF(fmt, ...) Serial.printf(("PUBSUBCLIENT:" fmt), ##__VA_ARGS__)
+#define DEBUG_PSC_PRINTF(fmt, ...) Serial.printf(("PUBSUBCLIENT: " fmt), ##__VA_ARGS__)
 #endif
 #else
 #define DEBUG_PSC_PRINTF(...)
