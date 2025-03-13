@@ -24,4 +24,9 @@ unsigned long millis(void);
 
 #define yield(x) {}
 
+#ifdef DEBUG_PUBSUBCLIENT
+#pragma GCC system_header
+#define DEBUG_PSC_PRINTF(fmt, ...) printf(("PUBSUBCLIENT: " fmt), ##__VA_ARGS__)
+#endif
+
 #endif  // Arduino_h
