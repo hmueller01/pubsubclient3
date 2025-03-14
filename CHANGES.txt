@@ -7,6 +7,7 @@
    * Fix keepalive handling, thanks to @uschnindler providing this to thingsboard #14
    * Use initializer lists instead of assigning global members in constructor #15
    * Fix DEBUG_PSC_PRINTF outputs #18
+   * Introduce MQTTRETAINED flag instead of hard coding #21
 
 3.0.2
    * Added github workflow to execute tests
