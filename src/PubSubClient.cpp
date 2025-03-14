@@ -370,7 +370,7 @@ void PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                         return;
                     }
                     uint16_t msgId = (this->buffer[payloadOffset] << 8) + this->buffer[payloadOffset + 1];
-                    callback(topic, payload + 2, payloadLen - 2); // remove the msgId from the callback payload
+                    callback(topic, payload + 2, payloadLen - 2);  // remove the msgId from the callback payload
 
                     this->buffer[0] = MQTTPUBACK;
                     this->buffer[1] = 2;
