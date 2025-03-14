@@ -472,7 +472,7 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained
         size_t length = MQTT_MAX_HEADER_SIZE;
         length = writeString(topic, this->buffer, length);
         const uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
-        size_t hlen = buildHeader(header, this->buffer, plength + length - MQTT_MAX_HEADER_SIZE);
+        uint8_t hlen = buildHeader(header, this->buffer, plength + length - MQTT_MAX_HEADER_SIZE);
         size_t rc = _client->write(this->buffer + (MQTT_MAX_HEADER_SIZE - hlen), length - (MQTT_MAX_HEADER_SIZE - hlen));
         lastOutActivity = millis();
         return (rc == (length - (MQTT_MAX_HEADER_SIZE - hlen)));
@@ -494,9 +494,19 @@ size_t PubSubClient::write(const uint8_t* buffer, size_t size) {
     return _client->write(buffer, size);
 }
 
-size_t PubSubClient::buildHeader(uint8_t header, uint8_t* buf, size_t length) {
-    uint8_t lenBuf[4];
-    uint8_t llen = 0;
+/**
+ * @brief  Build up the header ready to send.
+ * Note: the header is built at the end of the first MQTT_MAX_HEADER_SIZE bytes, so will start
+ * (MQTT_MAX_HEADER_SIZE - <returned size>) bytes into the buffer.
+ *
+ * @param  header Header byte, e.g. MQTTCONNECT, MQTTPUBLISH, MQTTSUBSCRIBE, MQTTUNSUBSCRIBE.
+ * @param  buf Buffer to write header to.
+ * @param  length Length to encode in the header.
+ * @return Returns the size of the header (1 .. MQTT_MAX_HEADER_SIZE).
+ */
+uint8_t PubSubClient::buildHeader(uint8_t header, uint8_t* buf, size_t length) {
+    uint8_t lenBuf[MQTT_MAX_HEADER_SIZE - 1];
+    uint8_t lenLen = 0;
     uint8_t digit;
     size_t len = length;
     do {
@@ -505,24 +515,24 @@ size_t PubSubClient::buildHeader(uint8_t header, uint8_t* buf, size_t length) {
         if (len > 0) {
             digit |= 0x80;
         }
-        lenBuf[llen++] = digit;
-    } while (len > 0 && llen < 4);
+        lenBuf[lenLen++] = digit;
+    } while (len > 0 && lenLen < MQTT_MAX_HEADER_SIZE - 1);
 
     if (len > 0) {
         DEBUG_PSC_PRINTF("length too big %zu, left %zu, should be 0\r\n", length, len);
     }
 
-    buf[4 - llen] = header;
-    for (uint8_t i = 0; i < llen; i++) {
-        buf[MQTT_MAX_HEADER_SIZE - llen + i] = lenBuf[i];
+    buf[MQTT_MAX_HEADER_SIZE - 1 - lenLen] = header;
+    for (uint8_t i = 0; i < lenLen; i++) {
+        buf[MQTT_MAX_HEADER_SIZE - lenLen + i] = lenBuf[i];
     }
-    return llen + 1;  // Full header size is variable length bit plus the 1-byte fixed header
+    return lenLen + 1;  // Full header size is variable length bit plus the 1-byte fixed header
 }
 
 bool PubSubClient::write(uint8_t header, uint8_t* buf, size_t length) {
     bool result = true;
     size_t rc;
-    size_t hlen = buildHeader(header, buf, length);
+    uint8_t hlen = buildHeader(header, buf, length);
 
 #ifdef MQTT_MAX_TRANSFER_SIZE
     uint8_t* writeBuf = buf + (MQTT_MAX_HEADER_SIZE - hlen);
