@@ -123,12 +123,25 @@
         return false;                                              \
     }
 
+#ifdef DEBUG_ESP_PORT
 #ifdef DEBUG_PUBSUBCLIENT
-#ifndef DEBUG_PSC_PRINTF
-#define DEBUG_PSC_PRINTF(fmt, ...) Serial.printf(("PUBSUBCLIENT: " fmt), ##__VA_ARGS__)
-#endif
+#define DEBUG_PSC_PRINTF(fmt, ...) DEBUG_ESP_PORT.printf(("PubSubClient: " fmt), ##__VA_ARGS__)
 #else
 #define DEBUG_PSC_PRINTF(...)
+#endif
+
+#define ERROR_PSC_PRINTF(fmt, ...) DEBUG_ESP_PORT.printf(("PubSubClient error: " fmt), ##__VA_ARGS__)
+#define ERROR_PSC_PRINTF_P(fmt, ...) DEBUG_ESP_PORT.printf_P(PSTR("PubSubClient error: " fmt), ##__VA_ARGS__)
+#else  // DEBUG_ESP_PORT
+#ifndef DEBUG_PSC_PRINTF
+#define DEBUG_PSC_PRINTF(...)
+#endif
+#ifndef ERROR_PSC_PRINTF
+#define ERROR_PSC_PRINTF(fmt, ...)
+#endif
+#ifndef ERROR_PSC_PRINTF_P
+#define ERROR_PSC_PRINTF_P(fmt, ...)
+#endif
 #endif
 
 /**
