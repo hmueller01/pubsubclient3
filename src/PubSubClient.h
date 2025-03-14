@@ -153,6 +153,7 @@ class PubSubClient : public Print {
     Stream* stream;
     int _state;
 
+    void handlePacket(uint8_t llen, size_t len);
     size_t readPacket(uint8_t*);
     bool readByte(uint8_t* result);
     bool readByte(uint8_t* result, size_t* index);
