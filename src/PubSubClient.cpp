@@ -196,7 +196,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
             while (!_client->available()) {
                 yield();
                 unsigned long t = millis();
-                if (t - lastInActivity >= static_cast<unsigned long>(this->socketTimeout * 1000UL)) {
+                if (t - lastInActivity >= this->socketTimeout * 1000UL) {
                     DEBUG_PSC_PRINTF("connect aborting due to timeout\n");
                     _state = MQTT_CONNECTION_TIMEOUT;
                     _client->stop();
@@ -231,7 +231,7 @@ bool PubSubClient::readByte(uint8_t* result) {
     while (!_client->available()) {
         yield();
         unsigned long currentMillis = millis();
-        if (currentMillis - previousMillis >= static_cast<unsigned long>(this->socketTimeout * 1000UL)) {
+        if (currentMillis - previousMillis >= this->socketTimeout * 1000UL) {
             return false;
         }
     }
@@ -413,10 +413,7 @@ bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t ple
         }
 
         // Write the header
-        uint8_t header = MQTTPUBLISH;
-        if (retained) {
-            header |= 1;
-        }
+        const uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
         return write(header, this->buffer, length - MQTT_MAX_HEADER_SIZE);
     }
     return false;
@@ -432,7 +429,7 @@ bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t p
     size_t rc = 0;
     size_t tlen;
     size_t pos = 0;
-    uint8_t header;
+    const uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
     size_t len;
     size_t expectedLength;
 
@@ -442,10 +439,6 @@ bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t p
 
     tlen = strnlen(topic, this->bufferSize);
 
-    header = MQTTPUBLISH;
-    if (retained) {
-        header |= 1;
-    }
     this->buffer[pos++] = header;
     len = plength + 2 + tlen;
     do {
@@ -478,10 +471,7 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained
         // Send the header and variable length field
         size_t length = MQTT_MAX_HEADER_SIZE;
         length = writeString(topic, this->buffer, length);
-        uint8_t header = MQTTPUBLISH;
-        if (retained) {
-            header |= 1;
-        }
+        const uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
         uint8_t hlen = buildHeader(header, this->buffer, plength + length - MQTT_MAX_HEADER_SIZE);
         size_t rc = _client->write(this->buffer + (MQTT_MAX_HEADER_SIZE - hlen), length - (MQTT_MAX_HEADER_SIZE - hlen));
         lastOutActivity = millis();
@@ -654,7 +644,7 @@ bool PubSubClient::connected() {
     if (_client == NULL) {
         rc = false;
     } else {
-        rc = (int)_client->connected();
+        rc = (bool)_client->connected();
         if (!rc) {
             if (this->_state == MQTT_CONNECTED) {
                 this->_state = MQTT_CONNECTION_LOST;

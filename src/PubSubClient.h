@@ -82,6 +82,7 @@
 #define MQTT_CONNECT_BAD_CREDENTIALS 4
 #define MQTT_CONNECT_UNAUTHORIZED    5
 
+#define MQTTRETAINED    1        // Retained flag in the header
 #define MQTTCONNECT     1 << 4   // Client request to connect to Server
 #define MQTTCONNACK     2 << 4   // Connect Acknowledgment
 #define MQTTPUBLISH     3 << 4   // Publish message
@@ -96,7 +97,7 @@
 #define MQTTPINGREQ     12 << 4  // PING Request
 #define MQTTPINGRESP    13 << 4  // PING Response
 #define MQTTDISCONNECT  14 << 4  // Client is Disconnecting
-#define MQTTReserved    15 << 4  // Reserved
+#define MQTTRESERVED    15 << 4  // Reserved
 
 #define MQTTQOS0 (0 << 1)
 #define MQTTQOS1 (1 << 1)
