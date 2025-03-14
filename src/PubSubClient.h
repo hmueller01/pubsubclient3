@@ -147,17 +147,18 @@ class PubSubClient : public Print {
     unsigned long lastInActivity;
     bool pingOutstanding;
     MQTT_CALLBACK_SIGNATURE;
+    IPAddress ip;
+    char* domain;
+    uint16_t port;
+    Stream* stream;
+    int _state;
+
     size_t readPacket(uint8_t*);
     bool readByte(uint8_t* result);
     bool readByte(uint8_t* result, size_t* index);
     bool write(uint8_t header, uint8_t* buf, size_t length);
     size_t writeString(const char* string, uint8_t* buf, size_t pos);
     uint8_t buildHeader(uint8_t header, uint8_t* buf, size_t length);
-    IPAddress ip;
-    char* domain;
-    uint16_t port;
-    Stream* stream;
-    int _state;
 
    public:
     /**
