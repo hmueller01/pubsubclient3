@@ -1,11 +1,12 @@
 #ifndef Arduino_h
 #define Arduino_h
 
-#include <cstdio>
 #include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include <cstdio>
 
 #include "Print.h"
 
