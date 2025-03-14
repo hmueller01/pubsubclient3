@@ -338,16 +338,21 @@ void PubSubClient::handlePacket(uint8_t llen, size_t len) {
     switch (type) {
         case MQTTPUBLISH:
             if (callback) {
-                uint8_t* payload;
-                uint16_t tl = (this->buffer[llen + 1] << 8) + this->buffer[llen + 2]; /* topic length in bytes */
-                memmove(this->buffer + llen + 2, this->buffer + llen + 3, tl);        /* move topic inside buffer 1 byte to front */
-                this->buffer[llen + 2 + tl] = 0;                                      /* end the topic as a 'C' string with \x00 */
-                char* topic = (char*)this->buffer + llen + 2;
-                // msgId only present for QOS>0
+                uint16_t topicLen = (this->buffer[llen + 1] << 8) + this->buffer[llen + 2];  // topic length in bytes
+                char* topic = (char*)(this->buffer + llen + 2);    // set the topic in the LSB of the topic lenght, as we move it there
+                uint16_t payloadOffset = llen + 1 + 2 + topicLen;  // payload starts after header and topic (if there is no packet identifier)
+                size_t payloadLen = len - payloadOffset;
+                uint8_t* payload = this->buffer + payloadOffset;
+
+                if (len < payloadOffset) return;      // do not move outside the max bufferSize
+                memmove(topic, topic + 1, topicLen);  // move topic inside buffer 1 byte to front
+                topic[topicLen] = '\0';               // end the topic as a 'C' string with \x00
+
                 if ((this->buffer[0] & 0x06) == MQTTQOS1) {
-                    uint16_t msgId = (this->buffer[llen + 3 + tl] << 8) + this->buffer[llen + 3 + tl + 1];
-                    payload = this->buffer + llen + 3 + tl + 2;
-                    callback(topic, payload, len - llen - 3 - tl - 2);
+                    // msgId (packet identifier) is only present for QOS > 0
+                    if (payloadLen < 2) return;  // payload must be >= 2, as we have the msgId before
+                    uint16_t msgId = (this->buffer[payloadOffset] << 8) + this->buffer[payloadOffset + 1];
+                    callback(topic, payload + 2, payloadLen - 2);
 
                     this->buffer[0] = MQTTPUBACK;
                     this->buffer[1] = 2;
@@ -357,9 +362,8 @@ void PubSubClient::handlePacket(uint8_t llen, size_t len) {
                         lastOutActivity = millis();
                     }
                 } else {
-                    // No msgId
-                    payload = this->buffer + llen + 3 + tl;
-                    callback(topic, payload, len - llen - 3 - tl);
+                    // No msgId for QOS == 0
+                    callback(topic, payload, payloadLen);
                 }
             }
             break;
