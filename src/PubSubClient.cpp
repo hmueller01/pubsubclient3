@@ -204,7 +204,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
                 }
             }
             uint8_t llen;
-            uint32_t len = readPacket(&llen);
+            size_t len = readPacket(&llen);
 
             if (len == 4) {
                 if (buffer[3] == 0) {
@@ -226,10 +226,10 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
 }
 
 /**
- * @brief  Reads a byte into result
+ * @brief  Reads a byte into result.
  *
- * @param  result Pointer to result buffer
- * @return true if byte was read, false if socketTimeout occurred
+ * @param  result Pointer to result buffer.
+ * @return true if byte was read, false if socketTimeout occurred.
  */
 bool PubSubClient::readByte(uint8_t* result) {
     unsigned long previousMillis = millis();
@@ -248,7 +248,7 @@ bool PubSubClient::readByte(uint8_t* result) {
  * @brief  Reads a byte into result[*index] and increments *index.
  * Note: *index may go out of bounds of result. This must be checked outside of this function!
  *
- * @return true if a byte was read, otherwise false (socketTimeout)
+ * @return true if a byte was read, otherwise false (socketTimeout).
  */
 bool PubSubClient::readByte(uint8_t* result, size_t* index) {
     uint8_t* write_address = &(result[*index]);
@@ -290,7 +290,7 @@ size_t PubSubClient::readPacket(uint8_t* lenLen) {
     } while ((digit & 128) != 0);
     *lenLen = (uint8_t)(len - 1);
 
-    DEBUG_PSC_PRINTF("readPacket received packet of length %u (isPublish = %u)\n", length, isPublish);
+    DEBUG_PSC_PRINTF("readPacket received packet of length %zu (isPublish = %u)\n", length, isPublish);
 
     if (isPublish) {
         // Read in topic length to calculate bytes to skip over for Stream writing
@@ -320,7 +320,7 @@ size_t PubSubClient::readPacket(uint8_t* lenLen) {
     }
 
     if (!this->stream && idx > this->bufferSize) {
-        DEBUG_PSC_PRINTF("readPacket ignoring packet of size %d exceeding buffer of size %zu\n", length, this->bufferSize);
+        DEBUG_PSC_PRINTF("readPacket ignoring packet of size %zu exceeding buffer of size %zu\n", length, this->bufferSize);
         len = 0;  // This will cause the packet to be ignored.
     }
     return len;
@@ -442,7 +442,7 @@ bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t ple
         }
 
         // Write the header
-        uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
+        const uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
         return write(header, this->buffer, length - MQTT_MAX_HEADER_SIZE);
     }
     return false;
@@ -458,7 +458,7 @@ bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t p
     size_t rc = 0;
     size_t tlen;
     size_t pos = 0;
-    uint8_t header;
+    const uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
     size_t len;
     size_t expectedLength;
 
@@ -468,7 +468,6 @@ bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t p
 
     tlen = strnlen(topic, this->bufferSize);
 
-    header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
     this->buffer[pos++] = header;
     len = plength + 2 + tlen;
     do {
@@ -501,7 +500,7 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained
         // Send the header and variable length field
         size_t length = MQTT_MAX_HEADER_SIZE;
         length = writeString(topic, this->buffer, length);
-        uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
+        const uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
         uint8_t hlen = buildHeader(header, this->buffer, plength + length - MQTT_MAX_HEADER_SIZE);
         size_t rc = _client->write(this->buffer + (MQTT_MAX_HEADER_SIZE - hlen), length - (MQTT_MAX_HEADER_SIZE - hlen));
         lastOutActivity = millis();
@@ -527,12 +526,12 @@ size_t PubSubClient::write(const uint8_t* buffer, size_t size) {
 /**
  * @brief  Build up the header ready to send.
  * Note: the header is built at the end of the first MQTT_MAX_HEADER_SIZE bytes, so will start
- * (MQTT_MAX_HEADER_SIZE - <returned size>) bytes into the buffer
+ * (MQTT_MAX_HEADER_SIZE - <returned size>) bytes into the buffer.
  *
- * @param  header Header byte, e.g. MQTTCONNECT, MQTTPUBLISH, MQTTSUBSCRIBE, MQTTUNSUBSCRIBE
+ * @param  header Header byte, e.g. MQTTCONNECT, MQTTPUBLISH, MQTTSUBSCRIBE, MQTTUNSUBSCRIBE.
  * @param  buf Buffer to write header to.
  * @param  length Length to encode in the header.
- * @return Returns the size of the header.
+ * @return Returns the size of the header (1 .. MQTT_MAX_HEADER_SIZE).
  */
 uint8_t PubSubClient::buildHeader(uint8_t header, uint8_t* buf, size_t length) {
     uint8_t lenBuf[MQTT_MAX_HEADER_SIZE - 1];
