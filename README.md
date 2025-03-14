@@ -13,6 +13,7 @@ I tried lot's of different other MQTT libs, but they need more resources than Pu
  - https://github.com/hideakitai/MQTTPubSubClient
  - https://github.com/bertmelis/espMqttClient
  - https://github.com/arduino-libraries/ArduinoMqttClient
+ - https://github.com/thingsboard/pubsubclient
 
 Since there was no progress I decided to merge the most important PRs manually and publish a new major version. I also renamed to PubSubClient3 to have a similar but different name of the library.
 
@@ -27,6 +28,7 @@ Full API documentation is available here: https://pubsubclient.knolleary.net
 
 ## Limitations
 
+ - The client is based on the [MQTT Version 3.1.1 specification](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html) with some limitations.
  - It can only publish QoS 0 messages. It can subscribe at QoS 0 or QoS 1.
  - The maximum message size, including header, is **256 bytes** by default. This
    is configurable via `MQTT_MAX_PACKET_SIZE` in `PubSubClient.h` or can be changed
