@@ -408,7 +408,7 @@ bool PubSubClient::loop() {
     if (((t - lastInActivity > this->keepAlive * 1000UL) || (t - lastOutActivity > this->keepAlive * 1000UL)) && keepAlive != 0) {
         if (pingOutstanding) {
             DEBUG_PSC_PRINTF("loop aborting due to timeout\n");
-            this->_state = MQTT_CONNECTION_TIMEOUT;
+            _state = MQTT_CONNECTION_TIMEOUT;
             _client->stop();
             pingOutstanding = false;
             return false;
@@ -701,14 +701,14 @@ bool PubSubClient::connected() {
     } else {
         rc = (bool)_client->connected();
         if (!rc) {
-            if (this->_state == MQTT_CONNECTED) {
-                this->_state = MQTT_CONNECTION_LOST;
+            if (_state == MQTT_CONNECTED) {
                 DEBUG_PSC_PRINTF("lost connection (client may have more details)\n");
+                _state = MQTT_CONNECTION_LOST;
                 _client->flush();
                 _client->stop();
             }
         } else {
-            return this->_state == MQTT_CONNECTED;
+            return _state == MQTT_CONNECTED;
         }
     }
     return rc;
