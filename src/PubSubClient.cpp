@@ -453,46 +453,17 @@ bool PubSubClient::publish_P(const char* topic, const char* payload, bool retain
 }
 
 bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t plength, bool retained) {
-    uint8_t llen = 0;
-    uint8_t digit;
     size_t rc = 0;
-    size_t tlen;
-    size_t pos = 0;
     const uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
-    size_t len;
-    size_t expectedLength;
 
-    if (!connected()) {
-        return false;
-    }
-
-    tlen = strnlen(topic, this->bufferSize);
-
-    this->buffer[pos++] = header;
-    len = plength + 2 + tlen;
-    do {
-        digit = len & 127;  // digit = len % 128
-        len >>= 7;          // len = len / 128
-        if (len > 0) {
-            digit |= 0x80;
+    if (beginPublish(topic, plength, retained)) {
+        for (size_t i = 0; i < plength; i++) {
+            rc += _client->write((uint8_t)pgm_read_byte_near(payload + i));
         }
-        this->buffer[pos++] = digit;
-        llen++;
-    } while (len > 0);
-
-    pos = writeString(topic, this->buffer, pos);
-
-    rc += _client->write(this->buffer, pos);
-
-    for (size_t i = 0; i < plength; i++) {
-        rc += _client->write((uint8_t)pgm_read_byte_near(payload + i));
+        lastOutActivity = millis();
+        return (rc == plength);
     }
-
-    lastOutActivity = millis();
-
-    expectedLength = 1 + llen + 2 + tlen + plength;
-
-    return (rc == expectedLength);
+    return false;
 }
 
 bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained) {
