@@ -278,8 +278,8 @@ size_t PubSubClient::readPacket(uint8_t* hdrLen) {
     do {
         if (len == MQTT_MAX_HEADER_SIZE) {
             // Invalid remaining length encoding - kill the connection
-            _state = MQTT_DISCONNECTED;
             DEBUG_PSC_PRINTF("readPacket detected packet of invalid length\n");
+            _state = MQTT_DISCONNECTED;
             _client->stop();
             return 0;
         }
@@ -327,12 +327,13 @@ size_t PubSubClient::readPacket(uint8_t* hdrLen) {
 }
 
 /**
- * @brief  After a packet is read handle the content here (call the callback, handle pings)
+ * @brief  After a packet is read handle the content here (call the callback, handle pings).
  *
- * @param  hdrLen Variable header length send by MQTT broker (1 .. MQTT_MAX_HEADER_SIZE - 1)
- * @param  length Number of read bytes in this->buffer
+ * @param  hdrLen Variable header length send by MQTT broker (1 .. MQTT_MAX_HEADER_SIZE - 1).
+ * @param  length Number of read bytes in this->buffer.
+ * @return true if packet was successfully processed, false if a buffer over or underflow occurred.
  */
-void PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
+bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
     uint8_t type = this->buffer[0] & 0xF0;
     DEBUG_PSC_PRINTF("received message of type %u\n", type);
     switch (type) {
@@ -355,7 +356,7 @@ void PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
 
                 if (length < payloadOffset) {  // do not move outside the max bufferSize
                     ERROR_PSC_PRINTF_P("handlePacket(): Suspicious topicLen (%u) points outside of received buffer length (%zu)\n", topicLen, length);
-                    return;
+                    return false;
                 }
                 memmove(topic, topic + 1, topicLen);  // move topic inside buffer 1 byte to front
                 topic[topicLen] = '\0';               // end the topic as a 'C' string with \x00
@@ -367,7 +368,7 @@ void PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                     // For QOS 1 and 2 we have a msgId (packet identifier) after the topic at the current payloadOffset
                     if (payloadLen < 2) {  // payload must be >= 2, as we have the msgId before
                         ERROR_PSC_PRINTF_P("handlePacket(): Missing msgId in QoS 1/2 message\n");
-                        return;
+                        return false;
                     }
                     uint16_t msgId = (this->buffer[payloadOffset] << 8) + this->buffer[payloadOffset + 1];
                     callback(topic, payload + 2, payloadLen - 2);  // remove the msgId from the callback payload
@@ -395,17 +396,19 @@ void PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
         default:
             break;
     }
+    return true;
 }
 
 bool PubSubClient::loop() {
     if (!connected()) {
         return false;
     }
+    bool ret = true;
     unsigned long t = millis();
     if (((t - lastInActivity > this->keepAlive * 1000UL) || (t - lastOutActivity > this->keepAlive * 1000UL)) && keepAlive != 0) {
         if (pingOutstanding) {
-            this->_state = MQTT_CONNECTION_TIMEOUT;
             DEBUG_PSC_PRINTF("loop aborting due to timeout\n");
+            this->_state = MQTT_CONNECTION_TIMEOUT;
             _client->stop();
             pingOutstanding = false;
             return false;
@@ -424,13 +427,17 @@ bool PubSubClient::loop() {
         size_t len = readPacket(&hdrLen);
         if (len > 0) {
             lastInActivity = t;
-            handlePacket(hdrLen, len);
+            ret = handlePacket(hdrLen, len);
+            if (!ret) {
+                _state = MQTT_DISCONNECTED;
+                _client->stop();
+            }
         } else if (!connected()) {
             // readPacket has closed the connection
             return false;
         }
     }
-    return true;
+    return ret;
 }
 
 bool PubSubClient::publish(const char* topic, const char* payload) {
