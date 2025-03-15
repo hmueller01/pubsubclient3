@@ -245,15 +245,15 @@ bool PubSubClient::readByte(uint8_t* result) {
 }
 
 /**
- * @brief  Reads a byte into result[*index] and increments *index.
- * Note: *index may go out of bounds of result. This must be checked outside of this function!
+ * @brief  Reads a byte into result[*pos] and increments *pos.
+ * Note: *pos may go out of bounds of result. This must be checked outside of this function!
  *
  * @return true if a byte was read, otherwise false (socketTimeout).
  */
-bool PubSubClient::readByte(uint8_t* result, size_t* index) {
-    uint8_t* write_address = &(result[*index]);
+bool PubSubClient::readByte(uint8_t* result, size_t* pos) {
+    uint8_t* write_address = &(result[*pos]);
     if (readByte(write_address)) {
-        (*index)++;
+        (*pos)++;
         return true;
     }
     return false;
@@ -262,10 +262,10 @@ bool PubSubClient::readByte(uint8_t* result, size_t* index) {
 /**
  * @brief  Reads a complete packet (header, topic, payload) into this->buffer.
  *
- * @param  *lenLen Returns the variable header length send by MQTT broker (1 .. MQTT_MAX_HEADER_SIZE - 1)
+ * @param  *hdrLen Returns the variable header length send by MQTT broker (1 .. MQTT_MAX_HEADER_SIZE - 1)
  * @return Number of read bytes, 0 in case of an error (socketTimeout, buffer overflow)
  */
-size_t PubSubClient::readPacket(uint8_t* lenLen) {
+size_t PubSubClient::readPacket(uint8_t* hdrLen) {
     size_t len = 0;
     if (!readByte(this->buffer, &len)) return 0;
     bool isPublish = (this->buffer[0] & 0xF0) == MQTTPUBLISH;
@@ -285,10 +285,10 @@ size_t PubSubClient::readPacket(uint8_t* lenLen) {
         }
         if (!readByte(&digit)) return 0;
         this->buffer[len++] = digit;
-        length += (digit & 127) * multiplier;
-        multiplier <<= 7;  // multiplier *= 128
-    } while ((digit & 128) != 0);
-    *lenLen = (uint8_t)(len - 1);
+        length += (digit & 0x7F) * multiplier;  // length is coded in the lower 7 bits
+        multiplier <<= 7;                       // multiplier *= 128
+    } while ((digit & 0x80) != 0);  // do while 8th continuation bit is set
+    *hdrLen = (uint8_t)(len - 1);
 
     DEBUG_PSC_PRINTF("readPacket received packet of length %zu (isPublish = %u)\n", length, isPublish);
 
@@ -296,7 +296,7 @@ size_t PubSubClient::readPacket(uint8_t* lenLen) {
         // Read in topic length to calculate bytes to skip over for Stream writing
         if (!readByte(this->buffer, &len)) return 0;
         if (!readByte(this->buffer, &len)) return 0;
-        skip = (this->buffer[*lenLen + 1] << 8) + this->buffer[*lenLen + 2];
+        skip = (this->buffer[*hdrLen + 1] << 8) + this->buffer[*hdrLen + 2];
         start = 2;
         if (this->buffer[0] & MQTTQOS1) {
             // skip message id
@@ -308,7 +308,7 @@ size_t PubSubClient::readPacket(uint8_t* lenLen) {
     for (size_t i = start; i < length; i++) {
         if (!readByte(&digit)) return 0;
         if (this->stream) {
-            if (isPublish && idx - *lenLen - 2 > skip) {
+            if (isPublish && idx - *hdrLen - 2 > skip) {
                 this->stream->write(digit);
             }
         }
@@ -401,11 +401,11 @@ bool PubSubClient::loop() {
         }
     }
     if (_client->available()) {
-        uint8_t lenLen;
-        size_t len = readPacket(&lenLen);
+        uint8_t hdrLen;
+        size_t len = readPacket(&hdrLen);
         if (len > 0) {
             lastInActivity = t;
-            handlePacket(lenLen, len);
+            handlePacket(hdrLen, len);
         } else if (!connected()) {
             // readPacket has closed the connection
             return false;
@@ -501,10 +501,10 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained
         size_t length = MQTT_MAX_HEADER_SIZE;
         length = writeString(topic, this->buffer, length);
         const uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
-        uint8_t hlen = buildHeader(header, this->buffer, plength + length - MQTT_MAX_HEADER_SIZE);
-        size_t rc = _client->write(this->buffer + (MQTT_MAX_HEADER_SIZE - hlen), length - (MQTT_MAX_HEADER_SIZE - hlen));
+        uint8_t hdrLen = buildHeader(header, this->buffer, plength + length - MQTT_MAX_HEADER_SIZE);
+        size_t rc = _client->write(this->buffer + (MQTT_MAX_HEADER_SIZE - hdrLen), length - (MQTT_MAX_HEADER_SIZE - hdrLen));
         lastOutActivity = millis();
-        return (rc == (length - (MQTT_MAX_HEADER_SIZE - hlen)));
+        return (rc == (length - (MQTT_MAX_HEADER_SIZE - hdrLen)));
     }
     return false;
 }
@@ -534,38 +534,38 @@ size_t PubSubClient::write(const uint8_t* buffer, size_t size) {
  * @return Returns the size of the header (1 .. MQTT_MAX_HEADER_SIZE).
  */
 uint8_t PubSubClient::buildHeader(uint8_t header, uint8_t* buf, size_t length) {
-    uint8_t lenBuf[MQTT_MAX_HEADER_SIZE - 1];
-    uint8_t lenLen = 0;
+    uint8_t hdrBuf[MQTT_MAX_HEADER_SIZE - 1];
+    uint8_t hdrLen = 0;
     uint8_t digit;
     size_t len = length;
     do {
-        digit = len & 127;  // digit = len % 128
-        len >>= 7;          // len = len / 128
+        digit = len & 0x7F;  // digit = len % 128
+        len >>= 7;           // len = len / 128
         if (len > 0) {
             digit |= 0x80;
         }
-        lenBuf[lenLen++] = digit;
-    } while (len > 0 && lenLen < MQTT_MAX_HEADER_SIZE - 1);
+        hdrBuf[hdrLen++] = digit;
+    } while (len > 0 && hdrLen < MQTT_MAX_HEADER_SIZE - 1);
 
     if (len > 0) {
         DEBUG_PSC_PRINTF("length too big %zu, left %zu, should be 0\r\n", length, len);
     }
 
-    buf[MQTT_MAX_HEADER_SIZE - 1 - lenLen] = header;
-    for (uint8_t i = 0; i < lenLen; i++) {
-        buf[MQTT_MAX_HEADER_SIZE - lenLen + i] = lenBuf[i];
+    buf[MQTT_MAX_HEADER_SIZE - 1 - hdrLen] = header;
+    for (uint8_t i = 0; i < hdrLen; i++) {
+        buf[MQTT_MAX_HEADER_SIZE - hdrLen + i] = hdrBuf[i];
     }
-    return lenLen + 1;  // Full header size is variable length bit plus the 1-byte fixed header
+    return hdrLen + 1;  // Full header size is variable length bit plus the 1-byte fixed header
 }
 
 bool PubSubClient::write(uint8_t header, uint8_t* buf, size_t length) {
     bool result = true;
     size_t rc;
-    uint8_t hlen = buildHeader(header, buf, length);
+    uint8_t hdrLen = buildHeader(header, buf, length);
 
 #ifdef MQTT_MAX_TRANSFER_SIZE
-    uint8_t* writeBuf = buf + (MQTT_MAX_HEADER_SIZE - hlen);
-    size_t bytesRemaining = length + hlen;  // Match the length type
+    uint8_t* writeBuf = buf + (MQTT_MAX_HEADER_SIZE - hdrLen);
+    size_t bytesRemaining = length + hdrLen;  // Match the length type
     size_t bytesToWrite;
     while ((bytesRemaining > 0) && result) {
         yield();
@@ -579,8 +579,8 @@ bool PubSubClient::write(uint8_t header, uint8_t* buf, size_t length) {
         }
     }
 #else
-    rc = _client->write(buf + (MQTT_MAX_HEADER_SIZE - hlen), length + hlen);
-    result = (rc == length + hlen);
+    rc = _client->write(buf + (MQTT_MAX_HEADER_SIZE - hdrLen), length + hdrLen);
+    result = (rc == length + hdrLen);
     if (result) {
         lastOutActivity = millis();
     }
