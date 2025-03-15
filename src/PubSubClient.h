@@ -508,7 +508,6 @@ class PubSubClient : public Print {
      * Allows for arbitrarily large payloads to be sent without them having to be copied into
      * a new buffer and held in memory at one time.
      * @param topic The topic to publish to.
-     * @param payload The message to publish.
      * @param plength The length of the payload.
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
@@ -520,7 +519,7 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    int endPublish();
+    bool endPublish();
 
     /**
      * @brief Writes a single byte as a component of a publish started with a call to beginPublish.
