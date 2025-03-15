@@ -278,8 +278,8 @@ size_t PubSubClient::readPacket(uint8_t* hdrLen) {
     do {
         if (len == MQTT_MAX_HEADER_SIZE) {
             // Invalid remaining length encoding - kill the connection
-            _state = MQTT_DISCONNECTED;
             DEBUG_PSC_PRINTF("readPacket detected packet of invalid length\n");
+            _state = MQTT_DISCONNECTED;
             _client->stop();
             return 0;
         }
@@ -327,27 +327,51 @@ size_t PubSubClient::readPacket(uint8_t* hdrLen) {
 }
 
 /**
- * @brief  After a packet is read handle the content here (call the callback, handle pings)
+ * @brief  After a packet is read handle the content here (call the callback, handle pings).
  *
- * @param  llen Header length send by MQTT broker (1 .. MQTT_MAX_HEADER_SIZE - 1)
- * @param  len Number of read bytes in this->buffer
+ * @param  hdrLen Variable header length send by MQTT broker (1 .. MQTT_MAX_HEADER_SIZE - 1).
+ * @param  length Number of read bytes in this->buffer.
+ * @return true if packet was successfully processed, false if a buffer over or underflow occurred.
  */
-void PubSubClient::handlePacket(uint8_t llen, size_t len) {
+bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
     uint8_t type = this->buffer[0] & 0xF0;
     DEBUG_PSC_PRINTF("received message of type %u\n", type);
     switch (type) {
         case MQTTPUBLISH:
             if (callback) {
-                uint8_t* payload;
-                uint16_t tl = (this->buffer[llen + 1] << 8) + this->buffer[llen + 2]; /* topic length in bytes */
-                memmove(this->buffer + llen + 2, this->buffer + llen + 3, tl);        /* move topic inside buffer 1 byte to front */
-                this->buffer[llen + 2 + tl] = 0;                                      /* end the topic as a 'C' string with \x00 */
-                char* topic = (char*)this->buffer + llen + 2;
-                // msgId only present for QOS>0
-                if ((this->buffer[0] & 0x06) == MQTTQOS1) {
-                    uint16_t msgId = (this->buffer[llen + 3 + tl] << 8) + this->buffer[llen + 3 + tl + 1];
-                    payload = this->buffer + llen + 3 + tl + 2;
-                    callback(topic, payload, len - llen - 3 - tl - 2);
+                // MQTT Publish packet: See section 3.3 MQTT v3.1 protocol specification:
+                // - Header: 1 byte
+                // - Remaining header length: hdrLen bytes, multibyte field (1 .. MQTT_MAX_HEADER_SIZE - 1)
+                // - Topic length: 2 bytes (starts at buffer[hdrLen + 1])
+                // - Topic: topicLen bytes (starts at buffer[hdrLen + 3])
+                // - Packet Identifier (msgId): 0 bytes for QoS 0, 2 bytes for QoS 1 and 2 (starts at buffer[hdrLen + 3 + topicLen])
+                // - Payload (for QoS = 0): length - (hdrLen + 3 + topicLen) bytes (starts at buffer[hdrLen + 3 + topicLen])
+                // - Payload (for QoS > 0): length - (hdrLen + 5 + topicLen) bytes (starts at buffer[hdrLen + 5 + topicLen])
+                // To get a null reminated 'C' topic string we move the topic 1 byte to the front (overwriting the LSB of the topic lenght)
+                uint16_t topicLen = (this->buffer[hdrLen + 1] << 8) + this->buffer[hdrLen + 2];  // topic length in bytes
+                char* topic = (char*)(this->buffer + hdrLen + 3 - 1);  // set the topic in the LSB of the topic lenght, as we move it there
+                uint16_t payloadOffset = hdrLen + 3 + topicLen;        // payload starts after header and topic (if there is no packet identifier)
+                size_t payloadLen = length - payloadOffset;            // this might change by 2 if we have a QoS 1 or 2 message
+                uint8_t* payload = this->buffer + payloadOffset;
+
+                if (length < payloadOffset) {  // do not move outside the max bufferSize
+                    ERROR_PSC_PRINTF_P("handlePacket(): Suspicious topicLen (%u) points outside of received buffer length (%zu)\n", topicLen, length);
+                    return false;
+                }
+                memmove(topic, topic + 1, topicLen);  // move topic inside buffer 1 byte to front
+                topic[topicLen] = '\0';               // end the topic as a 'C' string with \x00
+
+                if ((this->buffer[0] & 0x06) == MQTTQOS0) {
+                    // No msgId for QOS == 0
+                    callback(topic, payload, payloadLen);
+                } else {
+                    // For QOS 1 and 2 we have a msgId (packet identifier) after the topic at the current payloadOffset
+                    if (payloadLen < 2) {  // payload must be >= 2, as we have the msgId before
+                        ERROR_PSC_PRINTF_P("handlePacket(): Missing msgId in QoS 1/2 message\n");
+                        return false;
+                    }
+                    uint16_t msgId = (this->buffer[payloadOffset] << 8) + this->buffer[payloadOffset + 1];
+                    callback(topic, payload + 2, payloadLen - 2);  // remove the msgId from the callback payload
 
                     this->buffer[0] = MQTTPUBACK;
                     this->buffer[1] = 2;
@@ -356,10 +380,6 @@ void PubSubClient::handlePacket(uint8_t llen, size_t len) {
                     if (_client->write(this->buffer, 4) == 4) {
                         lastOutActivity = millis();
                     }
-                } else {
-                    // No msgId
-                    payload = this->buffer + llen + 3 + tl;
-                    callback(topic, payload, len - llen - 3 - tl);
                 }
             }
             break;
@@ -376,12 +396,14 @@ void PubSubClient::handlePacket(uint8_t llen, size_t len) {
         default:
             break;
     }
+    return true;
 }
 
 bool PubSubClient::loop() {
     if (!connected()) {
         return false;
     }
+    bool ret = true;
     unsigned long t = millis();
     if (((t - lastInActivity > this->keepAlive * 1000UL) || (t - lastOutActivity > this->keepAlive * 1000UL)) && keepAlive != 0) {
         if (pingOutstanding) {
@@ -405,13 +427,17 @@ bool PubSubClient::loop() {
         size_t len = readPacket(&hdrLen);
         if (len > 0) {
             lastInActivity = t;
-            handlePacket(hdrLen, len);
+            ret = handlePacket(hdrLen, len);
+            if (!ret) {
+                _state = MQTT_DISCONNECTED;
+                _client->stop();
+            }
         } else if (!connected()) {
             // readPacket has closed the connection
             return false;
         }
     }
-    return true;
+    return ret;
 }
 
 bool PubSubClient::publish(const char* topic, const char* payload) {
