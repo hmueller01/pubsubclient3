@@ -15,6 +15,7 @@ int test_publish_retained_2();
 int test_publish_not_connected();
 int test_publish_too_long();
 int test_publish_P();
+int test_publish_P_too_long();
 
 void callback(char* topic, uint8_t* payload, size_t length) {
     // handle message arrived
