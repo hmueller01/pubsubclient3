@@ -148,7 +148,7 @@ int test_publish_too_long() {
     bool rc = client.connect("client_test1");
     IS_TRUE(rc);
 
-    //                                         0        1         2         3         4         5         6         7         8         9         0 1 2
+    //                   0        1         2         3         4         5         6         7         8         9         0         1         2
     rc = client.publish("topic",
                         "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
     IS_FALSE(rc);
@@ -184,6 +184,33 @@ int test_publish_P() {
     END_IT
 }
 
+int test_publish_P_too_long() {
+    IT("publish using PROGMEM fails when topic/payload are too long");
+    ShimClient shimClient;
+    shimClient.setAllowConnect(true);
+
+    //              0        1         2         3         4         5         6         7         8         9         0         1         2
+    char topic[] = "1234567890123456789012345678901234567890123456789012345678901234";
+
+    //                0        1         2         3         4         5         6         7         8         9         0         1         2
+    char payload[] = "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
+
+    byte connack[] = {0x20, 0x02, 0x00, 0x00};
+    shimClient.respond(connack, 4);
+
+    PubSubClient client(server, 1883, callback, shimClient);
+    client.setBufferSize(64);
+    bool rc = client.connect("client_test1");
+    IS_TRUE(rc);
+
+    rc = client.publish_P(topic, payload, false);
+    IS_FALSE(rc);
+
+    IS_FALSE(shimClient.error());
+
+    END_IT
+}
+
 int main() {
     SUITE("Publish");
     test_publish();
@@ -193,6 +220,7 @@ int main() {
     test_publish_not_connected();
     test_publish_too_long();
     test_publish_P();
+    test_publish_P_too_long();
 
     FINISH
 }
