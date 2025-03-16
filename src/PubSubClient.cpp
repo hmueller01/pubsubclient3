@@ -415,11 +415,11 @@ bool PubSubClient::loop() {
 }
 
 bool PubSubClient::publish(const char* topic, const char* payload) {
-    return publish(topic, (const uint8_t*)payload, payload ? strnlen(payload, this->bufferSize) : 0, false);
+    return publish(topic, (const uint8_t*)payload, payload ? strnlen(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, false);
 }
 
 bool PubSubClient::publish(const char* topic, const char* payload, bool retained) {
-    return publish(topic, (const uint8_t*)payload, payload ? strnlen(payload, this->bufferSize) : 0, retained);
+    return publish(topic, (const uint8_t*)payload, payload ? strnlen(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, retained);
 }
 
 bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t plength) {
@@ -427,23 +427,10 @@ bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t ple
 }
 
 bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t plength, bool retained) {
-    if (connected()) {
-        if (this->bufferSize < MQTT_MAX_HEADER_SIZE + 2 + strnlen(topic, this->bufferSize) + plength) {
-            // Too long
-            return false;
-        }
-        // Leave room in the buffer for header and variable length field
-        size_t length = MQTT_MAX_HEADER_SIZE;
-        length = writeString(topic, this->buffer, length);
-
-        // Add payload
-        for (size_t i = 0; i < plength; i++) {
-            this->buffer[length++] = payload[i];
-        }
-
-        // Write the header
-        const uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
-        return write(header, this->buffer, length - MQTT_MAX_HEADER_SIZE);
+    if (beginPublish(topic, plength, retained)) {
+        size_t rc = write(payload, plength);
+        lastOutActivity = millis();
+        return endPublish() && (rc == plength);
     }
     return false;
 }
