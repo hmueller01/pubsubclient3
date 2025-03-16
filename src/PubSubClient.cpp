@@ -496,12 +496,15 @@ bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t p
 }
 
 bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained) {
+    if (!topic) return false;
     // check if the header and the topic (including 2 length bytes) fit into the buffer
     if (connected() && MQTT_MAX_HEADER_SIZE + strlen(topic) + 2 <= this->bufferSize) {
-        // Send the header and variable length field
+        // first write the topic at the end of the maximal variable header (MQTT_MAX_HEADER_SIZE) to the buffer
         size_t topicLen = writeString(topic, this->buffer, MQTT_MAX_HEADER_SIZE) - MQTT_MAX_HEADER_SIZE;
+        // we now know the length of the topic and can build the variable header information
         const uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
         uint8_t hdrLen = buildHeader(header, this->buffer, topicLen + plength);
+        // as the header length is variable, it starts at MQTT_MAX_HEADER_SIZE - hdrLen (see buildHeader() documentation)
         size_t rc = _client->write(this->buffer + (MQTT_MAX_HEADER_SIZE - hdrLen), hdrLen + topicLen);
         lastOutActivity = millis();
         return (rc == (hdrLen + topicLen));
@@ -679,9 +682,10 @@ size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos) {
  * @param  buf Buffer to write the string into.
  * @param  pos Position in the buffer to write the string.
  * @param  size Maximal size of the buffer.
- * @return New position in the buffer (pos + 2 + string length), or pos if a buffer overrun would occur.
+ * @return New position in the buffer (pos + 2 + string length), or pos if a buffer overrun would occur or the string is a nullptr.
  */
 size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, size_t size) {
+    if (!string) return pos;
     size_t sLen = strlen(string);
     if (pos + 2 + sLen <= size && sLen <= 0xFFFF) {
         buf[pos++] = (uint8_t)(sLen >> 8);
