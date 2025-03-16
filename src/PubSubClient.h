@@ -510,6 +510,7 @@ class PubSubClient : public Print {
      * a new buffer and held in memory at one time.
      * @param topic The topic to publish to.
      * @param plength The length of the payload.
+     * @param retained Publish the message with the retain flag.
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
