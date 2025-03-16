@@ -501,7 +501,7 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained
     if (connected() && MQTT_MAX_HEADER_SIZE + strlen(topic) + 2 <= this->bufferSize) {
         // first write the topic at the end of the maximal variable header (MQTT_MAX_HEADER_SIZE) to the buffer
         size_t topicLen = writeString(topic, this->buffer, MQTT_MAX_HEADER_SIZE) - MQTT_MAX_HEADER_SIZE;
-        // we now know the length of the topic and can build the variable header information
+        // we now know the length of the topic string (lenght + 2 bytes signalling the length) and can build the variable header information
         const uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
         uint8_t hdrLen = buildHeader(header, this->buffer, topicLen + plength);
         // as the header length is variable, it starts at MQTT_MAX_HEADER_SIZE - hdrLen (see buildHeader() documentation)
