@@ -186,7 +186,7 @@ int test_publish_P() {
 }
 
 int test_publish_P_too_long() {
-    IT("publish using PROGMEM fails when topic/payload are too long");
+    IT("publish using PROGMEM fails when topic are too long");
     ShimClient shimClient;
     shimClient.setAllowConnect(true);
 
