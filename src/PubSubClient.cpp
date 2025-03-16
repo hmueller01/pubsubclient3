@@ -453,10 +453,8 @@ bool PubSubClient::publish_P(const char* topic, const char* payload, bool retain
 }
 
 bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t plength, bool retained) {
-    size_t rc = 0;
-    const uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
-
     if (beginPublish(topic, plength, retained)) {
+        size_t rc = 0;
         for (size_t i = 0; i < plength; i++) {
             rc += _client->write((uint8_t)pgm_read_byte_near(payload + i));
         }
