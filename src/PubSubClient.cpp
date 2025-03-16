@@ -461,7 +461,7 @@ bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t p
             rc += _client->write((uint8_t)pgm_read_byte_near(payload + i));
         }
         lastOutActivity = millis();
-        return (rc == plength);
+        return endPublish() && (rc == plength);
     }
     return false;
 }
