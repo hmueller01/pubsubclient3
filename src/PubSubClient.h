@@ -453,7 +453,7 @@ class PubSubClient : public Print {
     void disconnect();
 
     /**
-     * @brief Publishes a message to the specified topic.
+     * @brief Publishes a non retained message to the specified topic.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
      * @return true If the publish succeeded.
@@ -472,7 +472,7 @@ class PubSubClient : public Print {
     bool publish(const char* topic, const char* payload, bool retained);
 
     /**
-     * @brief Publishes a message to the specified topic.
+     * @brief Publishes a non retained message to the specified topic.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
      * @param plength The length of the payload.
