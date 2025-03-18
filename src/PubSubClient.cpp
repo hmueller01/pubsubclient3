@@ -240,7 +240,11 @@ bool PubSubClient::readByte(uint8_t* result) {
             return false;
         }
     }
-    *result = _client->read();
+    int rc = _client->read();
+    if (rc < 0) {
+        return false;
+    }
+    *result = (uint8_t)rc;
     return true;
 }
 
