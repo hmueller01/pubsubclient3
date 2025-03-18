@@ -359,6 +359,7 @@ class PubSubClient : public Print {
     /**
      * @brief Sets the keep alive interval used by the client.
      * This value should only be changed when the client is not connected.
+     * Set keepAlive to zero (0) to turn off the keep alive mechanism.
      * @param keepAlive The keep alive interval, in seconds.
      * @return The client instance, allowing the function to be chained.
      */
