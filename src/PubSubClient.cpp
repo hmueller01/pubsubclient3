@@ -719,8 +719,7 @@ size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, s
         memcpy(buf + pos, string, sLen);
         pos += sLen;
     } else {
-        DEBUG_PSC_PRINTF("writeString(): string (%zu) does not fit into buf (%zu)\n", pos + 2 + sLen,
-                         size);  // TODO: change this to ERROR_PSC_PRINTF_P after #25 is merged
+        ERROR_PSC_PRINTF_P("writeString(): string (%zu) does not fit into buf (%zu)\n", pos + 2 + sLen, size);
     }
     return pos;
 }
