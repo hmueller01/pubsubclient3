@@ -522,21 +522,24 @@ bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t p
 }
 
 bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained) {
-    if (connected()) {
-        // Send the header and variable length field
-        size_t length = MQTT_MAX_HEADER_SIZE;
-        length = writeString(topic, this->buffer, length);
+    if (!topic) return false;
+    // check if the header and the topic (including 2 length bytes) fit into the buffer
+    if (connected() && MQTT_MAX_HEADER_SIZE + strlen(topic) + 2 <= this->bufferSize) {
+        // first write the topic at the end of the maximal variable header (MQTT_MAX_HEADER_SIZE) to the buffer
+        size_t topicLen = writeString(topic, this->buffer, MQTT_MAX_HEADER_SIZE) - MQTT_MAX_HEADER_SIZE;
+        // we now know the length of the topic string (lenght + 2 bytes signalling the length) and can build the variable header information
         const uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
-        uint8_t hdrLen = buildHeader(header, this->buffer, plength + length - MQTT_MAX_HEADER_SIZE);
-        size_t rc = _client->write(this->buffer + (MQTT_MAX_HEADER_SIZE - hdrLen), length - (MQTT_MAX_HEADER_SIZE - hdrLen));
+        uint8_t hdrLen = buildHeader(header, this->buffer, topicLen + plength);
+        // as the header length is variable, it starts at MQTT_MAX_HEADER_SIZE - hdrLen (see buildHeader() documentation)
+        size_t rc = _client->write(this->buffer + (MQTT_MAX_HEADER_SIZE - hdrLen), hdrLen + topicLen);
         lastOutActivity = millis();
-        return (rc == (length - (MQTT_MAX_HEADER_SIZE - hdrLen)));
+        return (rc == (hdrLen + topicLen));
     }
     return false;
 }
 
-int PubSubClient::endPublish() {
-    return 1;
+bool PubSubClient::endPublish() {
+    return connected();
 }
 
 size_t PubSubClient::write(uint8_t data) {
@@ -681,16 +684,43 @@ void PubSubClient::disconnect() {
     pingOutstanding = false;
 }
 
+/**
+ * @brief  Write an UTF-8 encoded string to the give buffer and position. The string can have a length of 0 to 65535 bytes. The buffer is prefixed with two
+ * bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol specification.
+ * @note   If the string does not fit in the buffer (bufferSize) or is longer than 65535 bytes nothing is written to the buffer and the returned position
+ * is unchanged.
+ *
+ * @param  string 'C' string of the data that shall be written in the buffer.
+ * @param  buf Buffer to write the string into.
+ * @param  pos Position in the buffer to write the string.
+ * @return New position in the buffer (pos + 2 + string length), or pos if a buffer overrun would occur.
+ */
 size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos) {
-    const char* idp = string;
-    uint16_t i = 0;
-    pos += 2;
-    while (*idp) {
-        buf[pos++] = (uint8_t)*idp++;
-        i++;
+    return writeString(string, buf, pos, this->bufferSize);
+}
+
+/**
+ * @brief  Write an UTF-8 encoded string to the give buffer and position. The string can have a length of 0 to 65535 bytes. The buffer is prefixed with two
+ * bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol specification.
+ * @note   If the string does not fit in the buffer or is longer than 65535 bytes nothing is written to the buffer and the returned position is unchanged.
+ *
+ * @param  string 'C' string of the data that shall be written in the buffer.
+ * @param  buf Buffer to write the string into.
+ * @param  pos Position in the buffer to write the string.
+ * @param  size Maximal size of the buffer.
+ * @return New position in the buffer (pos + 2 + string length), or pos if a buffer overrun would occur or the string is a nullptr.
+ */
+size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, size_t size) {
+    if (!string) return pos;
+    size_t sLen = strlen(string);
+    if (pos + 2 + sLen <= size && sLen <= 0xFFFF) {
+        buf[pos++] = (uint8_t)(sLen >> 8);
+        buf[pos++] = (uint8_t)(sLen & 0xFF);
+        memcpy(buf + pos, string, sLen);
+        pos += sLen;
+    } else {
+        ERROR_PSC_PRINTF_P("writeString(): string (%zu) does not fit into buf (%zu)\n", pos + 2 + sLen, size);
     }
-    buf[pos - i - 2] = (i >> 8);
-    buf[pos - i - 1] = (i & 0xFF);
     return pos;
 }
 
