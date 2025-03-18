@@ -16,11 +16,8 @@ int test_keepalive_pings_with_inbound_qos0();
 int test_keepalive_no_pings_inbound_qos1();
 int test_keepalive_disconnects_hung();
 
-void callback(char* topic, uint8_t* payload, size_t length) {
+void callback(_UNUSED_ char* topic, _UNUSED_ uint8_t* payload, _UNUSED_ size_t length) {
     // handle message arrived
-    topic[0];
-    payload[0];
-    length;
 }
 
 int test_keepalive_pings_idle() {
