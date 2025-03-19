@@ -214,18 +214,15 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
 bool PubSubClient::connected() {
     if (!_client) return false;
 
-    bool rc = (bool)_client->connected();
-    if (!rc) {
-        if (_state == MQTT_CONNECTED) {
-            DEBUG_PSC_PRINTF("lost connection (client may have more details)\n");
-            _state = MQTT_CONNECTION_LOST;
-            _client->flush();
-            _client->stop();
-        }
-    } else {
-        return _state == MQTT_CONNECTED;
+    if (_client->connected()) {
+        return (_state == MQTT_CONNECTED);
+    } else if (_state == MQTT_CONNECTED) {
+        DEBUG_PSC_PRINTF("lost connection (client may have more details)\n");
+        _state = MQTT_CONNECTION_LOST;
+        _client->flush();
+        _client->stop();
     }
-    return rc;
+    return false;
 }
 
 void PubSubClient::disconnect() {
