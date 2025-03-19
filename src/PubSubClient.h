@@ -154,7 +154,7 @@ class PubSubClient : public Print {
     uint8_t* buffer;
     size_t bufferSize;
     uint16_t keepAlive;
-    uint16_t socketTimeout;
+    unsigned long socketTimeoutMillis;
     uint16_t nextMsgId;
     unsigned long lastOutActivity;
     unsigned long lastInActivity;
