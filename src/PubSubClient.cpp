@@ -166,7 +166,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
                     v = v | (0x80 >> 1);
                 }
             }
-            uint16_t keepAlive = this->keepAliveMillis / 1000;
+            const uint16_t keepAlive = this->keepAliveMillis / 1000;
             this->buffer[length++] = v;
             this->buffer[length++] = keepAlive >> 8;
             this->buffer[length++] = keepAlive & 0xFF;
@@ -409,7 +409,7 @@ bool PubSubClient::loop() {
         return false;
     }
     bool ret = true;
-    unsigned long t = millis();
+    const unsigned long t = millis();
     if (keepAliveMillis && ((t - lastInActivity > this->keepAliveMillis) || (t - lastOutActivity > this->keepAliveMillis))) {
         if (pingOutstanding) {
             DEBUG_PSC_PRINTF("loop aborting due to timeout\n");
