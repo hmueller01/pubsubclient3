@@ -219,7 +219,6 @@ bool PubSubClient::connected() {
     } else if (_state == MQTT_CONNECTED) {
         DEBUG_PSC_PRINTF("lost connection (client may have more details)\n");
         _state = MQTT_CONNECTION_LOST;
-        _client->flush();
         _client->stop();
         pingOutstanding = false;
     }
