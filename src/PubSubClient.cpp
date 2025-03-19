@@ -432,8 +432,7 @@ bool PubSubClient::loop() {
             this->buffer[0] = MQTTPINGREQ;
             this->buffer[1] = 0;
             if (_client->write(this->buffer, 2) == 2) {
-                lastOutActivity = t;
-                lastInActivity = t;
+                lastInActivity = lastOutActivity = t;
                 pingOutstanding = true;
             }
         }
