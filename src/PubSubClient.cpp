@@ -221,17 +221,18 @@ bool PubSubClient::connected() {
         _state = MQTT_CONNECTION_LOST;
         _client->flush();
         _client->stop();
+        pingOutstanding = false;
     }
     return false;
 }
 
 void PubSubClient::disconnect() {
+    DEBUG_PSC_PRINTF("disconnect called\n");
     this->buffer[0] = MQTTDISCONNECT;
     this->buffer[1] = 0;
     _client->write(this->buffer, 2);
     _state = MQTT_DISCONNECTED;
     _client->flush();
-    DEBUG_PSC_PRINTF("disconnect called\n");
     _client->stop();
     lastInActivity = lastOutActivity = millis();
     pingOutstanding = false;
