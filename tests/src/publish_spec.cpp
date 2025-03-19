@@ -17,11 +17,8 @@ int test_publish_too_long();
 int test_publish_P();
 int test_publish_P_too_long();
 
-void callback(char* topic, uint8_t* payload, size_t length) {
+void callback(_UNUSED_ char* topic, _UNUSED_ uint8_t* payload, _UNUSED_ size_t length) {
     // handle message arrived
-    topic[0];
-    payload[0];
-    length;
 }
 
 int test_publish() {
