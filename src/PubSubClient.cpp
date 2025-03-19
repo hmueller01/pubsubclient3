@@ -482,6 +482,7 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained
         // we now know the length of the topic string (lenght + 2 bytes signalling the length) and can build the variable header information
         const uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
         uint8_t hdrLen = buildHeader(header, this->buffer, topicLen + plength);
+        if (hdrLen == 0) return false;  // exit here in case of header generation failure
         // as the header length is variable, it starts at MQTT_MAX_HEADER_SIZE - hdrLen (see buildHeader() documentation)
         size_t rc = _client->write(this->buffer + (MQTT_MAX_HEADER_SIZE - hdrLen), hdrLen + topicLen);
         lastOutActivity = millis();
@@ -512,7 +513,7 @@ size_t PubSubClient::write(const uint8_t* buffer, size_t size) {
  * @param  header Header byte, e.g. MQTTCONNECT, MQTTPUBLISH, MQTTSUBSCRIBE, MQTTUNSUBSCRIBE.
  * @param  buf Buffer to write header to.
  * @param  length Length to encode in the header.
- * @return Returns the size of the header (1 .. MQTT_MAX_HEADER_SIZE).
+ * @return Returns the size of the header (1 .. MQTT_MAX_HEADER_SIZE), or 0 in case of a failure (e.g. length to big).
  */
 uint8_t PubSubClient::buildHeader(uint8_t header, uint8_t* buf, size_t length) {
     uint8_t hdrBuf[MQTT_MAX_HEADER_SIZE - 1];
@@ -529,13 +530,12 @@ uint8_t PubSubClient::buildHeader(uint8_t header, uint8_t* buf, size_t length) {
     } while (len > 0 && hdrLen < MQTT_MAX_HEADER_SIZE - 1);
 
     if (len > 0) {
-        DEBUG_PSC_PRINTF("length too big %zu, left %zu, should be 0\r\n", length, len);
+        ERROR_PSC_PRINTF_P("buildHeader() length too big %zu, left %zu\n", length, len);
+        return 0;
     }
 
     buf[MQTT_MAX_HEADER_SIZE - 1 - hdrLen] = header;
-    for (uint8_t i = 0; i < hdrLen; i++) {
-        buf[MQTT_MAX_HEADER_SIZE - hdrLen + i] = hdrBuf[i];
-    }
+    memcpy(buf + MQTT_MAX_HEADER_SIZE - hdrLen, hdrBuf, hdrLen);
     return hdrLen + 1;  // Full header size is variable length bit plus the 1-byte fixed header
 }
 
@@ -543,6 +543,7 @@ bool PubSubClient::write(uint8_t header, uint8_t* buf, size_t length) {
     bool result = true;
     size_t rc;
     uint8_t hdrLen = buildHeader(header, buf, length);
+    if (hdrLen == 0) return false;  // exit here in case of header generation failure
 
 #ifdef MQTT_MAX_TRANSFER_SIZE
     uint8_t* writeBuf = buf + (MQTT_MAX_HEADER_SIZE - hdrLen);
