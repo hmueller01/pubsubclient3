@@ -7,8 +7,7 @@
 
 #include "PubSubClient.h"
 
-PubSubClient::PubSubClient()
-    : _client(nullptr), bufferSize(0), callback(nullptr), domain(nullptr), port(0), stream(nullptr), _state(MQTT_DISCONNECTED) {
+PubSubClient::PubSubClient() : _client(nullptr), bufferSize(0), callback(nullptr), domain(nullptr), port(0), stream(nullptr), _state(MQTT_DISCONNECTED) {
     setBufferSize(MQTT_MAX_PACKET_SIZE);
     setSocketTimeout(MQTT_SOCKET_TIMEOUT);
     setKeepAlive(MQTT_KEEPALIVE);
