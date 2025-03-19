@@ -539,7 +539,7 @@ uint8_t PubSubClient::buildHeader(uint8_t header, uint8_t* buf, size_t length) {
 
     if (len > 0) {
         ERROR_PSC_PRINTF_P("buildHeader() length too big %zu, left %zu\n", length, len);
-        hdrLen = 0;
+        return 0;
     }
 
     buf[MQTT_MAX_HEADER_SIZE - 1 - hdrLen] = header;
