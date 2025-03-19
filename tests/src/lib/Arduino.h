@@ -33,4 +33,6 @@ unsigned long millis(void);
 #define DEBUG_PSC_PRINTF(fmt, ...) printf(("PubSubClient: " fmt), ##__VA_ARGS__)
 #endif
 
+#define _UNUSED_ __attribute__((unused))
+
 #endif  // Arduino_h
