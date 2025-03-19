@@ -211,6 +211,38 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
     return true;
 }
 
+bool PubSubClient::connected() {
+    bool rc;
+    if (_client == NULL) {
+        rc = false;
+    } else {
+        rc = (bool)_client->connected();
+        if (!rc) {
+            if (_state == MQTT_CONNECTED) {
+                DEBUG_PSC_PRINTF("lost connection (client may have more details)\n");
+                _state = MQTT_CONNECTION_LOST;
+                _client->flush();
+                _client->stop();
+            }
+        } else {
+            return _state == MQTT_CONNECTED;
+        }
+    }
+    return rc;
+}
+
+void PubSubClient::disconnect() {
+    this->buffer[0] = MQTTDISCONNECT;
+    this->buffer[1] = 0;
+    _client->write(this->buffer, 2);
+    _state = MQTT_DISCONNECTED;
+    _client->flush();
+    DEBUG_PSC_PRINTF("disconnect called\n");
+    _client->stop();
+    lastInActivity = lastOutActivity = millis();
+    pingOutstanding = false;
+}
+
 /**
  * @brief  Reads a byte into result.
  *
@@ -489,16 +521,6 @@ bool PubSubClient::endPublish() {
     return connected();
 }
 
-size_t PubSubClient::write(uint8_t data) {
-    lastOutActivity = millis();
-    return _client->write(data);
-}
-
-size_t PubSubClient::write(const uint8_t* buffer, size_t size) {
-    lastOutActivity = millis();
-    return _client->write(buffer, size);
-}
-
 /**
  * @brief  Build up the header ready to send.
  * Note: the header is built at the end of the first MQTT_MAX_HEADER_SIZE bytes, so will start
@@ -533,6 +555,16 @@ uint8_t PubSubClient::buildHeader(uint8_t header, uint8_t* buf, size_t length) {
     return hdrLen + 1;  // Full header size is variable length bit plus the 1-byte fixed header
 }
 
+size_t PubSubClient::write(uint8_t data) {
+    lastOutActivity = millis();
+    return _client->write(data);
+}
+
+size_t PubSubClient::write(const uint8_t* buffer, size_t size) {
+    lastOutActivity = millis();
+    return _client->write(buffer, size);
+}
+
 bool PubSubClient::write(uint8_t header, uint8_t* buf, size_t length) {
     bool result = true;
     size_t rc;
@@ -562,6 +594,46 @@ bool PubSubClient::write(uint8_t header, uint8_t* buf, size_t length) {
     }
 #endif
     return result;
+}
+
+/**
+ * @brief  Write an UTF-8 encoded string to the give buffer and position. The string can have a length of 0 to 65535 bytes. The buffer is prefixed with two
+ * bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol specification.
+ * @note   If the string does not fit in the buffer (bufferSize) or is longer than 65535 bytes nothing is written to the buffer and the returned position
+ * is unchanged.
+ *
+ * @param  string 'C' string of the data that shall be written in the buffer.
+ * @param  buf Buffer to write the string into.
+ * @param  pos Position in the buffer to write the string.
+ * @return New position in the buffer (pos + 2 + string length), or pos if a buffer overrun would occur.
+ */
+size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos) {
+    return writeString(string, buf, pos, this->bufferSize);
+}
+
+/**
+ * @brief  Write an UTF-8 encoded string to the give buffer and position. The string can have a length of 0 to 65535 bytes. The buffer is prefixed with two
+ * bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol specification.
+ * @note   If the string does not fit in the buffer or is longer than 65535 bytes nothing is written to the buffer and the returned position is unchanged.
+ *
+ * @param  string 'C' string of the data that shall be written in the buffer.
+ * @param  buf Buffer to write the string into.
+ * @param  pos Position in the buffer to write the string.
+ * @param  size Maximal size of the buffer.
+ * @return New position in the buffer (pos + 2 + string length), or pos if a buffer overrun would occur or the string is a nullptr.
+ */
+size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, size_t size) {
+    if (!string) return pos;
+    size_t sLen = strlen(string);
+    if (pos + 2 + sLen <= size && sLen <= 0xFFFF) {
+        buf[pos++] = (uint8_t)(sLen >> 8);
+        buf[pos++] = (uint8_t)(sLen & 0xFF);
+        memcpy(buf + pos, string, sLen);
+        pos += sLen;
+    } else {
+        ERROR_PSC_PRINTF_P("writeString(): string (%zu) does not fit into buf (%zu)\n", pos + 2 + sLen, size);
+    }
+    return pos;
 }
 
 bool PubSubClient::subscribe(const char* topic) {
@@ -619,78 +691,6 @@ bool PubSubClient::unsubscribe(const char* topic) {
     return false;
 }
 
-void PubSubClient::disconnect() {
-    this->buffer[0] = MQTTDISCONNECT;
-    this->buffer[1] = 0;
-    _client->write(this->buffer, 2);
-    _state = MQTT_DISCONNECTED;
-    _client->flush();
-    DEBUG_PSC_PRINTF("disconnect called\n");
-    _client->stop();
-    lastInActivity = lastOutActivity = millis();
-    pingOutstanding = false;
-}
-
-/**
- * @brief  Write an UTF-8 encoded string to the give buffer and position. The string can have a length of 0 to 65535 bytes. The buffer is prefixed with two
- * bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol specification.
- * @note   If the string does not fit in the buffer (bufferSize) or is longer than 65535 bytes nothing is written to the buffer and the returned position
- * is unchanged.
- *
- * @param  string 'C' string of the data that shall be written in the buffer.
- * @param  buf Buffer to write the string into.
- * @param  pos Position in the buffer to write the string.
- * @return New position in the buffer (pos + 2 + string length), or pos if a buffer overrun would occur.
- */
-size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos) {
-    return writeString(string, buf, pos, this->bufferSize);
-}
-
-/**
- * @brief  Write an UTF-8 encoded string to the give buffer and position. The string can have a length of 0 to 65535 bytes. The buffer is prefixed with two
- * bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol specification.
- * @note   If the string does not fit in the buffer or is longer than 65535 bytes nothing is written to the buffer and the returned position is unchanged.
- *
- * @param  string 'C' string of the data that shall be written in the buffer.
- * @param  buf Buffer to write the string into.
- * @param  pos Position in the buffer to write the string.
- * @param  size Maximal size of the buffer.
- * @return New position in the buffer (pos + 2 + string length), or pos if a buffer overrun would occur or the string is a nullptr.
- */
-size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, size_t size) {
-    if (!string) return pos;
-    size_t sLen = strlen(string);
-    if (pos + 2 + sLen <= size && sLen <= 0xFFFF) {
-        buf[pos++] = (uint8_t)(sLen >> 8);
-        buf[pos++] = (uint8_t)(sLen & 0xFF);
-        memcpy(buf + pos, string, sLen);
-        pos += sLen;
-    } else {
-        ERROR_PSC_PRINTF_P("writeString(): string (%zu) does not fit into buf (%zu)\n", pos + 2 + sLen, size);
-    }
-    return pos;
-}
-
-bool PubSubClient::connected() {
-    bool rc;
-    if (_client == NULL) {
-        rc = false;
-    } else {
-        rc = (bool)_client->connected();
-        if (!rc) {
-            if (_state == MQTT_CONNECTED) {
-                DEBUG_PSC_PRINTF("lost connection (client may have more details)\n");
-                _state = MQTT_CONNECTION_LOST;
-                _client->flush();
-                _client->stop();
-            }
-        } else {
-            return _state == MQTT_CONNECTED;
-        }
-    }
-    return rc;
-}
-
 PubSubClient& PubSubClient::setServer(uint8_t* ip, uint16_t port) {
     IPAddress addr(ip[0], ip[1], ip[2], ip[3]);
     return setServer(addr, port);
@@ -736,10 +736,6 @@ PubSubClient& PubSubClient::setStream(Stream& stream) {
     return *this;
 }
 
-int PubSubClient::state() {
-    return this->_state;
-}
-
 bool PubSubClient::setBufferSize(size_t size) {
     if (size == 0) {
         // Cannot set it back to 0
@@ -771,4 +767,8 @@ PubSubClient& PubSubClient::setKeepAlive(uint16_t keepAlive) {
 PubSubClient& PubSubClient::setSocketTimeout(uint16_t timeout) {
     this->socketTimeoutMillis = timeout * 1000UL;
     return *this;
+}
+
+int PubSubClient::state() {
+    return this->_state;
 }

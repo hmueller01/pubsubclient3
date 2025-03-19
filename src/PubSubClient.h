@@ -166,14 +166,14 @@ class PubSubClient : public Print {
     Stream* stream;
     int _state;
 
-    bool handlePacket(uint8_t hdrLen, size_t len);
     size_t readPacket(uint8_t* hdrLen);
+    bool handlePacket(uint8_t hdrLen, size_t len);
     bool readByte(uint8_t* result);
     bool readByte(uint8_t* result, size_t* pos);
+    uint8_t buildHeader(uint8_t header, uint8_t* buf, size_t length);
     bool write(uint8_t header, uint8_t* buf, size_t length);
     size_t writeString(const char* string, uint8_t* buf, size_t pos);
     size_t writeString(const char* string, uint8_t* buf, size_t pos, size_t size);
-    uint8_t buildHeader(uint8_t header, uint8_t* buf, size_t length);
 
    public:
     /**
