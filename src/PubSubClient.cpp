@@ -126,7 +126,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
         if (_client->connected()) {
             result = 1;
         } else if (this->port != 0) {
-            if (this->domain != NULL) {
+            if (this->domain) {
                 result = _client->connect(this->domain, this->port);
             } else {
                 result = _client->connect(this->ip, this->port);
@@ -134,39 +134,31 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
         }
 
         if (result == 1) {
-            nextMsgId = 1;
-            // Leave room in the buffer for header and variable length field
-            size_t length = MQTT_MAX_HEADER_SIZE;
+            nextMsgId = 1;  // init msgId (packet identifier)
 
 #if MQTT_VERSION == MQTT_VERSION_3_1
-            uint8_t d[9] = {0x00, 0x06, 'M', 'Q', 'I', 's', 'd', 'p', MQTT_VERSION};
-#define MQTT_HEADER_VERSION_LENGTH 9
+            const uint8_t protocol[9] = {0x00, 0x06, 'M', 'Q', 'I', 's', 'd', 'p', MQTT_VERSION};
 #elif MQTT_VERSION == MQTT_VERSION_3_1_1
-            uint8_t d[7] = {0x00, 0x04, 'M', 'Q', 'T', 'T', MQTT_VERSION};
-#define MQTT_HEADER_VERSION_LENGTH 7
+            const uint8_t protocol[7] = {0x00, 0x04, 'M', 'Q', 'T', 'T', MQTT_VERSION};
 #endif
-            for (size_t j = 0; j < MQTT_HEADER_VERSION_LENGTH; j++) {
-                this->buffer[length++] = d[j];
-            }
+            // Leave room in the buffer for header and variable length field
+            memcpy(this->buffer + MQTT_MAX_HEADER_SIZE, protocol, sizeof(protocol));
 
-            uint8_t v;
+            size_t length = MQTT_MAX_HEADER_SIZE + sizeof(protocol);
+            uint8_t flags = 0x00;
             if (willTopic) {
-                v = 0x04 | (willQos << 3) | (willRetain << 5);
-            } else {
-                v = 0x00;
+                flags = (0x01 << 2) | (willQos << 3) | (willRetain << 5);  // set will flag bit 2, will QoS and will retain bit 5
             }
             if (cleanSession) {
-                v = v | 0x02;
+                flags = flags | (0x01 << 1);  // set clean session bit 1
             }
-
-            if (user != NULL) {
-                v = v | 0x80;
-
-                if (pass != NULL) {
-                    v = v | (0x80 >> 1);
+            if (user) {
+                flags = flags | (0x01 << 7);  // set user name flag bit 7
+                if (pass) {
+                    flags = flags | (0x01 << 6);  // set password flag bit 6
                 }
             }
-            this->buffer[length++] = v;
+            this->buffer[length++] = flags;
             this->buffer[length++] = ((this->keepAlive) >> 8);
             this->buffer[length++] = ((this->keepAlive) & 0xFF);
 
@@ -179,10 +171,10 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
                 length = writeString(willMessage, this->buffer, length);
             }
 
-            if (user != NULL) {
+            if (user) {
                 CHECK_STRING_LENGTH(length, user)
                 length = writeString(user, this->buffer, length);
-                if (pass != NULL) {
+                if (pass) {
                     CHECK_STRING_LENGTH(length, pass)
                     length = writeString(pass, this->buffer, length);
                 }
@@ -203,8 +195,8 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
                     return false;
                 }
             }
-            uint8_t llen;
-            size_t len = readPacket(&llen);
+            uint8_t hdrLen;
+            size_t len = readPacket(&hdrLen);
 
             if (len == 4) {
                 if (buffer[3] == 0) {
