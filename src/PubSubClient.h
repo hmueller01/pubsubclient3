@@ -153,7 +153,7 @@ class PubSubClient : public Print {
     Client* _client;
     uint8_t* buffer;
     size_t bufferSize;
-    uint16_t keepAlive;
+    unsigned long keepAliveMillis;
     unsigned long socketTimeoutMillis;
     uint16_t nextMsgId;
     unsigned long lastOutActivity;
@@ -359,6 +359,7 @@ class PubSubClient : public Print {
     /**
      * @brief Sets the keep alive interval used by the client.
      * This value should only be changed when the client is not connected.
+     * Set keepAlive to zero (0) to turn off the keep alive mechanism.
      * @param keepAlive The keep alive interval, in seconds.
      * @return The client instance, allowing the function to be chained.
      */

@@ -7,10 +7,10 @@
 
 #include "PubSubClient.h"
 
-PubSubClient::PubSubClient()
-    : _client(nullptr), bufferSize(0), keepAlive(MQTT_KEEPALIVE), callback(nullptr), domain(nullptr), port(0), stream(nullptr), _state(MQTT_DISCONNECTED) {
+PubSubClient::PubSubClient() : _client(nullptr), bufferSize(0), callback(nullptr), domain(nullptr), port(0), stream(nullptr), _state(MQTT_DISCONNECTED) {
     setBufferSize(MQTT_MAX_PACKET_SIZE);
     setSocketTimeout(MQTT_SOCKET_TIMEOUT);
+    setKeepAlive(MQTT_KEEPALIVE);
 }
 
 PubSubClient::PubSubClient(Client& client) : PubSubClient() {
@@ -151,9 +151,10 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
                     flags = flags | (0x01 << 6);  // set password flag bit 6
                 }
             }
+            const uint16_t keepAlive = this->keepAliveMillis / 1000;
             this->buffer[length++] = flags;
-            this->buffer[length++] = ((this->keepAlive) >> 8);
-            this->buffer[length++] = ((this->keepAlive) & 0xFF);
+            this->buffer[length++] = keepAlive >> 8;
+            this->buffer[length++] = keepAlive & 0xFF;
 
             CHECK_STRING_LENGTH(length, id)
             length = writeString(id, this->buffer, length);
@@ -393,8 +394,8 @@ bool PubSubClient::loop() {
         return false;
     }
     bool ret = true;
-    unsigned long t = millis();
-    if (((t - lastInActivity > this->keepAlive * 1000UL) || (t - lastOutActivity > this->keepAlive * 1000UL)) && keepAlive != 0) {
+    const unsigned long t = millis();
+    if (keepAliveMillis && ((t - lastInActivity > this->keepAliveMillis) || (t - lastOutActivity > this->keepAliveMillis))) {
         if (pingOutstanding) {
             DEBUG_PSC_PRINTF("loop aborting due to timeout\n");
             _state = MQTT_CONNECTION_TIMEOUT;
@@ -763,7 +764,7 @@ size_t PubSubClient::getBufferSize() {
 }
 
 PubSubClient& PubSubClient::setKeepAlive(uint16_t keepAlive) {
-    this->keepAlive = keepAlive;
+    this->keepAliveMillis = keepAlive * 1000UL;
     return *this;
 }
 
