@@ -95,7 +95,7 @@ PubSubClient::~PubSubClient() {
 }
 
 bool PubSubClient::connect(const char* id) {
-    return connect(id, NULL, NULL, 0, 0, 0, 0, 1);
+    return connect(id, nullptr, nullptr, 0, 0, 0, 0, 1);
 }
 
 bool PubSubClient::connect(const char* id, const char* user, const char* pass) {
@@ -103,7 +103,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass) {
 }
 
 bool PubSubClient::connect(const char* id, const char* willTopic, uint8_t willQos, bool willRetain, const char* willMessage) {
-    return connect(id, NULL, NULL, willTopic, willQos, willRetain, willMessage, 1);
+    return connect(id, nullptr, nullptr, willTopic, willQos, willRetain, willMessage, 1);
 }
 
 bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
@@ -212,32 +212,26 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
 }
 
 bool PubSubClient::connected() {
-    bool rc;
-    if (_client == NULL) {
-        rc = false;
-    } else {
-        rc = (bool)_client->connected();
-        if (!rc) {
-            if (_state == MQTT_CONNECTED) {
-                DEBUG_PSC_PRINTF("lost connection (client may have more details)\n");
-                _state = MQTT_CONNECTION_LOST;
-                _client->flush();
-                _client->stop();
-            }
-        } else {
-            return _state == MQTT_CONNECTED;
-        }
+    if (!_client) return false;
+
+    if (_client->connected()) {
+        return (_state == MQTT_CONNECTED);
+    } else if (_state == MQTT_CONNECTED) {
+        DEBUG_PSC_PRINTF("lost connection (client may have more details)\n");
+        _state = MQTT_CONNECTION_LOST;
+        _client->stop();
+        pingOutstanding = false;
     }
-    return rc;
+    return false;
 }
 
 void PubSubClient::disconnect() {
+    DEBUG_PSC_PRINTF("disconnect called\n");
     this->buffer[0] = MQTTDISCONNECT;
     this->buffer[1] = 0;
     _client->write(this->buffer, 2);
     _state = MQTT_DISCONNECTED;
     _client->flush();
-    DEBUG_PSC_PRINTF("disconnect called\n");
     _client->stop();
     lastInActivity = lastOutActivity = millis();
     pingOutstanding = false;
@@ -438,8 +432,7 @@ bool PubSubClient::loop() {
             this->buffer[0] = MQTTPINGREQ;
             this->buffer[1] = 0;
             if (_client->write(this->buffer, 2) == 2) {
-                lastOutActivity = t;
-                lastInActivity = t;
+                lastInActivity = lastOutActivity = t;
                 pingOutstanding = true;
             }
         }
@@ -565,6 +558,14 @@ size_t PubSubClient::write(const uint8_t* buffer, size_t size) {
     return _client->write(buffer, size);
 }
 
+/**
+ * @brief  Send the header and the prepared data to the client / MQTT broker.
+ *
+ * @param  header Header byte, e.g. MQTTCONNECT, MQTTPUBLISH, MQTTSUBSCRIBE, MQTTUNSUBSCRIBE.
+ * @param  buf Buffer of data to write.
+ * @param  length Length of buf to write.
+ * @return True if successfully sent, otherwise false if buildHeader() failed or buf could not be written.
+ */
 bool PubSubClient::write(uint8_t header, uint8_t* buf, size_t length) {
     bool result = true;
     size_t rc;
@@ -624,6 +625,7 @@ size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos) {
  */
 size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, size_t size) {
     if (!string) return pos;
+
     size_t sLen = strlen(string);
     if (pos + 2 + sLen <= size && sLen <= 0xFFFF) {
         buf[pos++] = (uint8_t)(sLen >> 8);
@@ -641,15 +643,12 @@ bool PubSubClient::subscribe(const char* topic) {
 }
 
 bool PubSubClient::subscribe(const char* topic, uint8_t qos) {
-    size_t topicLength = strnlen(topic, this->bufferSize);
-    if (topic == 0) {
-        return false;
-    }
-    if (qos > 1) {
-        return false;
-    }
-    if (this->bufferSize < 9 + topicLength) {
-        // Too long
+    if (!topic) return false;
+    if (qos > 1) return false;  // only QoS 0 and 1 supported
+
+    size_t topicLen = strnlen(topic, this->bufferSize);
+    if (this->bufferSize < MQTT_MAX_HEADER_SIZE + 2 + 2 + topicLen) {
+        // Too long: header + nextMsgId (2) + topic length bytes (2) + topicLen
         return false;
     }
     if (connected()) {
@@ -669,12 +668,11 @@ bool PubSubClient::subscribe(const char* topic, uint8_t qos) {
 }
 
 bool PubSubClient::unsubscribe(const char* topic) {
-    size_t topicLength = strnlen(topic, this->bufferSize);
-    if (topic == 0) {
-        return false;
-    }
-    if (this->bufferSize < 9 + topicLength) {
-        // Too long
+    if (!topic) return false;
+
+    size_t topicLen = strnlen(topic, this->bufferSize);
+    if (this->bufferSize < MQTT_MAX_HEADER_SIZE + 2 + 2 + topicLen) {
+        // Too long: header + nextMsgId (2) + topic length bytes (2) + topicLen
         return false;
     }
     if (connected()) {
@@ -700,22 +698,22 @@ PubSubClient& PubSubClient::setServer(IPAddress ip, uint16_t port) {
     this->ip = ip;
     this->port = port;
     free(this->domain);
-    this->domain = NULL;
+    this->domain = nullptr;
     return *this;
 }
 
 PubSubClient& PubSubClient::setServer(const char* domain, uint16_t port) {
-    char* newDomain = NULL;
-    if (domain != NULL) {
+    char* newDomain = nullptr;
+    if (domain) {
         newDomain = (char*)realloc(this->domain, strlen(domain) + 1);
     }
-    if (newDomain != NULL) {
+    if (newDomain) {
         strcpy(newDomain, domain);
         this->domain = newDomain;
         this->port = port;
     } else {
         free(this->domain);
-        this->domain = NULL;
+        this->domain = nullptr;
         this->port = 0;
     }
     return *this;
@@ -745,14 +743,14 @@ bool PubSubClient::setBufferSize(size_t size) {
         this->buffer = (uint8_t*)malloc(size);
     } else {
         uint8_t* newBuffer = (uint8_t*)realloc(this->buffer, size);
-        if (newBuffer != NULL) {
+        if (newBuffer) {
             this->buffer = newBuffer;
         } else {
             return false;
         }
     }
     this->bufferSize = size;
-    return (this->buffer != NULL);
+    return (this->buffer != nullptr);
 }
 
 size_t PubSubClient::getBufferSize() {
