@@ -1,6 +1,28 @@
 3.1.0
    * Fix setServer(domain, ...) by copy domain string to own buffer (prevent potential dangling string pointer) #10
    * Connect to broker only if port != 0 (e.g. in case of incorrect PubSubClient initialization) #10
+   * Refactored different buffer length types to size_t #11
+   * Added a bunch of warnings and -Werror to tests Makefile #11
+   * Reformatted tests code using Google sytle (see .clang-format) #11
+   * Fix keepalive handling, thanks to @uschnindler providing this to thingsboard #14
+   * Use initializer lists instead of assigning global members in constructor #15
+   * Fix DEBUG_PSC_PRINTF outputs #18
+   * Added ERROR_PSC_PRINTF and ERROR_PSC_PRINTF_P outputs #25
+   * Introduce MQTTRETAINED flag instead of hard coding #21
+   * Added documentation on readByte() and readPacket() functions #23
+   * Refactored buildHeader() (change return type, use MQTT_MAX_HEADER_SIZE, locals) #22, #34, #37
+   * Refactored readPacket() (changed return type to size_t, used MQTT_MAX_HEADER_SIZE, locals) #23
+   * Refactored readByte() #23
+   * Refactored beginPublish() and endPublish() #28
+   * Refactored publish() #31
+   * Refactored publish_P() #30
+   * Refactored connect() #40
+   * Refactored connected() (mostly rewritten and simplified, added setting pingOutstanding, don't need flush()) #44
+   * Refactored subscribe() and unsubscribe() #44
+   * Refactored internal socketTimeout and keepAlive to millis to improve performance #33, #38, #39
+   * Fix potential memory corruption in MQTTPUBLISH callback preparation #25
+   * Fix potential error in readByte() (missing failure test on _client->read()) #32
+   * Switch from constructor init-lists to class member initialization, see C++ core guideline C.45 #42
 
 3.0.2
    * Added github workflow to execute tests
