@@ -314,7 +314,7 @@ size_t PubSubClient::readPacket(uint8_t* hdrLen) {
         if (!readByte(this->buffer, &len)) return 0;
         skip = (this->buffer[*hdrLen + 1] << 8) + this->buffer[*hdrLen + 2];
         start = 2;
-        if (this->buffer[0] & MQTTQOS1) {
+        if (this->buffer[0] & MQTTQOS_BITS(MQTTQOS1)) {
             // skip message id
             skip += 2;
         }
@@ -355,7 +355,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
     switch (type) {
         case MQTTPUBLISH:
             if (callback) {
-                // MQTT Publish packet: See section 3.3 MQTT v3.1 protocol specification:
+                // MQTT Publish packet: See section 3.3 MQTT v3.1.1 protocol specification:
                 // - Header: 1 byte
                 // - Remaining header length: hdrLen bytes, multibyte field (1 .. MQTT_MAX_HEADER_SIZE - 1)
                 // - Topic length: 2 bytes (starts at buffer[hdrLen + 1])
@@ -377,7 +377,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 memmove(topic, topic + 1, topicLen);  // move topic inside buffer 1 byte to front
                 topic[topicLen] = '\0';               // end the topic as a 'C' string with \x00
 
-                if ((this->buffer[0] & 0x06) == MQTTQOS0) {
+                if ((this->buffer[0] & 0x06) == MQTTQOS_BITS(MQTTQOS0)) {
                     // No msgId for QOS == 0
                     callback(topic, payload, payloadLen);
                 } else {
@@ -399,7 +399,37 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 }
             }
             break;
+        case MQTTPUBACK:
+            // MQTT Publish Acknowledgment (QoS 1 publish received): See section 3.4 MQTT v3.1.1 protocol specification
+            if (length < 4) {
+                ERROR_PSC_PRINTF_P("handlePacket(): Received PUBACK packet with length %zu, expected at least 4 bytes\n", length);
+                return false;
+            }
+            // No futher action here, as resending is not supported.
+            break;
+        case MQTTPUBREC:
+            // MQTT Publish Received (QoS 2 publish received, part 1): See section 3.5 MQTT v3.1.1 protocol specification
+            if (length < 4) {
+                ERROR_PSC_PRINTF_P("handlePacket(): Received PUBREC packet with length %zu, expected at least 4 bytes\n", length);
+                return false;
+            }
+            // MQTT Publish Release (QoS 2 publish received, part 2): See section 3.6 MQTT v3.1.1 protocol specification
+            buffer[0] = MQTTPUBREL | 2;  // PUBREL with bit 1 set
+            // bytes 1-3 of PUBREL are the same as of PUBREC
+            if (_client->write(buffer, 4) == 4) {
+                lastOutActivity = millis();
+            }
+            break;
+        case MQTTPUBCOMP:
+            // MQTT Publish Complete (QoS 2 publish received, part 3): See section 3.7 MQTT v3.1.1 protocol specification
+            if (length < 4) {
+                ERROR_PSC_PRINTF_P("handlePacket(): Received PUBCOMP packet with length %zu, expected at least 4 bytes\n", length);
+                return false;
+            }
+            // No futher action here, as resending is not supported.
+            break;
         case MQTTPINGREQ:
+            // MQTT Ping Request: See section 3.12 MQTT v3.1.1 protocol specification
             this->buffer[0] = MQTTPINGRESP;
             this->buffer[1] = 0;
             if (_client->write(this->buffer, 2) == 2) {
@@ -456,19 +486,27 @@ bool PubSubClient::loop() {
 }
 
 bool PubSubClient::publish(const char* topic, const char* payload) {
-    return publish(topic, (const uint8_t*)payload, payload ? strnlen(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, false);
+    return publish(topic, payload, MQTTQOS0, false);
 }
 
 bool PubSubClient::publish(const char* topic, const char* payload, bool retained) {
-    return publish(topic, (const uint8_t*)payload, payload ? strnlen(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, retained);
+    return publish(topic, payload, MQTTQOS0, retained);
+}
+
+bool PubSubClient::publish(const char* topic, const char* payload, uint8_t qos, bool retained) {
+    return publish(topic, (const uint8_t*)payload, payload ? strnlen(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
 }
 
 bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t plength) {
-    return publish(topic, payload, plength, false);
+    return publish(topic, payload, plength, MQTTQOS0, false);
 }
 
 bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t plength, bool retained) {
-    if (beginPublish(topic, plength, retained)) {
+    return publish(topic, payload, plength, MQTTQOS0, retained);
+}
+
+bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained) {
+    if (beginPublish(topic, plength, qos, retained)) {
         size_t rc = write(payload, plength);
         lastOutActivity = millis();
         return endPublish() && (rc == plength);
@@ -477,11 +515,19 @@ bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t ple
 }
 
 bool PubSubClient::publish_P(const char* topic, const char* payload, bool retained) {
-    return publish_P(topic, (const uint8_t*)payload, payload ? strnlen_P(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, retained);
+    return publish_P(topic, payload, MQTTQOS0, retained);
+}
+
+bool PubSubClient::publish_P(const char* topic, const char* payload, uint8_t qos, bool retained) {
+    return publish_P(topic, (const uint8_t*)payload, payload ? strnlen_P(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
 }
 
 bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t plength, bool retained) {
-    if (beginPublish(topic, plength, retained)) {
+    return publish_P(topic, payload, plength, MQTTQOS0, retained);
+}
+
+bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained) {
+    if (beginPublish(topic, plength, qos, retained)) {
         size_t rc = 0;
         for (size_t i = 0; i < plength; i++) {
             rc += _client->write((uint8_t)pgm_read_byte_near(payload + i));
@@ -493,13 +539,22 @@ bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t p
 }
 
 bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained) {
+    return beginPublish(topic, plength, MQTTQOS0, retained);
+}
+
+bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained) {
     if (!topic) return false;
+    if (qos > MQTTQOS2) {       // only valid QoS supported
+        this->_qos = MQTTQOS0;  // reset QoS to 0, that endPublish() will not send a msgId
+        return false;
+    }
+    this->_qos = qos;  // save the QoS for later endPublish() operation
     // check if the header and the topic (including 2 length bytes) fit into the buffer
     if (connected() && MQTT_MAX_HEADER_SIZE + strlen(topic) + 2 <= this->bufferSize) {
         // first write the topic at the end of the maximal variable header (MQTT_MAX_HEADER_SIZE) to the buffer
         size_t topicLen = writeString(topic, this->buffer, MQTT_MAX_HEADER_SIZE) - MQTT_MAX_HEADER_SIZE;
         // we now know the length of the topic string (lenght + 2 bytes signalling the length) and can build the variable header information
-        const uint8_t header = MQTTPUBLISH | (retained ? MQTTRETAINED : 0);
+        const uint8_t header = MQTTPUBLISH | MQTTQOS_BITS(qos) | (retained ? MQTTRETAINED : 0);
         uint8_t hdrLen = buildHeader(header, this->buffer, topicLen + plength);
         if (hdrLen == 0) return false;  // exit here in case of header generation failure
         // as the header length is variable, it starts at MQTT_MAX_HEADER_SIZE - hdrLen (see buildHeader() documentation)
@@ -511,7 +566,19 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained
 }
 
 bool PubSubClient::endPublish() {
-    return connected();
+    if (connected()) {
+        if (this->_qos) {
+            // QoS == 1 or 2, send the msgId
+            nextMsgId = (++nextMsgId == 0) ? 1 : nextMsgId;  // msgId must not be 0, so start at 1
+            const uint8_t buf[2] = {(uint8_t)(nextMsgId >> 8), (uint8_t)(nextMsgId & 0xFF)};
+            size_t rc = _client->write(buf, 2);
+            lastOutActivity = millis();
+            return (rc == 2);
+        }
+        // QoS == 0, no msgId to send
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -598,10 +665,10 @@ bool PubSubClient::write(uint8_t header, uint8_t* buf, size_t length) {
 }
 
 /**
- * @brief  Write an UTF-8 encoded string to the give buffer and position. The string can have a length of 0 to 65535 bytes. The buffer is prefixed with two
- * bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol specification.
- * @note   If the string does not fit in the buffer (bufferSize) or is longer than 65535 bytes nothing is written to the buffer and the returned position
- * is unchanged.
+ * @brief  Write an UTF-8 encoded string to the give buffer and position. The string can have a length of 0 to 65535 bytes. The buffer is prefixed with
+ * two bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol specification.
+ * @note   If the string does not fit in the buffer (bufferSize) or is longer than 65535 bytes nothing is written to the buffer and the returned
+ * position is unchanged.
  *
  * @param  string 'C' string of the data that shall be written in the buffer.
  * @param  buf Buffer to write the string into.
@@ -613,9 +680,10 @@ size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos) {
 }
 
 /**
- * @brief  Write an UTF-8 encoded string to the give buffer and position. The string can have a length of 0 to 65535 bytes. The buffer is prefixed with two
- * bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol specification.
- * @note   If the string does not fit in the buffer or is longer than 65535 bytes nothing is written to the buffer and the returned position is unchanged.
+ * @brief  Write an UTF-8 encoded string to the give buffer and position. The string can have a length of 0 to 65535 bytes. The buffer is prefixed with
+ * two bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol specification.
+ * @note   If the string does not fit in the buffer or is longer than 65535 bytes nothing is written to the buffer and the returned position is
+ * unchanged.
  *
  * @param  string 'C' string of the data that shall be written in the buffer.
  * @param  buf Buffer to write the string into.
@@ -644,7 +712,7 @@ bool PubSubClient::subscribe(const char* topic) {
 
 bool PubSubClient::subscribe(const char* topic, uint8_t qos) {
     if (!topic) return false;
-    if (qos > 1) return false;  // only QoS 0 and 1 supported
+    if (qos > MQTTQOS1) return false;  // only QoS 0 and 1 supported
 
     size_t topicLen = strnlen(topic, this->bufferSize);
     if (this->bufferSize < MQTT_MAX_HEADER_SIZE + 2 + 2 + topicLen) {
@@ -662,7 +730,7 @@ bool PubSubClient::subscribe(const char* topic, uint8_t qos) {
         this->buffer[length++] = (nextMsgId & 0xFF);
         length = writeString(topic, this->buffer, length);
         this->buffer[length++] = qos;
-        return write(MQTTSUBSCRIBE | MQTTQOS1, this->buffer, length - MQTT_MAX_HEADER_SIZE);
+        return write(MQTTSUBSCRIBE | MQTTQOS_BITS(MQTTQOS1), this->buffer, length - MQTT_MAX_HEADER_SIZE);
     }
     return false;
 }
@@ -684,7 +752,7 @@ bool PubSubClient::unsubscribe(const char* topic) {
         this->buffer[length++] = (nextMsgId >> 8);
         this->buffer[length++] = (nextMsgId & 0xFF);
         length = writeString(topic, this->buffer, length);
-        return write(MQTTUNSUBSCRIBE | MQTTQOS1, this->buffer, length - MQTT_MAX_HEADER_SIZE);
+        return write(MQTTUNSUBSCRIBE | MQTTQOS_BITS(MQTTQOS1), this->buffer, length - MQTT_MAX_HEADER_SIZE);
     }
     return false;
 }

@@ -99,9 +99,10 @@
 #define MQTTDISCONNECT  14 << 4  // Client is Disconnecting
 #define MQTTRESERVED    15 << 4  // Reserved
 
-#define MQTTQOS0 (0 << 1)
-#define MQTTQOS1 (1 << 1)
-#define MQTTQOS2 (2 << 1)
+#define MQTTQOS0 ((uint8_t)0)  // Quality of Service 0: At most once
+#define MQTTQOS1 ((uint8_t)1)  // Quality of Service 1: At least once
+#define MQTTQOS2 ((uint8_t)2)  // Quality of Service 2: Exactly once
+#define MQTTQOS_BITS(qos) ((qos) << 1) // Quality of Service bits in the header
 
 // Maximum size of fixed header and variable length size header
 #define MQTT_MAX_HEADER_SIZE 5
@@ -165,6 +166,7 @@ class PubSubClient : public Print {
     uint16_t port{};
     Stream* stream{};
     int _state{MQTT_DISCONNECTED};
+    uint8_t _qos{MQTTQOS0};
 
     size_t readPacket(uint8_t* hdrLen);
     bool handlePacket(uint8_t hdrLen, size_t len);
@@ -454,7 +456,7 @@ class PubSubClient : public Print {
     void disconnect();
 
     /**
-     * @brief Publishes a non retained message to the specified topic.
+     * @brief Publishes a non retained message to the specified topic using QoS 0.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
      * @return true If the publish succeeded.
@@ -463,7 +465,7 @@ class PubSubClient : public Print {
     bool publish(const char* topic, const char* payload);
 
     /**
-     * @brief Publishes a message to the specified topic.
+     * @brief Publishes a message to the specified topic using QoS 0.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
      * @param retained Publish the message with the retain flag.
@@ -473,7 +475,18 @@ class PubSubClient : public Print {
     bool publish(const char* topic, const char* payload, bool retained);
 
     /**
-     * @brief Publishes a non retained message to the specified topic.
+     * @brief Publishes a message to the specified topic.
+     * @param topic The topic to publish to.
+     * @param payload The message to publish.
+     * @param qos The quality of service (QoS) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool publish(const char* topic, const char* payload, uint8_t qos, bool retained);
+
+    /**
+     * @brief Publishes a non retained message to the specified topic using QoS 0.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
      * @param plength The length of the payload.
@@ -483,7 +496,7 @@ class PubSubClient : public Print {
     bool publish(const char* topic, const uint8_t* payload, size_t plength);
 
     /**
-     * @brief Publishes a message to the specified topic.
+     * @brief Publishes a message to the specified topic using QoS 0.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
      * @param plength The length of the payload.
@@ -494,7 +507,19 @@ class PubSubClient : public Print {
     bool publish(const char* topic, const uint8_t* payload, size_t plength, bool retained);
 
     /**
-     * @brief Publishes a message stored in PROGMEM to the specified topic.
+     * @brief Publishes a message to the specified topic.
+     * @param topic The topic to publish to.
+     * @param payload The message to publish.
+     * @param plength The length of the payload.
+     * @param qos The quality of service (QoS) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool publish(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained);
+
+    /**
+     * @brief Publishes a message stored in PROGMEM to the specified topic using QoS 0.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
      * @param retained Publish the message with the retain flag.
@@ -507,6 +532,17 @@ class PubSubClient : public Print {
      * @brief Publishes a message stored in PROGMEM to the specified topic.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
+     * @param qos The quality of service (QoS) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool publish_P(const char* topic, const char* payload, uint8_t qos, bool retained);
+
+    /**
+     * @brief Publishes a message stored in PROGMEM to the specified topic using QoS 0.
+     * @param topic The topic to publish to.
+     * @param payload The message to publish.
      * @param plength The length of the payload.
      * @param retained Publish the message with the retain flag.
      * @return true If the publish succeeded.
@@ -515,7 +551,19 @@ class PubSubClient : public Print {
     bool publish_P(const char* topic, const uint8_t* payload, size_t plength, bool retained);
 
     /**
-     * @brief Start to publish a message.
+     * @brief Publishes a message stored in PROGMEM to the specified topic.
+     * @param topic The topic to publish to.
+     * @param payload The message to publish.
+     * @param plength The length of the payload.
+     * @param qos The quality of service (QoS) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool publish_P(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained);
+
+    /**
+     * @brief Start to publish a message using QoS 0.
      * This API:
      *   beginPublish(...)
      *   one or more calls to write(...)
@@ -529,6 +577,23 @@ class PubSubClient : public Print {
      * false If the publish failed, either connection lost or message too large.
      */
     bool beginPublish(const char* topic, size_t plength, bool retained);
+
+    /**
+     * @brief Start to publish a message.
+     * This API:
+     *   beginPublish(...)
+     *   one or more calls to write(...)
+     *   endPublish()
+     * Allows for arbitrarily large payloads to be sent without them having to be copied into
+     * a new buffer and held in memory at one time.
+     * @param topic The topic to publish to.
+     * @param plength The length of the payload.
+     * @param qos The quality of service (QoS) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained);
 
     /**
      * @brief Finish sending a message that was started with a call to beginPublish.
