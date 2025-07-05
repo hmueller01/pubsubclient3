@@ -7,6 +7,19 @@
 
 #include "PubSubClient.h"
 
+/**
+ * @brief Macro to check if a string 's' can be safely added to the MQTT buffer.
+ *
+ * If either check fails, the client connection is stopped and the function returns false.
+ * @param l current length in the buffer
+ * @param s string to check
+ */
+#define CHECK_STRING_LENGTH(l, s)                                            \
+    if ((!s) || (l + 2 + strnlen(s, this->bufferSize) > this->bufferSize)) { \
+        _client->stop();                                                     \
+        return false;                                                        \
+    }
+
 PubSubClient::PubSubClient() {
     setBufferSize(MQTT_MAX_PACKET_SIZE);
     setKeepAlive(MQTT_KEEPALIVE);
