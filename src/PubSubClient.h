@@ -117,12 +117,6 @@
 #define MQTT_CALLBACK_SIGNATURE void (*callback)(char*, uint8_t*, size_t)
 #endif
 
-#define CHECK_STRING_LENGTH(l, s)                                            \
-    if ((!s) || (l + 2 + strnlen(s, this->bufferSize) > this->bufferSize)) { \
-        _client->stop();                                                     \
-        return false;                                                        \
-    }
-
 #ifdef DEBUG_ESP_PORT
 #ifdef DEBUG_PUBSUBCLIENT
 #define DEBUG_PSC_PRINTF(fmt, ...) DEBUG_ESP_PORT.printf(("PubSubClient: " fmt), ##__VA_ARGS__)
