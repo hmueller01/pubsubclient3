@@ -544,6 +544,7 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained
 
 bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained) {
     if (!topic) return false;
+    if (strlen(topic) == 0) return false;  // empty topic is not allowed
     if (qos > MQTTQOS2) {       // only valid QoS supported
         this->_qos = MQTTQOS0;  // reset QoS to 0, that endPublish() will not send a nextMsgId
         ERROR_PSC_PRINTF_P("beginPublish() called with invalid QoS %u\n", qos);
