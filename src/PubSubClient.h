@@ -114,6 +114,10 @@
  */
 #define MQTT_CALLBACK_SIGNATURE std::function<void(char*, uint8_t*, size_t)> callback
 #else
+/**
+ * @brief Define the signature required by any callback function.
+ * @note The parameters are TOPIC, PAYLOAD, and LENGTH, respectively.
+ */
 #define MQTT_CALLBACK_SIGNATURE void (*callback)(char*, uint8_t*, size_t)
 #endif
 
@@ -206,7 +210,7 @@ class PubSubClient : public Print {
      * @brief Creates a fully configured client instance.
      * @param addr The address of the server.
      * @param port The port to connect to.
-     * @param MQTT_CALLBACK_SIGNATURE Pointer to a message callback function.
+     * @param callback Pointer to a message callback function.
      * Called when a message arrives for a subscription created by this client.
      * @param client The network client to use, for example WiFiClient.
      */
