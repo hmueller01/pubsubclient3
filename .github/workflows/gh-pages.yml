@@ -50,7 +50,7 @@ jobs:
           # Custom Doxygen pages header HTML file URL
           # customheader: # optional, default is
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
