@@ -44,9 +44,9 @@ jobs:
           # GitHub Pages branch name
           ghpagesbranch: gh-pages
           # GitHub Pages directory path
-          ghpagesdir: ./html
+          #ghpagesdir: ./
           # Toggle dark mode CSS
-          darkmode: true
+          #darkmode: true
           # Custom Doxygen pages header HTML file URL
           # customheader: # optional, default is
       - name: Upload artifact
