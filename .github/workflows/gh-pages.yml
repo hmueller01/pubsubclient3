@@ -53,9 +53,9 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
-          # path: '.'
+          path: '.'
           # This will only include the Doxygen generated HTML files
-          path: 'docs'
+          # path: 'docs'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
