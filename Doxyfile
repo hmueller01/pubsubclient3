@@ -2,8 +2,8 @@
 
 # Project related configuration options
 PROJECT_NAME           = "PubSubClient3"
-OUTPUT_DIRECTORY       = docs
-INPUT                  = src
+OUTPUT_DIRECTORY       = ./
+INPUT                  = ./src
 RECURSIVE              = YES
 
 # Build related configuration options
@@ -13,7 +13,7 @@ EXTRACT_STATIC         = NO
 
 # HTML output
 GENERATE_HTML          = YES
-HTML_OUTPUT            = html
+HTML_OUTPUT            = ./docs
 
 # LaTeX output (disable if not needed)
 GENERATE_LATEX         = NO
