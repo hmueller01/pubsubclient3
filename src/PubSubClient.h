@@ -187,7 +187,7 @@ class PubSubClient : public Print {
 
     /**
      * @brief Creates a fully configured client instance.
-     * @param domain The address of the server.
+     * @param addr The address of the server.
      * @param port The port to connect to.
      * @param client The network client to use, for example WiFiClient.
      */
@@ -195,7 +195,7 @@ class PubSubClient : public Print {
 
     /**
      * @brief Creates a fully configured client instance.
-     * @param domain The address of the server.
+     * @param addr The address of the server.
      * @param port The port to connect to.
      * @param client The network client to use, for example WiFiClient.
      * @param stream A stream to write received messages to.
@@ -204,9 +204,9 @@ class PubSubClient : public Print {
 
     /**
      * @brief Creates a fully configured client instance.
-     * @param domain The address of the server.
+     * @param addr The address of the server.
      * @param port The port to connect to.
-     * @param callback Pointer to a message callback function.
+     * @param MQTT_CALLBACK_SIGNATURE Pointer to a message callback function.
      * Called when a message arrives for a subscription created by this client.
      * @param client The network client to use, for example WiFiClient.
      */
@@ -214,7 +214,7 @@ class PubSubClient : public Print {
 
     /**
      * @brief Creates a fully configured client instance.
-     * @param domain The address of the server.
+     * @param addr The address of the server.
      * @param port The port to connect to.
      * @param callback Pointer to a message callback function.
      * Called when a message arrives for a subscription created by this client.
@@ -225,7 +225,7 @@ class PubSubClient : public Print {
 
     /**
      * @brief Creates a fully configured client instance.
-     * @param domain The address of the server.
+     * @param ip The address of the server.
      * @param port The port to connect to.
      * @param client The network client to use, for example WiFiClient.
      */
@@ -233,7 +233,7 @@ class PubSubClient : public Print {
 
     /**
      * @brief Creates a fully configured client instance.
-     * @param domain The address of the server.
+     * @param ip The address of the server.
      * @param port The port to connect to.
      * @param client The network client to use, for example WiFiClient.
      * @param stream A stream to write received messages to.
@@ -242,7 +242,7 @@ class PubSubClient : public Print {
 
     /**
      * @brief Creates a fully configured client instance.
-     * @param domain The address of the server.
+     * @param ip The address of the server.
      * @param port The port to connect to.
      * @param callback Pointer to a message callback function.
      * Called when a message arrives for a subscription created by this client.
@@ -252,7 +252,7 @@ class PubSubClient : public Print {
 
     /**
      * @brief Creates a fully configured client instance.
-     * @param domain The address of the server.
+     * @param ip The address of the server.
      * @param port The port to connect to.
      * @param callback Pointer to a message callback function.
      * Called when a message arrives for a subscription created by this client.
@@ -307,7 +307,7 @@ class PubSubClient : public Print {
     /**
      * @brief Sets the server details.
      * @param ip The address of the server.
-     * @param port  The port to connect to.
+     * @param port The port to connect to.
      * @return The client instance, allowing the function to be chained.
      */
     PubSubClient& setServer(IPAddress ip, uint16_t port);
@@ -315,15 +315,15 @@ class PubSubClient : public Print {
     /**
      * @brief Sets the server details.
      * @param ip The address of the server.
-     * @param port  The port to connect to.
+     * @param port The port to connect to.
      * @return The client instance, allowing the function to be chained.
      */
     PubSubClient& setServer(uint8_t* ip, uint16_t port);
 
     /**
      * @brief Sets the server details.
-     * @param ip The address of the server.
-     * @param port  The port to connect to.
+     * @param domain The address of the server.
+     * @param port The port to connect to.
      * @return The client instance, allowing the function to be chained.
      */
     PubSubClient& setServer(const char* domain, uint16_t port);
@@ -409,6 +409,8 @@ class PubSubClient : public Print {
      * @param willTopic The topic to be used by the will message.
      * @param willQos The quality of service to be used by the will message. [0, 1, 2].
      * @param willRetain Publish the will message with the retain flag.
+     * @param willMessage The message to be used by the will message.
+     * @note If willTopic is NULL, no will message is sent.
      * @return true If client succeeded in establishing a connection to the broker.
      * false If client failed to establish a connection to the broker.
      */
@@ -422,6 +424,8 @@ class PubSubClient : public Print {
      * @param willTopic The topic to be used by the will message.
      * @param willQos The quality of service to be used by the will message. [0, 1, 2].
      * @param willRetain Publish the will message with the retain flag.
+     * @param willMessage The message to be used by the will message.
+     * @note If willTopic is NULL, no will message is sent.
      * @return true If client succeeded in establishing a connection to the broker.
      * false If client failed to establish a connection to the broker.
      */
@@ -435,7 +439,9 @@ class PubSubClient : public Print {
      * @param willTopic The topic to be used by the will message.
      * @param willQos The quality of service to be used by the will message. [0, 1, 2].
      * @param willRetain Publish the will message with the retain flag.
+     * @param willMessage The message to be used by the will message.
      * @param cleanSession Connect with a clean session.
+     * @note If willTopic is NULL, no will message is sent.
      * @return true If client succeeded in establishing a connection to the broker.
      * false If client failed to establish a connection to the broker.
      */
@@ -533,7 +539,7 @@ class PubSubClient : public Print {
 
     /**
      * @brief Writes a single byte as a component of a publish started with a call to beginPublish.
-     * @param byte A byte to write to the publish payload.
+     * @param data A byte to write to the publish payload.
      * @return The number of bytes written.
      */
     virtual size_t write(uint8_t);
