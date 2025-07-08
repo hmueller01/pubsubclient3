@@ -24,6 +24,7 @@ concurrency:
 jobs:
   # Single deploy job since we're just deploying
   deploy:
+    if: github.repository == 'hmueller01/pubsubclient3'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -48,6 +49,8 @@ jobs:
           # darkmode: # optional
           # Custom Doxygen pages header HTML file URL
           # customheader: # optional, default is
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
