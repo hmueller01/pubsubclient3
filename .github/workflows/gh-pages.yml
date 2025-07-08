@@ -42,11 +42,11 @@ jobs:
           # Generated HTML documents output folder
           #htmloutput: ./docs/
           # GitHub Pages branch name
-          #ghpagesbranch: gh-pages
+          ghpagesbranch: gh-pages
           # GitHub Pages directory path
-          #ghpagesdir: ./docs
+          ghpagesdir: ./html
           # Toggle dark mode CSS
-          # darkmode: # optional
+          darkmode: true
           # Custom Doxygen pages header HTML file URL
           # customheader: # optional, default is
       - name: Upload artifact
