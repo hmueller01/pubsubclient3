@@ -46,7 +46,7 @@ jobs:
           # GitHub Pages directory path
           #ghpagesdir: ./
           # Toggle dark mode CSS
-          #darkmode: true
+          darkmode: true
           # Custom Doxygen pages header HTML file URL
           # customheader: # optional, default is
       - name: Upload artifact
