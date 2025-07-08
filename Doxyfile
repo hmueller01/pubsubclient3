@@ -7,9 +7,10 @@ INPUT                  = ./src
 RECURSIVE              = YES
 
 # Build related configuration options
-EXTRACT_ALL            = YES
+EXTRACT_ALL            = NO
 EXTRACT_PRIVATE        = NO
 EXTRACT_STATIC         = NO
+#EXCLUDE_SYMBOLS = CHECK_STRING_LENGTH
 
 # HTML output
 GENERATE_HTML          = YES
