@@ -9,10 +9,6 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
-<link href="navtree.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="resize.js"></script>
-<script type="text/javascript" src="navtreedata.js"></script>
-<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -50,23 +46,6 @@ $(function() {
 /* @license-end */
 </script>
 <div id="main-nav"></div>
-</div><!-- top -->
-<div id="side-nav" class="ui-resizable side-nav-resizable">
-  <div id="nav-tree">
-    <div id="nav-tree-contents">
-      <div id="nav-sync" class="sync"></div>
-    </div>
-  </div>
-  <div id="splitbar" style="-moz-user-select:none;" 
-       class="ui-resizable-handle">
-  </div>
-</div>
-<script type="text/javascript">
-/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function(){initNavTree('classPubSubClient.html',''); initResizable(); });
-/* @license-end */
-</script>
-<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -81,6 +60,7 @@ $(document).ready(function(){initNavTree('classPubSubClient.html',''); initResiz
 </iframe>
 </div>
 
+</div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
@@ -144,9 +124,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a83f82890460b9297a403f5fdf6d80806"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPubSubClient.html#a83f82890460b9297a403f5fdf6d80806">PubSubClient</a> (const char *, uint16_t, MQTT_CALLBACK_SIGNATURE, Client &amp;client, Stream &amp;)</td></tr>
 <tr class="memdesc:a83f82890460b9297a403f5fdf6d80806"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a fully configured client instance.  <a href="classPubSubClient.html#a83f82890460b9297a403f5fdf6d80806">More...</a><br /></td></tr>
 <tr class="separator:a83f82890460b9297a403f5fdf6d80806"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a597a07b746c33a77f77486f426dc85fd"><td class="memItemLeft" align="right" valign="top"><a id="a597a07b746c33a77f77486f426dc85fd" name="a597a07b746c33a77f77486f426dc85fd"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>~PubSubClient</b> ()</td></tr>
-<tr class="memdesc:a597a07b746c33a77f77486f426dc85fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for the <a class="el" href="classPubSubClient.html" title="This class provides a client for doing simple publish and subscribe messaging with a server that supp...">PubSubClient</a> class. <br /></td></tr>
+<tr class="memitem:a597a07b746c33a77f77486f426dc85fd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPubSubClient.html#a597a07b746c33a77f77486f426dc85fd">~PubSubClient</a> ()</td></tr>
+<tr class="memdesc:a597a07b746c33a77f77486f426dc85fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for the <a class="el" href="classPubSubClient.html" title="This class provides a client for doing simple publish and subscribe messaging with a server that supp...">PubSubClient</a> class.  <a href="classPubSubClient.html#a597a07b746c33a77f77486f426dc85fd">More...</a><br /></td></tr>
 <tr class="separator:a597a07b746c33a77f77486f426dc85fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1acafb3015e083911b7ca205b79a3829"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classPubSubClient.html">PubSubClient</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPubSubClient.html#a1acafb3015e083911b7ca205b79a3829">setServer</a> (IPAddress ip, uint16_t port)</td></tr>
 <tr class="memdesc:a1acafb3015e083911b7ca205b79a3829"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the server details.  <a href="classPubSubClient.html#a1acafb3015e083911b7ca205b79a3829">More...</a><br /></td></tr>
@@ -193,9 +172,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a39edc53b2e8e8c54b198500b3032d768"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPubSubClient.html#a39edc53b2e8e8c54b198500b3032d768">connect</a> (const char *id, const char *user, const char *pass, const char *willTopic, uint8_t willQos, bool willRetain, const char *willMessage, bool cleanSession)</td></tr>
 <tr class="memdesc:a39edc53b2e8e8c54b198500b3032d768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connects the client.  <a href="classPubSubClient.html#a39edc53b2e8e8c54b198500b3032d768">More...</a><br /></td></tr>
 <tr class="separator:a39edc53b2e8e8c54b198500b3032d768"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0d1c6de8a88a9f9fda04126c8cf2fe0"><td class="memItemLeft" align="right" valign="top"><a id="ac0d1c6de8a88a9f9fda04126c8cf2fe0" name="ac0d1c6de8a88a9f9fda04126c8cf2fe0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>disconnect</b> ()</td></tr>
-<tr class="memdesc:ac0d1c6de8a88a9f9fda04126c8cf2fe0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disconnects the client. <br /></td></tr>
+<tr class="memitem:ac0d1c6de8a88a9f9fda04126c8cf2fe0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPubSubClient.html#ac0d1c6de8a88a9f9fda04126c8cf2fe0">disconnect</a> ()</td></tr>
+<tr class="memdesc:ac0d1c6de8a88a9f9fda04126c8cf2fe0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disconnects the client.  <a href="classPubSubClient.html#ac0d1c6de8a88a9f9fda04126c8cf2fe0">More...</a><br /></td></tr>
 <tr class="separator:ac0d1c6de8a88a9f9fda04126c8cf2fe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59500b307e27b6ec9007ef1f3a0c24db"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPubSubClient.html#a59500b307e27b6ec9007ef1f3a0c24db">publish</a> (const char *topic, const char *payload)</td></tr>
 <tr class="memdesc:a59500b307e27b6ec9007ef1f3a0c24db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes a non retained message to the specified topic.  <a href="classPubSubClient.html#a59500b307e27b6ec9007ef1f3a0c24db">More...</a><br /></td></tr>
@@ -908,6 +886,25 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>disconnect</b> ()</td
 
 </div>
 </div>
+<a id="a597a07b746c33a77f77486f426dc85fd" name="a597a07b746c33a77f77486f426dc85fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a597a07b746c33a77f77486f426dc85fd">&#9670;&nbsp;</a></span>~PubSubClient()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PubSubClient::~PubSubClient </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor for the <a class="el" href="classPubSubClient.html" title="This class provides a client for doing simple publish and subscribe messaging with a server that supp...">PubSubClient</a> class. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a366090418dd09369df33d583b39c45db" name="a366090418dd09369df33d583b39c45db"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a366090418dd09369df33d583b39c45db">&#9670;&nbsp;</a></span>beginPublish()</h2>
@@ -1252,6 +1249,25 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>disconnect</b> ()</td
 
 <p>Checks whether the client is connected to the server. </p>
 <dl class="section return"><dt>Returns</dt><dd>true If the client is connected. false If the client is not connected. </dd></dl>
+
+</div>
+</div>
+<a id="ac0d1c6de8a88a9f9fda04126c8cf2fe0" name="ac0d1c6de8a88a9f9fda04126c8cf2fe0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0d1c6de8a88a9f9fda04126c8cf2fe0">&#9670;&nbsp;</a></span>disconnect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PubSubClient::disconnect </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Disconnects the client. </p>
 
 </div>
 </div>
@@ -1884,7 +1900,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>disconnect</b> ()</td
 </div><div class="memdoc">
 
 <p>Returns the current state of the client. If a connection attempt fails, this can be used to get more information about the failure. </p>
-<dl class="section note"><dt>Note</dt><dd>All of the values have corresponding constants defined in <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>All of the values have corresponding constants defined in <a class="el" href="PubSubClient_8h.html">PubSubClient.h</a>. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>-4 : MQTT_CONNECTION_TIMEOUT - The server didn't respond within the keepalive time. -3 : MQTT_CONNECTION_LOST - The network connection was broken. -2 : MQTT_CONNECT_FAILED - The network connection failed. -1 : MQTT_DISCONNECTED - The client is disconnected cleanly. 0 : MQTT_CONNECTED - The client is connected. 1 : MQTT_CONNECT_BAD_PROTOCOL - The server doesn't support the requested version of MQTT. 2 : MQTT_CONNECT_BAD_CLIENT_ID - The server rejected the client identifier. 3 : MQTT_CONNECT_UNAVAILABLE - The server was unable to accept the connection. 4 : MQTT_CONNECT_BAD_CREDENTIALS - The username/password were rejected. 5 : MQTT_CONNECT_UNAUTHORIZED - The client was not authorized to connect. </dd></dl>
 
 </div>
@@ -2064,16 +2080,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>disconnect</b> ()</td
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/<a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a></li>
-<li>src/PubSubClient.cpp</li>
+<li>src/<a class="el" href="PubSubClient_8cpp.html">PubSubClient.cpp</a></li>
 </ul>
 </div><!-- contents -->
-</div><!-- doc-content -->
 <!-- start footer part -->
-<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
-  <ul>
-    <li class="navelem"><a class="el" href="classPubSubClient.html">PubSubClient</a></li>
-    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2 </li>
-  </ul>
-</div>
+<hr class="footer"/><address class="footer"><small>
+Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+</small></address>
 </body>
 </html>
