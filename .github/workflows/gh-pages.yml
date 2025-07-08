@@ -40,22 +40,20 @@ jobs:
           # Doxygen configuration file path
           doxygenconf: ./Doxyfile
           # Generated HTML documents output folder
-          #htmloutput: ./docs/
+          htmloutput: ./docs/
           # GitHub Pages branch name
           ghpagesbranch: gh-pages
           # GitHub Pages directory path
-          #ghpagesdir: ./
+          ghpagesdir: ./
           # Toggle dark mode CSS
-          darkmode: true
+          #darkmode: true # optional, default is false
           # Custom Doxygen pages header HTML file URL
-          # customheader: # optional, default is
+          #customheader: # optional, default is
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
           path: '.'
-          # This will only include the Doxygen generated HTML files
-          # path: 'docs'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
