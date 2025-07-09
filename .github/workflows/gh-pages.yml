@@ -32,8 +32,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
       - name: Doxygenize
         #uses: langroodi/doxygenize@v1.7.0
         uses: hmueller01/doxygenize@update-alpine-linux
@@ -50,6 +48,8 @@ jobs:
           #darkmode: true # optional, default is false
           # Custom Doxygen pages header HTML file URL
           #customheader: # optional, default is
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
