@@ -32,6 +32,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: List site contents
+        run: |
+          find ./site
       - name: Doxygenize
         #uses: langroodi/doxygenize@v1.7.0
         uses: hmueller01/doxygenize@update-alpine-linux
