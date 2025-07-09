@@ -51,6 +51,9 @@ jobs:
           #darkmode: true # optional, default is false
           # Custom Doxygen pages header HTML file URL
           #customheader: # optional, default is
+      - name: List site contents
+        run: |
+          find .
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
@@ -62,6 +65,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-      - name: List site contents
-        run: |
-          find ./site
