@@ -51,9 +51,6 @@ jobs:
           #darkmode: true # optional, default is false
           # Custom Doxygen pages header HTML file URL
           #customheader: # optional, default is
-      - name: Find .nojekyll
-        run: |
-          find ./site -name .nojekyll
       # - name: List site contents
       #   run: |
       #     find ./site
