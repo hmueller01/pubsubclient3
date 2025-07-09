@@ -14,7 +14,7 @@ EXCLUDE_SYMBOLS        = CHECK_STRING_LENGTH
 
 # HTML output
 GENERATE_HTML          = YES
-HTML_OUTPUT            = ./docs
+HTML_OUTPUT            = ./api
 
 # LaTeX output (disable if not needed)
 GENERATE_LATEX         = NO
