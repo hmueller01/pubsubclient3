@@ -1,5 +1,5 @@
 # Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to GitHub Pages
+name: Generate Doxygen API, Jekyll site and deploy content to GitHub Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -35,16 +35,17 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Doxygenize
-        uses: langroodi/doxygenize@v1.7.0
+        #uses: langroodi/doxygenize@v1.7.0
+        uses: hmueller01/doxygenize@update-alpine-linux
         with:
           # Doxygen configuration file path
           doxygenconf: ./Doxyfile
           # Generated HTML documents output folder
-          htmloutput: ./docs/
+          htmloutput: ./site/api
           # GitHub Pages branch name
           ghpagesbranch: gh-pages
           # GitHub Pages directory path
-          ghpagesdir: ./
+          ghpagesdir: ./site/api
           # Toggle dark mode CSS
           #darkmode: true # optional, default is false
           # Custom Doxygen pages header HTML file URL
@@ -53,7 +54,8 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
-          path: '.'
+          #path: '.'
+          path: './site'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

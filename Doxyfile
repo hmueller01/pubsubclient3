@@ -13,7 +13,7 @@ EXTRACT_STATIC         = NO
 
 # HTML output
 GENERATE_HTML          = YES
-HTML_OUTPUT            = ./docs
+HTML_OUTPUT            = ./site/api
 
 # LaTeX output (disable if not needed)
 GENERATE_LATEX         = NO
