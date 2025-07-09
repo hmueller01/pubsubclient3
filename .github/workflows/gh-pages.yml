@@ -41,11 +41,11 @@ jobs:
           # Doxygen configuration file path
           doxygenconf: ./Doxyfile
           # Generated HTML documents output folder
-          htmloutput: ./docs/
+          htmloutput: ./docs
           # GitHub Pages branch name
           ghpagesbranch: gh-pages
           # GitHub Pages directory path
-          ghpagesdir: ./
+          ghpagesdir: ./docs
           # Toggle dark mode CSS
           #darkmode: true # optional, default is false
           # Custom Doxygen pages header HTML file URL
