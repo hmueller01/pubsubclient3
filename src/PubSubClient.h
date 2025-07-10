@@ -95,7 +95,7 @@
 #define MQTT_CONNECT_UNAUTHORIZED    5   ///< The client is not authorized to connect to the server.
 /** @} */
 
-/// @cond
+/// \cond
 #define MQTTRETAINED    1        // Retained flag in the header
 #define MQTTCONNECT     1 << 4   // Client request to connect to Server
 #define MQTTCONNACK     2 << 4   // Connect Acknowledgment
@@ -112,19 +112,19 @@
 #define MQTTPINGRESP    13 << 4  // PING Response
 #define MQTTDISCONNECT  14 << 4  // Client is Disconnecting
 #define MQTTRESERVED    15 << 4  // Reserved
-/// @endcond
+/// \endcond
 
 #define MQTTQOS0 (0 << 1)
 #define MQTTQOS1 (1 << 1)
 #define MQTTQOS2 (2 << 1)
 
-/// @cond Maximum size of fixed header and variable length size header
+/// \cond Maximum size of fixed header and variable length size header
 #define MQTT_MAX_HEADER_SIZE 5
-/// @endcond
+/// \endcond
 
+/// \anchor callback
 /**
  * @brief Define the signature required by any callback function.
- * @anchor callback
  * @param topic The topic of the message.
  * @param payload The payload of the message.
  * @param plength The length of the payload.
@@ -136,7 +136,7 @@
 #define MQTT_CALLBACK_SIGNATURE void (*callback)(char* topic, uint8_t* payload, size_t plength)
 #endif
 
-/// @cond
+/// \cond
 #ifdef DEBUG_ESP_PORT
 #ifdef DEBUG_PUBSUBCLIENT
 #define DEBUG_PSC_PRINTF(fmt, ...) DEBUG_ESP_PORT.printf(("PubSubClient: " fmt), ##__VA_ARGS__)
@@ -157,7 +157,7 @@
 #define ERROR_PSC_PRINTF_P(fmt, ...)
 #endif
 #endif
-/// @endcond
+/// \endcond
 
 /**
  * @class PubSubClient
