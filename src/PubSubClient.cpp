@@ -108,20 +108,20 @@ PubSubClient::~PubSubClient() {
 }
 
 bool PubSubClient::connect(const char* id) {
-    return connect(id, nullptr, nullptr, 0, 0, 0, 0, 1);
+    return connect(id, nullptr, nullptr, nullptr, MQTTQOS0, false, nullptr, true);
 }
 
 bool PubSubClient::connect(const char* id, const char* user, const char* pass) {
-    return connect(id, user, pass, 0, 0, 0, 0, 1);
+    return connect(id, user, pass, nullptr, MQTTQOS0, false, nullptr, true);
 }
 
 bool PubSubClient::connect(const char* id, const char* willTopic, uint8_t willQos, bool willRetain, const char* willMessage) {
-    return connect(id, nullptr, nullptr, willTopic, willQos, willRetain, willMessage, 1);
+    return connect(id, nullptr, nullptr, willTopic, willQos, willRetain, willMessage, true);
 }
 
 bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
                            const char* willMessage) {
-    return connect(id, user, pass, willTopic, willQos, willRetain, willMessage, 1);
+    return connect(id, user, pass, willTopic, willQos, willRetain, willMessage, true);
 }
 
 bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
