@@ -266,6 +266,8 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class provides a client for doing simple publish and subscribe messaging with a server that supports MQTT. </p>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00149">149</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a63abf28fee11df02d353b83cd08c255e" name="a63abf28fee11df02d353b83cd08c255e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a63abf28fee11df02d353b83cd08c255e">&#9670;&#160;</a></span>PubSubClient() <span class="overload">[1/14]</span></h2>
@@ -284,6 +286,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Creates an uninitialised client instance. </p>
 <dl class="section note"><dt>Note</dt><dd>Before it can be used, it must be configured using the property setters setClient and setServer. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00023">23</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -310,6 +314,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section note"><dt>Note</dt><dd>Before it can be used, it must be configured with the property setter setServer. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00029">29</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -340,12 +346,14 @@ Public Member Functions</h2></td></tr>
 <p>Creates a fully configured client instance. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">domain</td><td>The address of the server. </td></tr>
+    <tr><td class="paramname">addr</td><td>The address of the server. </td></tr>
     <tr><td class="paramname">port</td><td>The port to connect to. </td></tr>
     <tr><td class="paramname">client</td><td>The network client to use, for example WiFiClient. </td></tr>
   </table>
   </dd>
 </dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00033">33</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -381,13 +389,15 @@ Public Member Functions</h2></td></tr>
 <p>Creates a fully configured client instance. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">domain</td><td>The address of the server. </td></tr>
+    <tr><td class="paramname">addr</td><td>The address of the server. </td></tr>
     <tr><td class="paramname">port</td><td>The port to connect to. </td></tr>
     <tr><td class="paramname">client</td><td>The network client to use, for example WiFiClient. </td></tr>
     <tr><td class="paramname">stream</td><td>A stream to write received messages to. </td></tr>
   </table>
   </dd>
 </dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00038">38</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -423,13 +433,15 @@ Public Member Functions</h2></td></tr>
 <p>Creates a fully configured client instance. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">domain</td><td>The address of the server. </td></tr>
+    <tr><td class="paramname">addr</td><td>The address of the server. </td></tr>
     <tr><td class="paramname">port</td><td>The port to connect to. </td></tr>
     <tr><td class="paramname">callback</td><td>Pointer to a message callback function. Called when a message arrives for a subscription created by this client. </td></tr>
     <tr><td class="paramname">client</td><td>The network client to use, for example WiFiClient. </td></tr>
   </table>
   </dd>
 </dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00044">44</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -470,7 +482,7 @@ Public Member Functions</h2></td></tr>
 <p>Creates a fully configured client instance. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">domain</td><td>The address of the server. </td></tr>
+    <tr><td class="paramname">addr</td><td>The address of the server. </td></tr>
     <tr><td class="paramname">port</td><td>The port to connect to. </td></tr>
     <tr><td class="paramname">callback</td><td>Pointer to a message callback function. Called when a message arrives for a subscription created by this client. </td></tr>
     <tr><td class="paramname">client</td><td>The network client to use, for example WiFiClient. </td></tr>
@@ -478,6 +490,8 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00050">50</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -508,12 +522,14 @@ Public Member Functions</h2></td></tr>
 <p>Creates a fully configured client instance. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">domain</td><td>The address of the server. </td></tr>
+    <tr><td class="paramname">ip</td><td>The address of the server. </td></tr>
     <tr><td class="paramname">port</td><td>The port to connect to. </td></tr>
     <tr><td class="paramname">client</td><td>The network client to use, for example WiFiClient. </td></tr>
   </table>
   </dd>
 </dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00057">57</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -549,13 +565,15 @@ Public Member Functions</h2></td></tr>
 <p>Creates a fully configured client instance. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">domain</td><td>The address of the server. </td></tr>
+    <tr><td class="paramname">ip</td><td>The address of the server. </td></tr>
     <tr><td class="paramname">port</td><td>The port to connect to. </td></tr>
     <tr><td class="paramname">client</td><td>The network client to use, for example WiFiClient. </td></tr>
     <tr><td class="paramname">stream</td><td>A stream to write received messages to. </td></tr>
   </table>
   </dd>
 </dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00062">62</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -591,13 +609,15 @@ Public Member Functions</h2></td></tr>
 <p>Creates a fully configured client instance. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">domain</td><td>The address of the server. </td></tr>
+    <tr><td class="paramname">ip</td><td>The address of the server. </td></tr>
     <tr><td class="paramname">port</td><td>The port to connect to. </td></tr>
     <tr><td class="paramname">callback</td><td>Pointer to a message callback function. Called when a message arrives for a subscription created by this client. </td></tr>
     <tr><td class="paramname">client</td><td>The network client to use, for example WiFiClient. </td></tr>
   </table>
   </dd>
 </dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00068">68</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -638,7 +658,7 @@ Public Member Functions</h2></td></tr>
 <p>Creates a fully configured client instance. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">domain</td><td>The address of the server. </td></tr>
+    <tr><td class="paramname">ip</td><td>The address of the server. </td></tr>
     <tr><td class="paramname">port</td><td>The port to connect to. </td></tr>
     <tr><td class="paramname">callback</td><td>Pointer to a message callback function. Called when a message arrives for a subscription created by this client. </td></tr>
     <tr><td class="paramname">client</td><td>The network client to use, for example WiFiClient. </td></tr>
@@ -646,6 +666,8 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00074">74</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -682,6 +704,8 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00081">81</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -725,6 +749,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00086">86</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
 </div>
 </div>
 <a id="ab56597bd7fb1e61b62df0f3d2b0e80b7" name="ab56597bd7fb1e61b62df0f3d2b0e80b7"></a>
@@ -766,6 +792,8 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00092">92</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -815,6 +843,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00098">98</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a597a07b746c33a77f77486f426dc85fd" name="a597a07b746c33a77f77486f426dc85fd"></a>
@@ -833,6 +863,8 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Destructor for the <a class="el" href="classPubSubClient.html" title="This class provides a client for doing simple publish and subscribe messaging with a server that supp...">PubSubClient</a> class. </p>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00105">105</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -872,6 +904,8 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00508">508</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
 </div>
 </div>
 <a id="ae7a37521960b158aff48b7fa17d1e825" name="ae7a37521960b158aff48b7fa17d1e825"></a>
@@ -897,6 +931,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If client succeeded in establishing a connection to the broker. false If client failed to establish a connection to the broker. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00110">110</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -934,6 +970,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If client succeeded in establishing a connection to the broker. false If client failed to establish a connection to the broker. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00114">114</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -990,10 +1028,14 @@ Public Member Functions</h2></td></tr>
     <tr><td class="paramname">willTopic</td><td>The topic to be used by the will message. </td></tr>
     <tr><td class="paramname">willQos</td><td>The quality of service to be used by the will message. [0, 1, 2]. </td></tr>
     <tr><td class="paramname">willRetain</td><td>Publish the will message with the retain flag. </td></tr>
+    <tr><td class="paramname">willMessage</td><td>The message to be used by the will message. </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section note"><dt>Note</dt><dd>If willTopic is NULL, no will message is sent. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>true If client succeeded in establishing a connection to the broker. false If client failed to establish a connection to the broker. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00122">122</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1055,11 +1097,15 @@ Public Member Functions</h2></td></tr>
     <tr><td class="paramname">willTopic</td><td>The topic to be used by the will message. </td></tr>
     <tr><td class="paramname">willQos</td><td>The quality of service to be used by the will message. [0, 1, 2]. </td></tr>
     <tr><td class="paramname">willRetain</td><td>Publish the will message with the retain flag. </td></tr>
+    <tr><td class="paramname">willMessage</td><td>The message to be used by the will message. </td></tr>
     <tr><td class="paramname">cleanSession</td><td>Connect with a clean session. </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section note"><dt>Note</dt><dd>If willTopic is NULL, no will message is sent. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>true If client succeeded in establishing a connection to the broker. false If client failed to establish a connection to the broker. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00127">127</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1104,10 +1150,14 @@ Public Member Functions</h2></td></tr>
     <tr><td class="paramname">willTopic</td><td>The topic to be used by the will message. </td></tr>
     <tr><td class="paramname">willQos</td><td>The quality of service to be used by the will message. [0, 1, 2]. </td></tr>
     <tr><td class="paramname">willRetain</td><td>Publish the will message with the retain flag. </td></tr>
+    <tr><td class="paramname">willMessage</td><td>The message to be used by the will message. </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section note"><dt>Note</dt><dd>If willTopic is NULL, no will message is sent. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>true If client succeeded in establishing a connection to the broker. false If client failed to establish a connection to the broker. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00118">118</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1129,6 +1179,8 @@ Public Member Functions</h2></td></tr>
 <p>Checks whether the client is connected to the server. </p>
 <dl class="section return"><dt>Returns</dt><dd>true If the client is connected. false If the client is not connected. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00227">227</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
 </div>
 </div>
 <a id="ac0d1c6de8a88a9f9fda04126c8cf2fe0" name="ac0d1c6de8a88a9f9fda04126c8cf2fe0"></a>
@@ -1147,6 +1199,8 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Disconnects the client. </p>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00241">241</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1168,6 +1222,8 @@ Public Member Functions</h2></td></tr>
 <p>Finish sending a message that was started with a call to beginPublish. </p>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00526">526</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
 </div>
 </div>
 <a id="acaa57fdcdb00d3a0fa69b03fc57f70bf" name="acaa57fdcdb00d3a0fa69b03fc57f70bf"></a>
@@ -1188,6 +1244,8 @@ Public Member Functions</h2></td></tr>
 <p>Gets the current size of the internal buffer. </p>
 <dl class="section return"><dt>Returns</dt><dd>The size of the internal buffer. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00769">769</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a08f4240c1f1fc10b9c6f5f063b13d240" name="a08f4240c1f1fc10b9c6f5f063b13d240"></a>
@@ -1207,6 +1265,8 @@ Public Member Functions</h2></td></tr>
 
 <p>This should be called regularly to allow the client to process incoming messages and maintain its connection to the server. </p>
 <dl class="section return"><dt>Returns</dt><dd>true If the client is still connected. false If the client is no longer connected. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00431">431</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1238,6 +1298,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00471">471</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1276,6 +1338,8 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00475">475</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a78f2ad424db740bab8038f31c743f3e3" name="a78f2ad424db740bab8038f31c743f3e3"></a>
@@ -1312,6 +1376,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00479">479</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1356,6 +1422,8 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00483">483</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a501d46ac5e4296634aad8aa2452ac986" name="a501d46ac5e4296634aad8aa2452ac986"></a>
@@ -1392,6 +1460,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00492">492</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1436,6 +1506,8 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00496">496</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
 </div>
 </div>
 <a id="ae3d8b934862ae82af9bdf11bea1fb94a" name="ae3d8b934862ae82af9bdf11bea1fb94a"></a>
@@ -1461,6 +1533,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the buffer was resized. false If the buffer could not be resized. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00750">750</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1488,6 +1562,8 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00735">735</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
 </div>
 </div>
 <a id="ab661f30558142d81e88bf1ea83eb2ed7" name="ab661f30558142d81e88bf1ea83eb2ed7"></a>
@@ -1513,6 +1589,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00740">740</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1540,6 +1618,8 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00773">773</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
 </div>
 </div>
 <a id="af05f16377e871e039edd1c9cdfad9b2a" name="af05f16377e871e039edd1c9cdfad9b2a"></a>
@@ -1564,12 +1644,14 @@ Public Member Functions</h2></td></tr>
 <p>Sets the server details. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ip</td><td>The address of the server. </td></tr>
+    <tr><td class="paramname">domain</td><td>The address of the server. </td></tr>
     <tr><td class="paramname">port</td><td>The port to connect to. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00718">718</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1602,6 +1684,8 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00710">710</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a4ef0b47a6c107d8e4ea71fead0d43673" name="a4ef0b47a6c107d8e4ea71fead0d43673"></a>
@@ -1633,6 +1717,8 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00705">705</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a6337d6b919fb5fd79bc4a00019bbd70c" name="a6337d6b919fb5fd79bc4a00019bbd70c"></a>
@@ -1658,6 +1744,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00778">778</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1685,6 +1773,8 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00745">745</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a8a7025562e55ee15fd4469b75d535b1d" name="a8a7025562e55ee15fd4469b75d535b1d"></a>
@@ -1705,6 +1795,8 @@ Public Member Functions</h2></td></tr>
 <p>Returns the current state of the client. If a connection attempt fails, this can be used to get more information about the failure. </p>
 <dl class="section note"><dt>Note</dt><dd>All of the values have corresponding constants defined in <a class="el" href="PubSubClient_8h.html">PubSubClient.h</a>. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>-4 : MQTT_CONNECTION_TIMEOUT - The server didn't respond within the keepalive time. -3 : MQTT_CONNECTION_LOST - The network connection was broken. -2 : MQTT_CONNECT_FAILED - The network connection failed. -1 : MQTT_DISCONNECTED - The client is disconnected cleanly. 0 : MQTT_CONNECTED - The client is connected. 1 : MQTT_CONNECT_BAD_PROTOCOL - The server doesn't support the requested version of MQTT. 2 : MQTT_CONNECT_BAD_CLIENT_ID - The server rejected the client identifier. 3 : MQTT_CONNECT_UNAVAILABLE - The server was unable to accept the connection. 4 : MQTT_CONNECT_BAD_CREDENTIALS - The username/password were rejected. 5 : MQTT_CONNECT_UNAUTHORIZED - The client was not authorized to connect. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00783">783</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1731,6 +1823,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If sending the subscribe succeeded. false If sending the subscribe failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00654">654</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1763,6 +1857,8 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If sending the subscribe succeeded. false If sending the subscribe failed, either connection lost or message too large. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00658">658</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a38a147c2013ea040a822334c1464ef9c" name="a38a147c2013ea040a822334c1464ef9c"></a>
@@ -1788,6 +1884,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If sending the unsubscribe succeeded. false If sending the unsubscribe failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00683">683</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1828,6 +1926,8 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The number of bytes written. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00569">569</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
 </div>
 </div>
 <a id="ab458138eef53893f3512d3d8eb047e8b" name="ab458138eef53893f3512d3d8eb047e8b"></a>
@@ -1856,17 +1956,19 @@ Public Member Functions</h2></td></tr>
 <p>Writes a single byte as a component of a publish started with a call to beginPublish. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">byte</td><td>A byte to write to the publish payload. </td></tr>
+    <tr><td class="paramname">data</td><td>A byte to write to the publish payload. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The number of bytes written. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00564">564</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/<a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a></li>
-<li>src/<a class="el" href="PubSubClient_8cpp.html">PubSubClient.cpp</a></li>
+<li>src/<a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

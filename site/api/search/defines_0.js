@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['check_5fstring_5flength_0',['CHECK_STRING_LENGTH',['../PubSubClient_8cpp.html#a2b5e3eb7905bdee2cd08a861302fa82e',1,'PubSubClient.cpp']]]
+  ['debug_5fpsc_5fprintf_0',['DEBUG_PSC_PRINTF',['../PubSubClient_8h.html#a98d05d79136252bf50a94333725d5704',1,'PubSubClient.h']]]
 ];

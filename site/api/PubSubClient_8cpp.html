@@ -102,54 +102,12 @@ $(function(){initNavTree('PubSubClient_8cpp.html',''); initResizable(true); });
 </div>
 
 <div class="header">
-  <div class="summary">
-<a href="#define-members">Macros</a>  </div>
   <div class="headertitle"><div class="title">PubSubClient.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>&quot;</code><br />
-</div><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
-Macros</h2></td></tr>
-<tr class="memitem:a2b5e3eb7905bdee2cd08a861302fa82e" id="r_a2b5e3eb7905bdee2cd08a861302fa82e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b5e3eb7905bdee2cd08a861302fa82e">CHECK_STRING_LENGTH</a>(l,  s)</td></tr>
-<tr class="memdesc:a2b5e3eb7905bdee2cd08a861302fa82e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Macro to check if a string 's' can be safely added to the MQTT buffer.  <br /></td></tr>
-<tr class="separator:a2b5e3eb7905bdee2cd08a861302fa82e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a2b5e3eb7905bdee2cd08a861302fa82e" name="a2b5e3eb7905bdee2cd08a861302fa82e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b5e3eb7905bdee2cd08a861302fa82e">&#9670;&#160;</a></span>CHECK_STRING_LENGTH</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define CHECK_STRING_LENGTH</td>
-          <td>(</td>
-          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>l</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>s</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">if</span> ((!s) || (l + 2 + strnlen(s, this-&gt;bufferSize) &gt; this-&gt;bufferSize)) { \</div>
-<div class="line">        _client-&gt;stop();                                                     \</div>
-<div class="line">        <span class="keywordflow">return</span> <span class="keyword">false</span>;                                                        \</div>
-<div class="line">    }</div>
-</div><!-- fragment -->
-<p>Macro to check if a string 's' can be safely added to the MQTT buffer. </p>
-<p>If either check fails, the client connection is stopped and the function returns false. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">l</td><td>current length in the buffer </td></tr>
-    <tr><td class="paramname">s</td><td>string to check </td></tr>
-  </table>
-  </dd>
-</dl>
-
 </div>
-</div>
+<p><a href="PubSubClient_8cpp_source.html">Go to the source code of this file.</a></p>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
