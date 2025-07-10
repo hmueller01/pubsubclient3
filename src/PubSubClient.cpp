@@ -1,9 +1,12 @@
-/*
-  PubSubClient.cpp - A simple client for MQTT.
-  Nick O'Leary, Holger Mueller
-  http://knolleary.net
-  https://github.com/hmueller01/pubsubclient3
-*/
+/**
+ * @file PubSubClient.cpp
+ * @brief A simple client for MQTT.
+ * @author Nicholas O'Leary - http://knolleary.net
+ * @author Holger Mueller - https://github.com/hmueller01/pubsubclient3
+ * @copyright MIT License 2008-2025
+ *
+ * This file is part of the PubSubClient library.
+ */
 
 #include "PubSubClient.h"
 

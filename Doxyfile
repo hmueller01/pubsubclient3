@@ -10,16 +10,18 @@ RECURSIVE              = YES
 EXTRACT_ALL            = YES
 EXTRACT_PRIVATE        = NO
 EXTRACT_STATIC         = NO
+EXCLUDE_SYMBOLS        = CHECK_STRING_LENGTH
 
 # HTML output
 GENERATE_HTML          = YES
 HTML_OUTPUT            = ./site/api
+HTML_COLORSTYLE        = AUTO_LIGHT
 
 # LaTeX output (disable if not needed)
 GENERATE_LATEX         = NO
 
 # Source code browsing
-SOURCE_BROWSER         = NO
+SOURCE_BROWSER         = YES
 
 # Warnings
 WARNINGS               = YES
