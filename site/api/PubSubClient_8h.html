@@ -108,6 +108,9 @@ $(function(){initNavTree('PubSubClient_8h.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">PubSubClient.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>A simple client for MQTT.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;Arduino.h&gt;</code><br />
 <code>#include &quot;Client.h&quot;</code><br />
 <code>#include &quot;IPAddress.h&quot;</code><br />
@@ -124,13 +127,16 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:af98dfc7d42750b53391878cc3598a37e" id="r_af98dfc7d42750b53391878cc3598a37e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af98dfc7d42750b53391878cc3598a37e">MQTT_VERSION_3_1</a>&#160;&#160;&#160;3</td></tr>
+<tr class="memdesc:af98dfc7d42750b53391878cc3598a37e"><td class="mdescLeft">&#160;</td><td class="mdescRight">MQTT 3.1 protocol version see <a class="el" href="#a702197a21870dfd505d92530b27754ac" title="Sets the version of the MQTT protocol to use (3.1 or 3.1.1).">MQTT_VERSION</a>.  <br /></td></tr>
 <tr class="separator:af98dfc7d42750b53391878cc3598a37e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c621dd360dd439f0d6d8dc5d951a619" id="r_a7c621dd360dd439f0d6d8dc5d951a619"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c621dd360dd439f0d6d8dc5d951a619">MQTT_VERSION_3_1_1</a>&#160;&#160;&#160;4</td></tr>
+<tr class="memdesc:a7c621dd360dd439f0d6d8dc5d951a619"><td class="mdescLeft">&#160;</td><td class="mdescRight">MQTT 3.1.1 protocol version see <a class="el" href="#a702197a21870dfd505d92530b27754ac" title="Sets the version of the MQTT protocol to use (3.1 or 3.1.1).">MQTT_VERSION</a>.  <br /></td></tr>
 <tr class="separator:a7c621dd360dd439f0d6d8dc5d951a619"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a702197a21870dfd505d92530b27754ac" id="r_a702197a21870dfd505d92530b27754ac"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a702197a21870dfd505d92530b27754ac">MQTT_VERSION</a>&#160;&#160;&#160;<a class="el" href="#a7c621dd360dd439f0d6d8dc5d951a619">MQTT_VERSION_3_1_1</a></td></tr>
-<tr class="memdesc:a702197a21870dfd505d92530b27754ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the version of the MQTT protocol to use.  <br /></td></tr>
+<tr class="memdesc:a702197a21870dfd505d92530b27754ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the version of the MQTT protocol to use (3.1 or 3.1.1).  <br /></td></tr>
 <tr class="separator:a702197a21870dfd505d92530b27754ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94da4eb7c328254242ce3690bcb2a880" id="r_a94da4eb7c328254242ce3690bcb2a880"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a94da4eb7c328254242ce3690bcb2a880">MQTT_MAX_POSSIBLE_PACKET_SIZE</a>&#160;&#160;&#160;268435455</td></tr>
+<tr class="memdesc:a94da4eb7c328254242ce3690bcb2a880"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum packet size defined by MQTT protocol.  <br /></td></tr>
 <tr class="separator:a94da4eb7c328254242ce3690bcb2a880"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae09b594688a59f1427c7e45259e039b9" id="r_ae09b594688a59f1427c7e45259e039b9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae09b594688a59f1427c7e45259e039b9">MQTT_MAX_PACKET_SIZE</a>&#160;&#160;&#160;256</td></tr>
 <tr class="memdesc:ae09b594688a59f1427c7e45259e039b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the largest packet size, in bytes, the client will handle. Any packet received that exceeds this size will be ignored. This value can be overridden by calling setBufferSize.  <br /></td></tr>
@@ -141,143 +147,59 @@ Macros</h2></td></tr>
 <tr class="memitem:a092cc564e4d7f03fdab6137e30a7f05b" id="r_a092cc564e4d7f03fdab6137e30a7f05b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a092cc564e4d7f03fdab6137e30a7f05b">MQTT_SOCKET_TIMEOUT</a>&#160;&#160;&#160;15</td></tr>
 <tr class="memdesc:a092cc564e4d7f03fdab6137e30a7f05b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the timeout, in seconds, when reading from the network. This also applies as the timeout for calls to connect. This value can be overridden by calling setSocketTimeout.  <br /></td></tr>
 <tr class="separator:a092cc564e4d7f03fdab6137e30a7f05b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c164f322b892ab16d49dafea0073ca3" id="r_a4c164f322b892ab16d49dafea0073ca3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4c164f322b892ab16d49dafea0073ca3">MQTT_CONNECTION_TIMEOUT</a>&#160;&#160;&#160;-4</td></tr>
-<tr class="memdesc:a4c164f322b892ab16d49dafea0073ca3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the maximum number of bytes passed to the network client in each write call. Some hardware has a limit to how much data can be passed to them in one go, such as the Arduino Wifi Shield.  <br /></td></tr>
-<tr class="separator:a4c164f322b892ab16d49dafea0073ca3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8f5592739ea2c329fe320ffa14731e9" id="r_ad8f5592739ea2c329fe320ffa14731e9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad8f5592739ea2c329fe320ffa14731e9">MQTT_CONNECTION_LOST</a>&#160;&#160;&#160;-3</td></tr>
-<tr class="separator:ad8f5592739ea2c329fe320ffa14731e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac80cae63b769440c31b8c294ac5ea191" id="r_ac80cae63b769440c31b8c294ac5ea191"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac80cae63b769440c31b8c294ac5ea191">MQTT_CONNECT_FAILED</a>&#160;&#160;&#160;-2</td></tr>
-<tr class="separator:ac80cae63b769440c31b8c294ac5ea191"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adaf86a906a305dd129164982d50111b3" id="r_adaf86a906a305dd129164982d50111b3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adaf86a906a305dd129164982d50111b3">MQTT_DISCONNECTED</a>&#160;&#160;&#160;-1</td></tr>
-<tr class="separator:adaf86a906a305dd129164982d50111b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb5539db14c26155eebe929fa84d1e96" id="r_abb5539db14c26155eebe929fa84d1e96"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abb5539db14c26155eebe929fa84d1e96">MQTT_CONNECTED</a>&#160;&#160;&#160;0</td></tr>
-<tr class="separator:abb5539db14c26155eebe929fa84d1e96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad76e7d21b1bda9adb81c7d4b392b1424" id="r_ad76e7d21b1bda9adb81c7d4b392b1424"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad76e7d21b1bda9adb81c7d4b392b1424">MQTT_CONNECT_BAD_PROTOCOL</a>&#160;&#160;&#160;1</td></tr>
-<tr class="separator:ad76e7d21b1bda9adb81c7d4b392b1424"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1a1a5ad79f98bad6645c6332c522952" id="r_ae1a1a5ad79f98bad6645c6332c522952"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae1a1a5ad79f98bad6645c6332c522952">MQTT_CONNECT_BAD_CLIENT_ID</a>&#160;&#160;&#160;2</td></tr>
-<tr class="separator:ae1a1a5ad79f98bad6645c6332c522952"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26d38ea448bc45efbc83c5730b83b171" id="r_a26d38ea448bc45efbc83c5730b83b171"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26d38ea448bc45efbc83c5730b83b171">MQTT_CONNECT_UNAVAILABLE</a>&#160;&#160;&#160;3</td></tr>
-<tr class="separator:a26d38ea448bc45efbc83c5730b83b171"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a6c0837ee9a7791d5392829bcf27553" id="r_a3a6c0837ee9a7791d5392829bcf27553"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3a6c0837ee9a7791d5392829bcf27553">MQTT_CONNECT_BAD_CREDENTIALS</a>&#160;&#160;&#160;4</td></tr>
-<tr class="separator:a3a6c0837ee9a7791d5392829bcf27553"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac465229204d105d09ae871df488b94b3" id="r_ac465229204d105d09ae871df488b94b3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac465229204d105d09ae871df488b94b3">MQTT_CONNECT_UNAUTHORIZED</a>&#160;&#160;&#160;5</td></tr>
-<tr class="separator:ac465229204d105d09ae871df488b94b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb6c0dc9d13fce3f89cc14465813e27a" id="r_acb6c0dc9d13fce3f89cc14465813e27a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb6c0dc9d13fce3f89cc14465813e27a">MQTTRETAINED</a>&#160;&#160;&#160;1</td></tr>
-<tr class="separator:acb6c0dc9d13fce3f89cc14465813e27a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a54e1cbf1e860b7628d9c73add908c564" id="r_a54e1cbf1e860b7628d9c73add908c564"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54e1cbf1e860b7628d9c73add908c564">MQTTCONNECT</a>&#160;&#160;&#160;1 &lt;&lt; 4</td></tr>
-<tr class="separator:a54e1cbf1e860b7628d9c73add908c564"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab5f09c2492326e40c0c9be6e30f9ac4" id="r_aab5f09c2492326e40c0c9be6e30f9ac4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab5f09c2492326e40c0c9be6e30f9ac4">MQTTCONNACK</a>&#160;&#160;&#160;2 &lt;&lt; 4</td></tr>
-<tr class="separator:aab5f09c2492326e40c0c9be6e30f9ac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a673aa9dd952b13bf964449d67d21db85" id="r_a673aa9dd952b13bf964449d67d21db85"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a673aa9dd952b13bf964449d67d21db85">MQTTPUBLISH</a>&#160;&#160;&#160;3 &lt;&lt; 4</td></tr>
-<tr class="separator:a673aa9dd952b13bf964449d67d21db85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af05fa79262740fd579ecbb4a67d1b15f" id="r_af05fa79262740fd579ecbb4a67d1b15f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af05fa79262740fd579ecbb4a67d1b15f">MQTTPUBACK</a>&#160;&#160;&#160;4 &lt;&lt; 4</td></tr>
-<tr class="separator:af05fa79262740fd579ecbb4a67d1b15f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af40a84f5de82816b5b147faca79e5c8d" id="r_af40a84f5de82816b5b147faca79e5c8d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af40a84f5de82816b5b147faca79e5c8d">MQTTPUBREC</a>&#160;&#160;&#160;5 &lt;&lt; 4</td></tr>
-<tr class="separator:af40a84f5de82816b5b147faca79e5c8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a593dae210c66818290a31ecd64dc0281" id="r_a593dae210c66818290a31ecd64dc0281"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a593dae210c66818290a31ecd64dc0281">MQTTPUBREL</a>&#160;&#160;&#160;6 &lt;&lt; 4</td></tr>
-<tr class="separator:a593dae210c66818290a31ecd64dc0281"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2236b08e051260c5e7015721034ae0b" id="r_ad2236b08e051260c5e7015721034ae0b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad2236b08e051260c5e7015721034ae0b">MQTTPUBCOMP</a>&#160;&#160;&#160;7 &lt;&lt; 4</td></tr>
-<tr class="separator:ad2236b08e051260c5e7015721034ae0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f8fd9ffa42a4c4b444d2f3690476ff0" id="r_a1f8fd9ffa42a4c4b444d2f3690476ff0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f8fd9ffa42a4c4b444d2f3690476ff0">MQTTSUBSCRIBE</a>&#160;&#160;&#160;8 &lt;&lt; 4</td></tr>
-<tr class="separator:a1f8fd9ffa42a4c4b444d2f3690476ff0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add2cb70f24e21d25fb8dc05ec989fbd0" id="r_add2cb70f24e21d25fb8dc05ec989fbd0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#add2cb70f24e21d25fb8dc05ec989fbd0">MQTTSUBACK</a>&#160;&#160;&#160;9 &lt;&lt; 4</td></tr>
-<tr class="separator:add2cb70f24e21d25fb8dc05ec989fbd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23699f4f798fdb9d0fdaca83843c9634" id="r_a23699f4f798fdb9d0fdaca83843c9634"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a23699f4f798fdb9d0fdaca83843c9634">MQTTUNSUBSCRIBE</a>&#160;&#160;&#160;10 &lt;&lt; 4</td></tr>
-<tr class="separator:a23699f4f798fdb9d0fdaca83843c9634"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5c89c83c9c76263f5d2026c35e386cb" id="r_ad5c89c83c9c76263f5d2026c35e386cb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad5c89c83c9c76263f5d2026c35e386cb">MQTTUNSUBACK</a>&#160;&#160;&#160;11 &lt;&lt; 4</td></tr>
-<tr class="separator:ad5c89c83c9c76263f5d2026c35e386cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41c76538ada72cdb07ec185f01bcd579" id="r_a41c76538ada72cdb07ec185f01bcd579"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a41c76538ada72cdb07ec185f01bcd579">MQTTPINGREQ</a>&#160;&#160;&#160;12 &lt;&lt; 4</td></tr>
-<tr class="separator:a41c76538ada72cdb07ec185f01bcd579"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af59e738a766613861161dc5904604c82" id="r_af59e738a766613861161dc5904604c82"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af59e738a766613861161dc5904604c82">MQTTPINGRESP</a>&#160;&#160;&#160;13 &lt;&lt; 4</td></tr>
-<tr class="separator:af59e738a766613861161dc5904604c82"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4605328c2c5c52f38b6c289bef505f84" id="r_a4605328c2c5c52f38b6c289bef505f84"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4605328c2c5c52f38b6c289bef505f84">MQTTDISCONNECT</a>&#160;&#160;&#160;14 &lt;&lt; 4</td></tr>
-<tr class="separator:a4605328c2c5c52f38b6c289bef505f84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0144cb28196021bdab45d529ca3ea3e4" id="r_a0144cb28196021bdab45d529ca3ea3e4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0144cb28196021bdab45d529ca3ea3e4">MQTTRESERVED</a>&#160;&#160;&#160;15 &lt;&lt; 4</td></tr>
-<tr class="separator:a0144cb28196021bdab45d529ca3ea3e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a489561ccf4fc185b1fd3276a2522c10f" id="r_a489561ccf4fc185b1fd3276a2522c10f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a489561ccf4fc185b1fd3276a2522c10f">MQTT_MAX_TRANSFER_SIZE</a>&#160;&#160;&#160;80</td></tr>
+<tr class="memdesc:a489561ccf4fc185b1fd3276a2522c10f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the maximum number of bytes passed to the network client in each write call. Some hardware has a limit to how much data can be passed to them in one go, such as the Arduino Wifi Shield e.g. use 80.  <br /></td></tr>
+<tr class="separator:a489561ccf4fc185b1fd3276a2522c10f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4c164f322b892ab16d49dafea0073ca3" id="r_ga4c164f322b892ab16d49dafea0073ca3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__state.html#ga4c164f322b892ab16d49dafea0073ca3">MQTT_CONNECTION_TIMEOUT</a>&#160;&#160;&#160;-4</td></tr>
+<tr class="memdesc:ga4c164f322b892ab16d49dafea0073ca3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The network connection timed out or server didn't respond within the keepalive time.  <br /></td></tr>
+<tr class="separator:ga4c164f322b892ab16d49dafea0073ca3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad8f5592739ea2c329fe320ffa14731e9" id="r_gad8f5592739ea2c329fe320ffa14731e9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__state.html#gad8f5592739ea2c329fe320ffa14731e9">MQTT_CONNECTION_LOST</a>&#160;&#160;&#160;-3</td></tr>
+<tr class="memdesc:gad8f5592739ea2c329fe320ffa14731e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The network connection was lost/broken.  <br /></td></tr>
+<tr class="separator:gad8f5592739ea2c329fe320ffa14731e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac80cae63b769440c31b8c294ac5ea191" id="r_gac80cae63b769440c31b8c294ac5ea191"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__state.html#gac80cae63b769440c31b8c294ac5ea191">MQTT_CONNECT_FAILED</a>&#160;&#160;&#160;-2</td></tr>
+<tr class="memdesc:gac80cae63b769440c31b8c294ac5ea191"><td class="mdescLeft">&#160;</td><td class="mdescRight">The network connection failed.  <br /></td></tr>
+<tr class="separator:gac80cae63b769440c31b8c294ac5ea191"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadaf86a906a305dd129164982d50111b3" id="r_gadaf86a906a305dd129164982d50111b3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__state.html#gadaf86a906a305dd129164982d50111b3">MQTT_DISCONNECTED</a>&#160;&#160;&#160;-1</td></tr>
+<tr class="memdesc:gadaf86a906a305dd129164982d50111b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The client is disconnected cleanly.  <br /></td></tr>
+<tr class="separator:gadaf86a906a305dd129164982d50111b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabb5539db14c26155eebe929fa84d1e96" id="r_gabb5539db14c26155eebe929fa84d1e96"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__state.html#gabb5539db14c26155eebe929fa84d1e96">MQTT_CONNECTED</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:gabb5539db14c26155eebe929fa84d1e96"><td class="mdescLeft">&#160;</td><td class="mdescRight">The client is connected.  <br /></td></tr>
+<tr class="separator:gabb5539db14c26155eebe929fa84d1e96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad76e7d21b1bda9adb81c7d4b392b1424" id="r_gad76e7d21b1bda9adb81c7d4b392b1424"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__state.html#gad76e7d21b1bda9adb81c7d4b392b1424">MQTT_CONNECT_BAD_PROTOCOL</a>&#160;&#160;&#160;1</td></tr>
+<tr class="memdesc:gad76e7d21b1bda9adb81c7d4b392b1424"><td class="mdescLeft">&#160;</td><td class="mdescRight">The server does not support the requested MQTT version.  <br /></td></tr>
+<tr class="separator:gad76e7d21b1bda9adb81c7d4b392b1424"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae1a1a5ad79f98bad6645c6332c522952" id="r_gae1a1a5ad79f98bad6645c6332c522952"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__state.html#gae1a1a5ad79f98bad6645c6332c522952">MQTT_CONNECT_BAD_CLIENT_ID</a>&#160;&#160;&#160;2</td></tr>
+<tr class="memdesc:gae1a1a5ad79f98bad6645c6332c522952"><td class="mdescLeft">&#160;</td><td class="mdescRight">The server rejected the client identifier.  <br /></td></tr>
+<tr class="separator:gae1a1a5ad79f98bad6645c6332c522952"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga26d38ea448bc45efbc83c5730b83b171" id="r_ga26d38ea448bc45efbc83c5730b83b171"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__state.html#ga26d38ea448bc45efbc83c5730b83b171">MQTT_CONNECT_UNAVAILABLE</a>&#160;&#160;&#160;3</td></tr>
+<tr class="memdesc:ga26d38ea448bc45efbc83c5730b83b171"><td class="mdescLeft">&#160;</td><td class="mdescRight">The server was unable to accept the connection.  <br /></td></tr>
+<tr class="separator:ga26d38ea448bc45efbc83c5730b83b171"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3a6c0837ee9a7791d5392829bcf27553" id="r_ga3a6c0837ee9a7791d5392829bcf27553"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__state.html#ga3a6c0837ee9a7791d5392829bcf27553">MQTT_CONNECT_BAD_CREDENTIALS</a>&#160;&#160;&#160;4</td></tr>
+<tr class="memdesc:ga3a6c0837ee9a7791d5392829bcf27553"><td class="mdescLeft">&#160;</td><td class="mdescRight">The username or password is not valid.  <br /></td></tr>
+<tr class="separator:ga3a6c0837ee9a7791d5392829bcf27553"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac465229204d105d09ae871df488b94b3" id="r_gac465229204d105d09ae871df488b94b3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__state.html#gac465229204d105d09ae871df488b94b3">MQTT_CONNECT_UNAUTHORIZED</a>&#160;&#160;&#160;5</td></tr>
+<tr class="memdesc:gac465229204d105d09ae871df488b94b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The client is not authorized to connect to the server.  <br /></td></tr>
+<tr class="separator:gac465229204d105d09ae871df488b94b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13c0719bffd6090cceb672c92edc2125" id="r_a13c0719bffd6090cceb672c92edc2125"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13c0719bffd6090cceb672c92edc2125">MQTTQOS0</a>&#160;&#160;&#160;(0 &lt;&lt; 1)</td></tr>
 <tr class="separator:a13c0719bffd6090cceb672c92edc2125"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2365b1c4755e7dc1136c3f02488d1d41" id="r_a2365b1c4755e7dc1136c3f02488d1d41"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2365b1c4755e7dc1136c3f02488d1d41">MQTTQOS1</a>&#160;&#160;&#160;(1 &lt;&lt; 1)</td></tr>
 <tr class="separator:a2365b1c4755e7dc1136c3f02488d1d41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a444640f17771484a123850d011f5d914" id="r_a444640f17771484a123850d011f5d914"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a444640f17771484a123850d011f5d914">MQTTQOS2</a>&#160;&#160;&#160;(2 &lt;&lt; 1)</td></tr>
 <tr class="separator:a444640f17771484a123850d011f5d914"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a979b4fc18388bc4f25631fbae542db8d" id="r_a979b4fc18388bc4f25631fbae542db8d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a979b4fc18388bc4f25631fbae542db8d">MQTT_MAX_HEADER_SIZE</a>&#160;&#160;&#160;5</td></tr>
-<tr class="separator:a979b4fc18388bc4f25631fbae542db8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20b35a8e27959a2b227c6d3c80799122" id="r_a20b35a8e27959a2b227c6d3c80799122"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a20b35a8e27959a2b227c6d3c80799122">MQTT_CALLBACK_SIGNATURE</a>&#160;&#160;&#160;void (*callback)(char*, uint8_t*, size_t)</td></tr>
-<tr class="memdesc:a20b35a8e27959a2b227c6d3c80799122"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define the signature required by any callback function.  <br /></td></tr>
+<tr class="memitem:a20b35a8e27959a2b227c6d3c80799122" id="r_a20b35a8e27959a2b227c6d3c80799122"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a20b35a8e27959a2b227c6d3c80799122">MQTT_CALLBACK_SIGNATURE</a>&#160;&#160;&#160;void (*callback)(char* topic, uint8_t* payload, size_t plength)</td></tr>
+<tr class="memdesc:a20b35a8e27959a2b227c6d3c80799122"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define the signature required by any callback function. <a class="anchor" id="callback"></a>.  <br /></td></tr>
 <tr class="separator:a20b35a8e27959a2b227c6d3c80799122"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98d05d79136252bf50a94333725d5704" id="r_a98d05d79136252bf50a94333725d5704"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98d05d79136252bf50a94333725d5704">DEBUG_PSC_PRINTF</a>(...)</td></tr>
-<tr class="separator:a98d05d79136252bf50a94333725d5704"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a515260abf909ae148dc0710143db688a" id="r_a515260abf909ae148dc0710143db688a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a515260abf909ae148dc0710143db688a">ERROR_PSC_PRINTF</a>(fmt, ...)</td></tr>
-<tr class="separator:a515260abf909ae148dc0710143db688a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8370890e7710535560b6c85a410b99a" id="r_ae8370890e7710535560b6c85a410b99a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae8370890e7710535560b6c85a410b99a">ERROR_PSC_PRINTF_P</a>(fmt, ...)</td></tr>
-<tr class="separator:ae8370890e7710535560b6c85a410b99a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a98d05d79136252bf50a94333725d5704" name="a98d05d79136252bf50a94333725d5704"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a98d05d79136252bf50a94333725d5704">&#9670;&#160;</a></span>DEBUG_PSC_PRINTF</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A simple client for MQTT. </p>
+<dl class="section author"><dt>Author</dt><dd>Nicholas O'Leary - <a href="http://knolleary.net">http://knolleary.net</a> </dd>
+<dd>
+Holger Mueller - <a href="https://github.com/hmueller01/pubsubclient3">https://github.com/hmueller01/pubsubclient3</a> </dd></dl>
+<dl class="section copyright"><dt>Copyright</dt><dd>MIT License 2008-2025</dd></dl>
+<p>This file is part of the <a class="el" href="classPubSubClient.html" title="This class provides a client for doing simple publish and subscribe messaging with a server that supp...">PubSubClient</a> library. </p>
 
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DEBUG_PSC_PRINTF</td>
-          <td>(</td>
-          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em></em></span>...</td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00135">135</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="a515260abf909ae148dc0710143db688a" name="a515260abf909ae148dc0710143db688a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a515260abf909ae148dc0710143db688a">&#9670;&#160;</a></span>ERROR_PSC_PRINTF</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define ERROR_PSC_PRINTF</td>
-          <td>(</td>
-          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>fmt</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em></em></span>...&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00138">138</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="ae8370890e7710535560b6c85a410b99a" name="ae8370890e7710535560b6c85a410b99a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae8370890e7710535560b6c85a410b99a">&#9670;&#160;</a></span>ERROR_PSC_PRINTF_P</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define ERROR_PSC_PRINTF_P</td>
-          <td>(</td>
-          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>fmt</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em></em></span>...&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00141">141</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
+<p class="definition">Definition in file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a20b35a8e27959a2b227c6d3c80799122" name="a20b35a8e27959a2b227c6d3c80799122"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a20b35a8e27959a2b227c6d3c80799122">&#9670;&#160;</a></span>MQTT_CALLBACK_SIGNATURE</h2>
 
@@ -285,178 +207,22 @@ Macros</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define MQTT_CALLBACK_SIGNATURE&#160;&#160;&#160;void (*callback)(char*, uint8_t*, size_t)</td>
+          <td class="memname">#define MQTT_CALLBACK_SIGNATURE&#160;&#160;&#160;void (*callback)(char* topic, uint8_t* payload, size_t plength)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Define the signature required by any callback function. </p>
-<dl class="section note"><dt>Note</dt><dd>The parameters are TOPIC, PAYLOAD, and LENGTH, respectively. </dd></dl>
+<p>Define the signature required by any callback function. <a class="anchor" id="callback"></a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topic</td><td>The topic of the message. </td></tr>
+    <tr><td class="paramname">payload</td><td>The payload of the message. </td></tr>
+    <tr><td class="paramname">plength</td><td>The length of the payload. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00121">121</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="ae1a1a5ad79f98bad6645c6332c522952" name="ae1a1a5ad79f98bad6645c6332c522952"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae1a1a5ad79f98bad6645c6332c522952">&#9670;&#160;</a></span>MQTT_CONNECT_BAD_CLIENT_ID</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTT_CONNECT_BAD_CLIENT_ID&#160;&#160;&#160;2</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00080">80</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="a3a6c0837ee9a7791d5392829bcf27553" name="a3a6c0837ee9a7791d5392829bcf27553"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a6c0837ee9a7791d5392829bcf27553">&#9670;&#160;</a></span>MQTT_CONNECT_BAD_CREDENTIALS</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTT_CONNECT_BAD_CREDENTIALS&#160;&#160;&#160;4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00082">82</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="ad76e7d21b1bda9adb81c7d4b392b1424" name="ad76e7d21b1bda9adb81c7d4b392b1424"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad76e7d21b1bda9adb81c7d4b392b1424">&#9670;&#160;</a></span>MQTT_CONNECT_BAD_PROTOCOL</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTT_CONNECT_BAD_PROTOCOL&#160;&#160;&#160;1</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00079">79</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="ac80cae63b769440c31b8c294ac5ea191" name="ac80cae63b769440c31b8c294ac5ea191"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac80cae63b769440c31b8c294ac5ea191">&#9670;&#160;</a></span>MQTT_CONNECT_FAILED</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTT_CONNECT_FAILED&#160;&#160;&#160;-2</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00076">76</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="ac465229204d105d09ae871df488b94b3" name="ac465229204d105d09ae871df488b94b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac465229204d105d09ae871df488b94b3">&#9670;&#160;</a></span>MQTT_CONNECT_UNAUTHORIZED</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTT_CONNECT_UNAUTHORIZED&#160;&#160;&#160;5</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00083">83</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="a26d38ea448bc45efbc83c5730b83b171" name="a26d38ea448bc45efbc83c5730b83b171"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a26d38ea448bc45efbc83c5730b83b171">&#9670;&#160;</a></span>MQTT_CONNECT_UNAVAILABLE</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTT_CONNECT_UNAVAILABLE&#160;&#160;&#160;3</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00081">81</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="abb5539db14c26155eebe929fa84d1e96" name="abb5539db14c26155eebe929fa84d1e96"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abb5539db14c26155eebe929fa84d1e96">&#9670;&#160;</a></span>MQTT_CONNECTED</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTT_CONNECTED&#160;&#160;&#160;0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00078">78</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="ad8f5592739ea2c329fe320ffa14731e9" name="ad8f5592739ea2c329fe320ffa14731e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad8f5592739ea2c329fe320ffa14731e9">&#9670;&#160;</a></span>MQTT_CONNECTION_LOST</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTT_CONNECTION_LOST&#160;&#160;&#160;-3</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00075">75</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="a4c164f322b892ab16d49dafea0073ca3" name="a4c164f322b892ab16d49dafea0073ca3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4c164f322b892ab16d49dafea0073ca3">&#9670;&#160;</a></span>MQTT_CONNECTION_TIMEOUT</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTT_CONNECTION_TIMEOUT&#160;&#160;&#160;-4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Sets the maximum number of bytes passed to the network client in each write call. Some hardware has a limit to how much data can be passed to them in one go, such as the Arduino Wifi Shield. </p>
-<dl class="section note"><dt>Note</dt><dd>Defaults to undefined, which passes the entire packet in each write call. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00074">74</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="adaf86a906a305dd129164982d50111b3" name="adaf86a906a305dd129164982d50111b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adaf86a906a305dd129164982d50111b3">&#9670;&#160;</a></span>MQTT_DISCONNECTED</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTT_DISCONNECTED&#160;&#160;&#160;-1</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00077">77</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00136">136</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -475,23 +241,7 @@ Macros</h2></td></tr>
 <p>Sets the keepalive interval, in seconds, the client will use. This is used to maintain the connection when no other packets are being sent or received. This value can be overridden by calling setKeepAlive. </p>
 <dl class="section note"><dt>Note</dt><dd>Default value is 15 seconds. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00052">52</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="a979b4fc18388bc4f25631fbae542db8d" name="a979b4fc18388bc4f25631fbae542db8d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a979b4fc18388bc4f25631fbae542db8d">&#9670;&#160;</a></span>MQTT_MAX_HEADER_SIZE</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTT_MAX_HEADER_SIZE&#160;&#160;&#160;5</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00107">107</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00057">57</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -510,7 +260,7 @@ Macros</h2></td></tr>
 <p>Sets the largest packet size, in bytes, the client will handle. Any packet received that exceeds this size will be ignored. This value can be overridden by calling setBufferSize. </p>
 <dl class="section note"><dt>Note</dt><dd>Default value is 256 bytes. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00042">42</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00047">47</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -526,7 +276,28 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00032">32</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p>Maximum packet size defined by MQTT protocol. </p>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00037">37</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+
+</div>
+</div>
+<a id="a489561ccf4fc185b1fd3276a2522c10f" name="a489561ccf4fc185b1fd3276a2522c10f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a489561ccf4fc185b1fd3276a2522c10f">&#9670;&#160;</a></span>MQTT_MAX_TRANSFER_SIZE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MQTT_MAX_TRANSFER_SIZE&#160;&#160;&#160;80</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the maximum number of bytes passed to the network client in each write call. Some hardware has a limit to how much data can be passed to them in one go, such as the Arduino Wifi Shield e.g. use 80. </p>
+<dl class="section note"><dt>Note</dt><dd>Defaults to undefined, which passes the entire packet in each write call. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00077">77</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -545,7 +316,7 @@ Macros</h2></td></tr>
 <p>Sets the timeout, in seconds, when reading from the network. This also applies as the timeout for calls to connect. This value can be overridden by calling setSocketTimeout. </p>
 <dl class="section note"><dt>Note</dt><dd>Default value is 15 seconds. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00062">62</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00067">67</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -561,10 +332,10 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Sets the version of the MQTT protocol to use. </p>
-<dl class="section note"><dt>Note</dt><dd>Default value is MQTT_VERSION_3_1_1 for MQTT 3.1.1. </dd></dl>
+<p>Sets the version of the MQTT protocol to use (3.1 or 3.1.1). </p>
+<dl class="section note"><dt>Note</dt><dd>Default value is <a class="el" href="#a7c621dd360dd439f0d6d8dc5d951a619" title="MQTT 3.1.1 protocol version see MQTT_VERSION.">MQTT_VERSION_3_1_1</a> for MQTT 3.1.1. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00027">27</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00030">30</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -580,7 +351,9 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00017">17</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p>MQTT 3.1 protocol version see <a class="el" href="#a702197a21870dfd505d92530b27754ac" title="Sets the version of the MQTT protocol to use (3.1 or 3.1.1).">MQTT_VERSION</a>. </p>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00020">20</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -596,167 +369,9 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00018">18</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p>MQTT 3.1.1 protocol version see <a class="el" href="#a702197a21870dfd505d92530b27754ac" title="Sets the version of the MQTT protocol to use (3.1 or 3.1.1).">MQTT_VERSION</a>. </p>
 
-</div>
-</div>
-<a id="aab5f09c2492326e40c0c9be6e30f9ac4" name="aab5f09c2492326e40c0c9be6e30f9ac4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab5f09c2492326e40c0c9be6e30f9ac4">&#9670;&#160;</a></span>MQTTCONNACK</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTTCONNACK&#160;&#160;&#160;2 &lt;&lt; 4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00087">87</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="a54e1cbf1e860b7628d9c73add908c564" name="a54e1cbf1e860b7628d9c73add908c564"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a54e1cbf1e860b7628d9c73add908c564">&#9670;&#160;</a></span>MQTTCONNECT</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTTCONNECT&#160;&#160;&#160;1 &lt;&lt; 4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00086">86</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="a4605328c2c5c52f38b6c289bef505f84" name="a4605328c2c5c52f38b6c289bef505f84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4605328c2c5c52f38b6c289bef505f84">&#9670;&#160;</a></span>MQTTDISCONNECT</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTTDISCONNECT&#160;&#160;&#160;14 &lt;&lt; 4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00099">99</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="a41c76538ada72cdb07ec185f01bcd579" name="a41c76538ada72cdb07ec185f01bcd579"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41c76538ada72cdb07ec185f01bcd579">&#9670;&#160;</a></span>MQTTPINGREQ</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTTPINGREQ&#160;&#160;&#160;12 &lt;&lt; 4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00097">97</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="af59e738a766613861161dc5904604c82" name="af59e738a766613861161dc5904604c82"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af59e738a766613861161dc5904604c82">&#9670;&#160;</a></span>MQTTPINGRESP</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTTPINGRESP&#160;&#160;&#160;13 &lt;&lt; 4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00098">98</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="af05fa79262740fd579ecbb4a67d1b15f" name="af05fa79262740fd579ecbb4a67d1b15f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af05fa79262740fd579ecbb4a67d1b15f">&#9670;&#160;</a></span>MQTTPUBACK</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTTPUBACK&#160;&#160;&#160;4 &lt;&lt; 4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00089">89</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="ad2236b08e051260c5e7015721034ae0b" name="ad2236b08e051260c5e7015721034ae0b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2236b08e051260c5e7015721034ae0b">&#9670;&#160;</a></span>MQTTPUBCOMP</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTTPUBCOMP&#160;&#160;&#160;7 &lt;&lt; 4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00092">92</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="a673aa9dd952b13bf964449d67d21db85" name="a673aa9dd952b13bf964449d67d21db85"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a673aa9dd952b13bf964449d67d21db85">&#9670;&#160;</a></span>MQTTPUBLISH</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTTPUBLISH&#160;&#160;&#160;3 &lt;&lt; 4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00088">88</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="af40a84f5de82816b5b147faca79e5c8d" name="af40a84f5de82816b5b147faca79e5c8d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af40a84f5de82816b5b147faca79e5c8d">&#9670;&#160;</a></span>MQTTPUBREC</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTTPUBREC&#160;&#160;&#160;5 &lt;&lt; 4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00090">90</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="a593dae210c66818290a31ecd64dc0281" name="a593dae210c66818290a31ecd64dc0281"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a593dae210c66818290a31ecd64dc0281">&#9670;&#160;</a></span>MQTTPUBREL</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTTPUBREL&#160;&#160;&#160;6 &lt;&lt; 4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00091">91</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00021">21</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -772,7 +387,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00102">102</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00117">117</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -788,7 +403,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00103">103</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00118">118</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -804,103 +419,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00104">104</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="a0144cb28196021bdab45d529ca3ea3e4" name="a0144cb28196021bdab45d529ca3ea3e4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0144cb28196021bdab45d529ca3ea3e4">&#9670;&#160;</a></span>MQTTRESERVED</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTTRESERVED&#160;&#160;&#160;15 &lt;&lt; 4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00100">100</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="acb6c0dc9d13fce3f89cc14465813e27a" name="acb6c0dc9d13fce3f89cc14465813e27a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb6c0dc9d13fce3f89cc14465813e27a">&#9670;&#160;</a></span>MQTTRETAINED</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTTRETAINED&#160;&#160;&#160;1</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00085">85</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="add2cb70f24e21d25fb8dc05ec989fbd0" name="add2cb70f24e21d25fb8dc05ec989fbd0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#add2cb70f24e21d25fb8dc05ec989fbd0">&#9670;&#160;</a></span>MQTTSUBACK</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTTSUBACK&#160;&#160;&#160;9 &lt;&lt; 4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00094">94</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="a1f8fd9ffa42a4c4b444d2f3690476ff0" name="a1f8fd9ffa42a4c4b444d2f3690476ff0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f8fd9ffa42a4c4b444d2f3690476ff0">&#9670;&#160;</a></span>MQTTSUBSCRIBE</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTTSUBSCRIBE&#160;&#160;&#160;8 &lt;&lt; 4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00093">93</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="ad5c89c83c9c76263f5d2026c35e386cb" name="ad5c89c83c9c76263f5d2026c35e386cb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad5c89c83c9c76263f5d2026c35e386cb">&#9670;&#160;</a></span>MQTTUNSUBACK</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTTUNSUBACK&#160;&#160;&#160;11 &lt;&lt; 4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00096">96</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
-
-</div>
-</div>
-<a id="a23699f4f798fdb9d0fdaca83843c9634" name="a23699f4f798fdb9d0fdaca83843c9634"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a23699f4f798fdb9d0fdaca83843c9634">&#9670;&#160;</a></span>MQTTUNSUBSCRIBE</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MQTTUNSUBSCRIBE&#160;&#160;&#160;10 &lt;&lt; 4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00095">95</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00119">119</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
