@@ -1,11 +1,27 @@
-/*
-  PubSubClient.cpp - A simple client for MQTT.
-  Nick O'Leary, Holger Mueller
-  http://knolleary.net
-  https://github.com/hmueller01/pubsubclient3
-*/
+/**
+ * @file PubSubClient.cpp
+ * @brief A simple client for MQTT.
+ * @author Nicholas O'Leary - http://knolleary.net
+ * @author Holger Mueller - https://github.com/hmueller01/pubsubclient3
+ * @copyright MIT License 2008-2025
+ *
+ * This file is part of the PubSubClient library.
+ */
 
 #include "PubSubClient.h"
+
+/**
+ * @brief Macro to check if a string 's' can be safely added to the MQTT buffer.
+ *
+ * If either check fails, the client connection is stopped and the function returns false.
+ * @param l current length in the buffer
+ * @param s string to check
+ */
+#define CHECK_STRING_LENGTH(l, s)                                            \
+    if ((!s) || (l + 2 + strnlen(s, this->bufferSize) > this->bufferSize)) { \
+        _client->stop();                                                     \
+        return false;                                                        \
+    }
 
 PubSubClient::PubSubClient() {
     setBufferSize(MQTT_MAX_PACKET_SIZE);
@@ -95,20 +111,20 @@ PubSubClient::~PubSubClient() {
 }
 
 bool PubSubClient::connect(const char* id) {
-    return connect(id, nullptr, nullptr, 0, 0, 0, 0, 1);
+    return connect(id, nullptr, nullptr, nullptr, MQTTQOS0, false, nullptr, true);
 }
 
 bool PubSubClient::connect(const char* id, const char* user, const char* pass) {
-    return connect(id, user, pass, 0, 0, 0, 0, 1);
+    return connect(id, user, pass, nullptr, MQTTQOS0, false, nullptr, true);
 }
 
 bool PubSubClient::connect(const char* id, const char* willTopic, uint8_t willQos, bool willRetain, const char* willMessage) {
-    return connect(id, nullptr, nullptr, willTopic, willQos, willRetain, willMessage, 1);
+    return connect(id, nullptr, nullptr, willTopic, willQos, willRetain, willMessage, true);
 }
 
 bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
                            const char* willMessage) {
-    return connect(id, user, pass, willTopic, willQos, willRetain, willMessage, 1);
+    return connect(id, user, pass, willTopic, willQos, willRetain, willMessage, true);
 }
 
 bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
