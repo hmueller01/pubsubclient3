@@ -17,13 +17,13 @@
 #include "IPAddress.h"
 #include "Stream.h"
 
-#define MQTT_VERSION_3_1   3  ///< MQTT 3.1 protocol version see #MQTT_VERSION
-#define MQTT_VERSION_3_1_1 4  ///< MQTT 3.1.1 protocol version see #MQTT_VERSION
+#define MQTT_VERSION_3_1   3  ///< Defines MQTT 3.1 protocol version, see #MQTT_VERSION
+#define MQTT_VERSION_3_1_1 4  ///< Defines MQTT 3.1.1 protocol version, see #MQTT_VERSION
 
 //< @note The following #define directives can be used to configure the library.
 
 /**
- * @brief Sets the version of the MQTT protocol to use (3.1 or 3.1.1).
+ * @brief Sets the version of the MQTT protocol to use (3.1 or 3.1.1). [#MQTT_VERSION_3_1, #MQTT_VERSION_3_1_1].
  * @note Default value is #MQTT_VERSION_3_1_1 for MQTT 3.1.1.
  */
 #ifndef MQTT_VERSION
@@ -114,10 +114,18 @@
 #define MQTTRESERVED    15 << 4  // Reserved
 /// \endcond
 
-#define MQTTQOS0 ((uint8_t)0)  // Quality of Service 0: At most once
-#define MQTTQOS1 ((uint8_t)1)  // Quality of Service 1: At least once
-#define MQTTQOS2 ((uint8_t)2)  // Quality of Service 2: Exactly once
+/**
+ * @defgroup group_qos QoS levels
+ * @brief Quality of Service (QoS) levels for MQTT messages.
+ * @{
+ */
+#define MQTTQOS0 ((uint8_t)0)  ///< Quality of Service 0: At most once
+#define MQTTQOS1 ((uint8_t)1)  ///< Quality of Service 1: At least once
+#define MQTTQOS2 ((uint8_t)2)  ///< Quality of Service 2: Exactly once
+/// \cond
 #define MQTTQOS_BITS(qos) ((qos) << 1) // Quality of Service bits in the header
+/// \endcond
+/** @} */
 
 /// \cond Maximum size of fixed header and variable length size header
 #define MQTT_MAX_HEADER_SIZE 5
@@ -503,7 +511,7 @@ class PubSubClient : public Print {
      * @brief Publishes a message to the specified topic.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
-     * @param qos The quality of service (QoS) to publish at. [0, 1, 2].
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
      * @param retained Publish the message with the retain flag.
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
@@ -536,7 +544,7 @@ class PubSubClient : public Print {
      * @param topic The topic to publish to.
      * @param payload The message to publish.
      * @param plength The length of the payload.
-     * @param qos The quality of service (QoS) to publish at. [0, 1, 2].
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
      * @param retained Publish the message with the retain flag.
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
@@ -557,7 +565,7 @@ class PubSubClient : public Print {
      * @brief Publishes a message stored in PROGMEM to the specified topic.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
-     * @param qos The quality of service (QoS) to publish at. [0, 1, 2].
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
      * @param retained Publish the message with the retain flag.
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
@@ -580,7 +588,7 @@ class PubSubClient : public Print {
      * @param topic The topic to publish to.
      * @param payload The message to publish.
      * @param plength The length of the payload.
-     * @param qos The quality of service (QoS) to publish at. [0, 1, 2].
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
      * @param retained Publish the message with the retain flag.
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
@@ -613,7 +621,7 @@ class PubSubClient : public Print {
      * a new buffer and held in memory at one time.
      * @param topic The topic to publish to.
      * @param plength The length of the payload.
-     * @param qos The quality of service (QoS) to publish at. [0, 1, 2].
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
      * @param retained Publish the message with the retain flag.
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
