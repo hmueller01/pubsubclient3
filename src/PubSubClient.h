@@ -123,7 +123,8 @@
 #define MQTTQOS1 ((uint8_t)1)  ///< Quality of Service 1: At least once
 #define MQTTQOS2 ((uint8_t)2)  ///< Quality of Service 2: Exactly once
 /// \cond
-#define MQTTQOS_BITS(qos) ((qos) << 1) // Quality of Service bits in the header
+#define MQTT_QOS_GET_HDR(qos) (((qos) & 0x03) << 1) // Get QoS header bits from QoS value
+#define MQTT_HDR_GET_QOS(header) (((header) & 0x06 ) >> 1) // Get QoS value from MQTT header
 /// \endcond
 /** @} */
 

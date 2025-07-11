@@ -330,8 +330,8 @@ size_t PubSubClient::readPacket(uint8_t* hdrLen) {
         if (!readByte(this->buffer, &len)) return 0;
         skip = (this->buffer[*hdrLen + 1] << 8) + this->buffer[*hdrLen + 2];
         start = 2;
-        if (this->buffer[0] & MQTTQOS_BITS(MQTTQOS1)) {
-            // skip message id
+        if (this->buffer[0] & MQTT_QOS_GET_HDR(MQTTQOS1)) {
+            // skip message id for QoS 1
             skip += 2;
         }
     }
@@ -393,7 +393,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 memmove(topic, topic + 1, topicLen);  // move topic inside buffer 1 byte to front
                 topic[topicLen] = '\0';               // end the topic as a 'C' string with \x00
 
-                if ((this->buffer[0] & 0x06) == MQTTQOS_BITS(MQTTQOS0)) {
+                if (MQTT_HDR_GET_QOS(this->buffer[0]) == MQTTQOS0) {
                     // No msgId for QOS == 0
                     callback(topic, payload, payloadLen);
                 } else {
@@ -572,7 +572,7 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, 
         // first write the topic at the end of the maximal variable header (MQTT_MAX_HEADER_SIZE) to the buffer
         size_t topicLen = writeString(topic, this->buffer, MQTT_MAX_HEADER_SIZE) - MQTT_MAX_HEADER_SIZE;
         // we now know the length of the topic string (lenght + 2 bytes signalling the length) and can build the variable header information
-        const uint8_t header = MQTTPUBLISH | MQTTQOS_BITS(qos) | (retained ? MQTTRETAINED : 0);
+        const uint8_t header = MQTTPUBLISH | MQTT_QOS_GET_HDR(qos) | (retained ? MQTTRETAINED : 0);
         const size_t nextMsgLen = (qos) ? 2 : 0;  // add 2 bytes for the nextMsgId if QoS > 0
         uint8_t hdrLen = buildHeader(header, this->buffer, topicLen + plength + nextMsgLen);
         if (hdrLen == 0) return false;  // exit here in case of header generation failure
@@ -749,7 +749,7 @@ bool PubSubClient::subscribe(const char* topic, uint8_t qos) {
         this->buffer[length++] = (nextMsgId & 0xFF);
         length = writeString(topic, this->buffer, length);
         this->buffer[length++] = qos;
-        return write(MQTTSUBSCRIBE | MQTTQOS_BITS(MQTTQOS1), this->buffer, length - MQTT_MAX_HEADER_SIZE);
+        return write(MQTTSUBSCRIBE | MQTT_QOS_GET_HDR(MQTTQOS1), this->buffer, length - MQTT_MAX_HEADER_SIZE);
     }
     return false;
 }
@@ -771,7 +771,7 @@ bool PubSubClient::unsubscribe(const char* topic) {
         this->buffer[length++] = (nextMsgId >> 8);
         this->buffer[length++] = (nextMsgId & 0xFF);
         length = writeString(topic, this->buffer, length);
-        return write(MQTTUNSUBSCRIBE | MQTTQOS_BITS(MQTTQOS1), this->buffer, length - MQTT_MAX_HEADER_SIZE);
+        return write(MQTTUNSUBSCRIBE | MQTT_QOS_GET_HDR(MQTTQOS1), this->buffer, length - MQTT_MAX_HEADER_SIZE);
     }
     return false;
 }
