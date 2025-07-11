@@ -330,8 +330,8 @@ size_t PubSubClient::readPacket(uint8_t* hdrLen) {
         if (!readByte(this->buffer, &len)) return 0;
         skip = (this->buffer[*hdrLen + 1] << 8) + this->buffer[*hdrLen + 2];
         start = 2;
-        if (this->buffer[0] & MQTT_QOS_GET_HDR(MQTT_QOS1)) {
-            // skip message id for QoS 1
+        if (MQTT_HDR_GET_QOS(this->buffer[0]) > MQTT_QOS0) {
+            // skip msgId (packet identifier) for QoS 1 and 2 messages
             skip += 2;
         }
     }
