@@ -725,6 +725,26 @@ size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, s
     return pos;
 }
 
+/**
+ * @brief  Write nextMsgId to the give buffer and position.
+ * @note   If the nextMsgId (2 bytes) does not fit in the buffer nothing is written to the buffer and the returned position is unchanged.
+ *
+ * @param  buf Buffer to write the nextMsgId into.
+ * @param  pos Position in the buffer to write the nextMsgId.
+ * @param  size Maximal size of the buffer.
+ * @return New position in the buffer (pos + 2), or pos if a buffer overrun would occur.
+ */
+size_t PubSubClient::writeNextMsgId(uint8_t* buf, size_t pos, size_t size) {
+    if (pos + 2 <= size) {
+        nextMsgId = (++nextMsgId == 0) ? 1 : nextMsgId;  // increment msgId (must not be 0, so start at 1)
+        buf[pos++] = (uint8_t)(nextMsgId >> 8);
+        buf[pos++] = (uint8_t)(nextMsgId & 0xFF);
+    } else {
+        ERROR_PSC_PRINTF_P("writeNextMsgId(): buffer (%zu) does not fit into buf (%zu)\n", pos + 2, size);
+    }
+    return pos;
+}
+
 bool PubSubClient::subscribe(const char* topic) {
     return subscribe(topic, MQTT_QOS0);
 }
@@ -734,19 +754,14 @@ bool PubSubClient::subscribe(const char* topic, uint8_t qos) {
     if (qos > MQTT_QOS1) return false;  // only QoS 0 and 1 supported
 
     size_t topicLen = strnlen(topic, this->bufferSize);
-    if (this->bufferSize < MQTT_MAX_HEADER_SIZE + 2 + 2 + topicLen) {
-        // Too long: header + nextMsgId (2) + topic length bytes (2) + topicLen
+    if (this->bufferSize < MQTT_MAX_HEADER_SIZE + 2 + 2 + topicLen + 1) {
+        // Too long: header + nextMsgId (2) + topic length bytes (2) + topicLen + QoS (1)
         return false;
     }
     if (connected()) {
         // Leave room in the buffer for header and variable length field
         uint16_t length = MQTT_MAX_HEADER_SIZE;
-        nextMsgId++;
-        if (nextMsgId == 0) {
-            nextMsgId = 1;
-        }
-        this->buffer[length++] = (nextMsgId >> 8);
-        this->buffer[length++] = (nextMsgId & 0xFF);
+        length = writeNextMsgId(buffer, length, this->bufferSize);  // buffer size is checked before
         length = writeString(topic, this->buffer, length);
         this->buffer[length++] = qos;
         return write(MQTTSUBSCRIBE | MQTT_QOS_GET_HDR(MQTT_QOS1), this->buffer, length - MQTT_MAX_HEADER_SIZE);
@@ -764,12 +779,7 @@ bool PubSubClient::unsubscribe(const char* topic) {
     }
     if (connected()) {
         uint16_t length = MQTT_MAX_HEADER_SIZE;
-        nextMsgId++;
-        if (nextMsgId == 0) {
-            nextMsgId = 1;
-        }
-        this->buffer[length++] = (nextMsgId >> 8);
-        this->buffer[length++] = (nextMsgId & 0xFF);
+        length = writeNextMsgId(buffer, length, this->bufferSize);  // buffer size is checked before
         length = writeString(topic, this->buffer, length);
         return write(MQTTUNSUBSCRIBE | MQTT_QOS_GET_HDR(MQTT_QOS1), this->buffer, length - MQTT_MAX_HEADER_SIZE);
     }
