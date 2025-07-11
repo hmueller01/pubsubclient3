@@ -17,13 +17,13 @@
 #include "IPAddress.h"
 #include "Stream.h"
 
-#define MQTT_VERSION_3_1   3  ///< MQTT 3.1 protocol version see #MQTT_VERSION
-#define MQTT_VERSION_3_1_1 4  ///< MQTT 3.1.1 protocol version see #MQTT_VERSION
+#define MQTT_VERSION_3_1   3  ///< Defines MQTT 3.1 protocol version, see #MQTT_VERSION
+#define MQTT_VERSION_3_1_1 4  ///< Defines MQTT 3.1.1 protocol version, see #MQTT_VERSION
 
 //< @note The following #define directives can be used to configure the library.
 
 /**
- * @brief Sets the version of the MQTT protocol to use (3.1 or 3.1.1).
+ * @brief Sets the version of the MQTT protocol to use (3.1 or 3.1.1). [#MQTT_VERSION_3_1, #MQTT_VERSION_3_1_1].
  * @note Default value is #MQTT_VERSION_3_1_1 for MQTT 3.1.1.
  */
 #ifndef MQTT_VERSION
@@ -114,9 +114,19 @@
 #define MQTTRESERVED    15 << 4  // Reserved
 /// \endcond
 
-#define MQTTQOS0 (0 << 1)
-#define MQTTQOS1 (1 << 1)
-#define MQTTQOS2 (2 << 1)
+/**
+ * @defgroup group_qos QoS levels
+ * @brief Quality of Service (QoS) levels for MQTT messages.
+ * @{
+ */
+#define MQTT_QOS0 ((uint8_t)0)  ///< Quality of Service 0: At most once
+#define MQTT_QOS1 ((uint8_t)1)  ///< Quality of Service 1: At least once
+#define MQTT_QOS2 ((uint8_t)2)  ///< Quality of Service 2: Exactly once
+/// \cond
+#define MQTT_QOS_GET_HDR(qos) (((qos) & 0x03) << 1) // Get QoS header bits from QoS value
+#define MQTT_HDR_GET_QOS(header) (((header) & 0x06 ) >> 1) // Get QoS value from MQTT header
+/// \endcond
+/** @} */
 
 /// \cond Maximum size of fixed header and variable length size header
 #define MQTT_MAX_HEADER_SIZE 5
@@ -180,6 +190,7 @@ class PubSubClient : public Print {
     uint16_t port{};
     Stream* stream{};
     int _state{MQTT_DISCONNECTED};
+    uint8_t _qos{MQTT_QOS0};
 
     size_t readPacket(uint8_t* hdrLen);
     bool handlePacket(uint8_t hdrLen, size_t len);
@@ -480,7 +491,7 @@ class PubSubClient : public Print {
     void disconnect();
 
     /**
-     * @brief Publishes a non retained message to the specified topic.
+     * @brief Publishes a non retained message to the specified topic using QoS 0.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
      * @return true If the publish succeeded.
@@ -489,7 +500,7 @@ class PubSubClient : public Print {
     bool publish(const char* topic, const char* payload);
 
     /**
-     * @brief Publishes a message to the specified topic.
+     * @brief Publishes a message to the specified topic using QoS 0.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
      * @param retained Publish the message with the retain flag.
@@ -499,7 +510,18 @@ class PubSubClient : public Print {
     bool publish(const char* topic, const char* payload, bool retained);
 
     /**
-     * @brief Publishes a non retained message to the specified topic.
+     * @brief Publishes a message to the specified topic.
+     * @param topic The topic to publish to.
+     * @param payload The message to publish.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool publish(const char* topic, const char* payload, uint8_t qos, bool retained);
+
+    /**
+     * @brief Publishes a non retained message to the specified topic using QoS 0.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
      * @param plength The length of the payload.
@@ -509,7 +531,7 @@ class PubSubClient : public Print {
     bool publish(const char* topic, const uint8_t* payload, size_t plength);
 
     /**
-     * @brief Publishes a message to the specified topic.
+     * @brief Publishes a message to the specified topic using QoS 0.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
      * @param plength The length of the payload.
@@ -520,7 +542,19 @@ class PubSubClient : public Print {
     bool publish(const char* topic, const uint8_t* payload, size_t plength, bool retained);
 
     /**
-     * @brief Publishes a message stored in PROGMEM to the specified topic.
+     * @brief Publishes a message to the specified topic.
+     * @param topic The topic to publish to.
+     * @param payload The message to publish.
+     * @param plength The length of the payload.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool publish(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained);
+
+    /**
+     * @brief Publishes a message stored in PROGMEM to the specified topic using QoS 0.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
      * @param retained Publish the message with the retain flag.
@@ -533,6 +567,17 @@ class PubSubClient : public Print {
      * @brief Publishes a message stored in PROGMEM to the specified topic.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool publish_P(const char* topic, const char* payload, uint8_t qos, bool retained);
+
+    /**
+     * @brief Publishes a message stored in PROGMEM to the specified topic using QoS 0.
+     * @param topic The topic to publish to.
+     * @param payload The message to publish.
      * @param plength The length of the payload.
      * @param retained Publish the message with the retain flag.
      * @return true If the publish succeeded.
@@ -541,7 +586,19 @@ class PubSubClient : public Print {
     bool publish_P(const char* topic, const uint8_t* payload, size_t plength, bool retained);
 
     /**
-     * @brief Start to publish a message.
+     * @brief Publishes a message stored in PROGMEM to the specified topic.
+     * @param topic The topic to publish to.
+     * @param payload The message to publish.
+     * @param plength The length of the payload.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool publish_P(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained);
+
+    /**
+     * @brief Start to publish a message using QoS 0.
      * This API:
      *   beginPublish(...)
      *   one or more calls to write(...)
@@ -555,6 +612,23 @@ class PubSubClient : public Print {
      * false If the publish failed, either connection lost or message too large.
      */
     bool beginPublish(const char* topic, size_t plength, bool retained);
+
+    /**
+     * @brief Start to publish a message.
+     * This API:
+     *   beginPublish(...)
+     *   one or more calls to write(...)
+     *   endPublish()
+     * Allows for arbitrarily large payloads to be sent without them having to be copied into
+     * a new buffer and held in memory at one time.
+     * @param topic The topic to publish to.
+     * @param plength The length of the payload.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained);
 
     /**
      * @brief Finish sending a message that was started with a call to beginPublish.
@@ -579,7 +653,7 @@ class PubSubClient : public Print {
     virtual size_t write(const uint8_t* buffer, size_t size);
 
     /**
-     * @brief Subscribes to messages published to the specified topic.
+     * @brief Subscribes to messages published to the specified topic using QoS 0.
      * @param topic The topic to subscribe to.
      * @return true If sending the subscribe succeeded.
      * false If sending the subscribe failed, either connection lost or message too large.
