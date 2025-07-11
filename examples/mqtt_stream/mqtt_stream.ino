@@ -25,7 +25,7 @@ void callback(char* topic, uint8_t* payload, size_t plength) {
     sram.seek(1);
 
     // do something with the message
-    for (size_t i = 0; i < length; i++) {
+    for (size_t i = 0; i < plength; i++) {
         Serial.write(sram.read());
     }
     Serial.println();
