@@ -189,6 +189,7 @@ class PubSubClient : public Print {
     bool write(uint8_t header, uint8_t* buf, size_t length);
     size_t writeString(const char* string, uint8_t* buf, size_t pos);
     size_t writeString(const char* string, uint8_t* buf, size_t pos, size_t size);
+    size_t writeNextMsgId(uint8_t* buf, size_t pos, size_t size);
 
    public:
     /**
