@@ -16,11 +16,11 @@ var PubSubClient_8h =
     [ "MQTT_MAX_PACKET_SIZE", "PubSubClient_8h.html#ae09b594688a59f1427c7e45259e039b9", null ],
     [ "MQTT_MAX_POSSIBLE_PACKET_SIZE", "PubSubClient_8h.html#a94da4eb7c328254242ce3690bcb2a880", null ],
     [ "MQTT_MAX_TRANSFER_SIZE", "PubSubClient_8h.html#a489561ccf4fc185b1fd3276a2522c10f", null ],
+    [ "MQTT_QOS0", "group__group__qos.html#ga39575f09a43923022f02e8febde00f4d", null ],
+    [ "MQTT_QOS1", "group__group__qos.html#gaea55330105a89a6dfb08953e0d309630", null ],
+    [ "MQTT_QOS2", "group__group__qos.html#gaaec3d69f1fe4d464d693cad535ae7397", null ],
     [ "MQTT_SOCKET_TIMEOUT", "PubSubClient_8h.html#a092cc564e4d7f03fdab6137e30a7f05b", null ],
     [ "MQTT_VERSION", "PubSubClient_8h.html#a702197a21870dfd505d92530b27754ac", null ],
     [ "MQTT_VERSION_3_1", "PubSubClient_8h.html#af98dfc7d42750b53391878cc3598a37e", null ],
-    [ "MQTT_VERSION_3_1_1", "PubSubClient_8h.html#a7c621dd360dd439f0d6d8dc5d951a619", null ],
-    [ "MQTTQOS0", "PubSubClient_8h.html#a13c0719bffd6090cceb672c92edc2125", null ],
-    [ "MQTTQOS1", "PubSubClient_8h.html#a2365b1c4755e7dc1136c3f02488d1d41", null ],
-    [ "MQTTQOS2", "PubSubClient_8h.html#a444640f17771484a123850d011f5d914", null ]
+    [ "MQTT_VERSION_3_1_1", "PubSubClient_8h.html#a7c621dd360dd439f0d6d8dc5d951a619", null ]
 ];

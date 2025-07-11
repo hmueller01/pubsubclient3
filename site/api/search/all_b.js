@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['write_0',['write',['../classPubSubClient.html#a5911478ded602f6fd8831921a77079f8',1,'PubSubClient::write(uint8_t data)'],['../classPubSubClient.html#acab06be609ad663253882ace39077f87',1,'PubSubClient::write(const uint8_t *buffer, size_t size)']]]
+  ['unsubscribe_0',['unsubscribe',['../classPubSubClient.html#a38a147c2013ea040a822334c1464ef9c',1,'PubSubClient']]]
 ];

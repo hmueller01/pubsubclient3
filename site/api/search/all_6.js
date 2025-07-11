@@ -15,11 +15,11 @@ var searchData=
   ['mqtt_5fmax_5fpacket_5fsize_12',['MQTT_MAX_PACKET_SIZE',['../PubSubClient_8h.html#ae09b594688a59f1427c7e45259e039b9',1,'PubSubClient.h']]],
   ['mqtt_5fmax_5fpossible_5fpacket_5fsize_13',['MQTT_MAX_POSSIBLE_PACKET_SIZE',['../PubSubClient_8h.html#a94da4eb7c328254242ce3690bcb2a880',1,'PubSubClient.h']]],
   ['mqtt_5fmax_5ftransfer_5fsize_14',['MQTT_MAX_TRANSFER_SIZE',['../PubSubClient_8h.html#a489561ccf4fc185b1fd3276a2522c10f',1,'PubSubClient.h']]],
-  ['mqtt_5fsocket_5ftimeout_15',['MQTT_SOCKET_TIMEOUT',['../PubSubClient_8h.html#a092cc564e4d7f03fdab6137e30a7f05b',1,'PubSubClient.h']]],
-  ['mqtt_5fversion_16',['MQTT_VERSION',['../PubSubClient_8h.html#a702197a21870dfd505d92530b27754ac',1,'PubSubClient.h']]],
-  ['mqtt_5fversion_5f3_5f1_17',['MQTT_VERSION_3_1',['../PubSubClient_8h.html#af98dfc7d42750b53391878cc3598a37e',1,'PubSubClient.h']]],
-  ['mqtt_5fversion_5f3_5f1_5f1_18',['MQTT_VERSION_3_1_1',['../PubSubClient_8h.html#a7c621dd360dd439f0d6d8dc5d951a619',1,'PubSubClient.h']]],
-  ['mqttqos0_19',['MQTTQOS0',['../PubSubClient_8h.html#a13c0719bffd6090cceb672c92edc2125',1,'PubSubClient.h']]],
-  ['mqttqos1_20',['MQTTQOS1',['../PubSubClient_8h.html#a2365b1c4755e7dc1136c3f02488d1d41',1,'PubSubClient.h']]],
-  ['mqttqos2_21',['MQTTQOS2',['../PubSubClient_8h.html#a444640f17771484a123850d011f5d914',1,'PubSubClient.h']]]
+  ['mqtt_5fqos0_15',['MQTT_QOS0',['../group__group__qos.html#ga39575f09a43923022f02e8febde00f4d',1,'PubSubClient.h']]],
+  ['mqtt_5fqos1_16',['MQTT_QOS1',['../group__group__qos.html#gaea55330105a89a6dfb08953e0d309630',1,'PubSubClient.h']]],
+  ['mqtt_5fqos2_17',['MQTT_QOS2',['../group__group__qos.html#gaaec3d69f1fe4d464d693cad535ae7397',1,'PubSubClient.h']]],
+  ['mqtt_5fsocket_5ftimeout_18',['MQTT_SOCKET_TIMEOUT',['../PubSubClient_8h.html#a092cc564e4d7f03fdab6137e30a7f05b',1,'PubSubClient.h']]],
+  ['mqtt_5fversion_19',['MQTT_VERSION',['../PubSubClient_8h.html#a702197a21870dfd505d92530b27754ac',1,'PubSubClient.h']]],
+  ['mqtt_5fversion_5f3_5f1_20',['MQTT_VERSION_3_1',['../PubSubClient_8h.html#af98dfc7d42750b53391878cc3598a37e',1,'PubSubClient.h']]],
+  ['mqtt_5fversion_5f3_5f1_5f1_21',['MQTT_VERSION_3_1_1',['../PubSubClient_8h.html#a7c621dd360dd439f0d6d8dc5d951a619',1,'PubSubClient.h']]]
 ];

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.13.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PubSubClient3: File Members</title>
+<title>PubSubClient3: QoS levels</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -76,7 +76,7 @@ $(function() { codefold.init(0); });
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(function(){initNavTree('globals.html',''); initResizable(true); });
+$(function(){initNavTree('group__group__qos.html',''); initResizable(true); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -101,31 +101,83 @@ $(function(){initNavTree('globals.html',''); initResizable(true); });
 </div>
 </div>
 
+<div class="header">
+  <div class="summary">
+<a href="#define-members">Macros</a>  </div>
+  <div class="headertitle"><div class="title">QoS levels</div></div>
+</div><!--header-->
 <div class="contents">
-<div class="textblock">Here is a list of all file members with links to the files they belong to:</div><ul>
-<li>MQTT_CALLBACK_SIGNATURE&#160;:&#160;<a class="el" href="PubSubClient_8h.html#a20b35a8e27959a2b227c6d3c80799122">PubSubClient.h</a></li>
-<li>MQTT_CONNECT_BAD_CLIENT_ID&#160;:&#160;<a class="el" href="group__group__state.html#gae1a1a5ad79f98bad6645c6332c522952">PubSubClient.h</a></li>
-<li>MQTT_CONNECT_BAD_CREDENTIALS&#160;:&#160;<a class="el" href="group__group__state.html#ga3a6c0837ee9a7791d5392829bcf27553">PubSubClient.h</a></li>
-<li>MQTT_CONNECT_BAD_PROTOCOL&#160;:&#160;<a class="el" href="group__group__state.html#gad76e7d21b1bda9adb81c7d4b392b1424">PubSubClient.h</a></li>
-<li>MQTT_CONNECT_FAILED&#160;:&#160;<a class="el" href="group__group__state.html#gac80cae63b769440c31b8c294ac5ea191">PubSubClient.h</a></li>
-<li>MQTT_CONNECT_UNAUTHORIZED&#160;:&#160;<a class="el" href="group__group__state.html#gac465229204d105d09ae871df488b94b3">PubSubClient.h</a></li>
-<li>MQTT_CONNECT_UNAVAILABLE&#160;:&#160;<a class="el" href="group__group__state.html#ga26d38ea448bc45efbc83c5730b83b171">PubSubClient.h</a></li>
-<li>MQTT_CONNECTED&#160;:&#160;<a class="el" href="group__group__state.html#gabb5539db14c26155eebe929fa84d1e96">PubSubClient.h</a></li>
-<li>MQTT_CONNECTION_LOST&#160;:&#160;<a class="el" href="group__group__state.html#gad8f5592739ea2c329fe320ffa14731e9">PubSubClient.h</a></li>
-<li>MQTT_CONNECTION_TIMEOUT&#160;:&#160;<a class="el" href="group__group__state.html#ga4c164f322b892ab16d49dafea0073ca3">PubSubClient.h</a></li>
-<li>MQTT_DISCONNECTED&#160;:&#160;<a class="el" href="group__group__state.html#gadaf86a906a305dd129164982d50111b3">PubSubClient.h</a></li>
-<li>MQTT_KEEPALIVE&#160;:&#160;<a class="el" href="PubSubClient_8h.html#afb4dd8c75385ab30e659314df7c2c335">PubSubClient.h</a></li>
-<li>MQTT_MAX_PACKET_SIZE&#160;:&#160;<a class="el" href="PubSubClient_8h.html#ae09b594688a59f1427c7e45259e039b9">PubSubClient.h</a></li>
-<li>MQTT_MAX_POSSIBLE_PACKET_SIZE&#160;:&#160;<a class="el" href="PubSubClient_8h.html#a94da4eb7c328254242ce3690bcb2a880">PubSubClient.h</a></li>
-<li>MQTT_MAX_TRANSFER_SIZE&#160;:&#160;<a class="el" href="PubSubClient_8h.html#a489561ccf4fc185b1fd3276a2522c10f">PubSubClient.h</a></li>
-<li>MQTT_QOS0&#160;:&#160;<a class="el" href="group__group__qos.html#ga39575f09a43923022f02e8febde00f4d">PubSubClient.h</a></li>
-<li>MQTT_QOS1&#160;:&#160;<a class="el" href="group__group__qos.html#gaea55330105a89a6dfb08953e0d309630">PubSubClient.h</a></li>
-<li>MQTT_QOS2&#160;:&#160;<a class="el" href="group__group__qos.html#gaaec3d69f1fe4d464d693cad535ae7397">PubSubClient.h</a></li>
-<li>MQTT_SOCKET_TIMEOUT&#160;:&#160;<a class="el" href="PubSubClient_8h.html#a092cc564e4d7f03fdab6137e30a7f05b">PubSubClient.h</a></li>
-<li>MQTT_VERSION&#160;:&#160;<a class="el" href="PubSubClient_8h.html#a702197a21870dfd505d92530b27754ac">PubSubClient.h</a></li>
-<li>MQTT_VERSION_3_1&#160;:&#160;<a class="el" href="PubSubClient_8h.html#af98dfc7d42750b53391878cc3598a37e">PubSubClient.h</a></li>
-<li>MQTT_VERSION_3_1_1&#160;:&#160;<a class="el" href="PubSubClient_8h.html#a7c621dd360dd439f0d6d8dc5d951a619">PubSubClient.h</a></li>
-</ul>
+
+<p>Quality of Service (QoS) levels for MQTT messages.  
+<a href="#details">More...</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:ga39575f09a43923022f02e8febde00f4d" id="r_ga39575f09a43923022f02e8febde00f4d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga39575f09a43923022f02e8febde00f4d">MQTT_QOS0</a>&#160;&#160;&#160;((uint8_t)0)</td></tr>
+<tr class="memdesc:ga39575f09a43923022f02e8febde00f4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Quality of Service 0: At most once.  <br /></td></tr>
+<tr class="separator:ga39575f09a43923022f02e8febde00f4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaea55330105a89a6dfb08953e0d309630" id="r_gaea55330105a89a6dfb08953e0d309630"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gaea55330105a89a6dfb08953e0d309630">MQTT_QOS1</a>&#160;&#160;&#160;((uint8_t)1)</td></tr>
+<tr class="memdesc:gaea55330105a89a6dfb08953e0d309630"><td class="mdescLeft">&#160;</td><td class="mdescRight">Quality of Service 1: At least once.  <br /></td></tr>
+<tr class="separator:gaea55330105a89a6dfb08953e0d309630"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaaec3d69f1fe4d464d693cad535ae7397" id="r_gaaec3d69f1fe4d464d693cad535ae7397"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gaaec3d69f1fe4d464d693cad535ae7397">MQTT_QOS2</a>&#160;&#160;&#160;((uint8_t)2)</td></tr>
+<tr class="separator:gaaec3d69f1fe4d464d693cad535ae7397"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<p>Quality of Service (QoS) levels for MQTT messages. </p>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ga39575f09a43923022f02e8febde00f4d" name="ga39575f09a43923022f02e8febde00f4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga39575f09a43923022f02e8febde00f4d">&#9670;&#160;</a></span>MQTT_QOS0</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MQTT_QOS0&#160;&#160;&#160;((uint8_t)0)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Quality of Service 0: At most once. </p>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00122">122</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+
+</div>
+</div>
+<a id="gaea55330105a89a6dfb08953e0d309630" name="gaea55330105a89a6dfb08953e0d309630"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaea55330105a89a6dfb08953e0d309630">&#9670;&#160;</a></span>MQTT_QOS1</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MQTT_QOS1&#160;&#160;&#160;((uint8_t)1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Quality of Service 1: At least once. </p>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00123">123</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+
+</div>
+</div>
+<a id="gaaec3d69f1fe4d464d693cad535ae7397" name="gaaec3d69f1fe4d464d693cad535ae7397"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaaec3d69f1fe4d464d693cad535ae7397">&#9670;&#160;</a></span>MQTT_QOS2</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MQTT_QOS2&#160;&#160;&#160;((uint8_t)2)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Quality of Service 2: Exactly once </p>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00124">124</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

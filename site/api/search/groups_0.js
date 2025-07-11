@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['result_0',['state() result',['../group__group__state.html',1,'']]]
+  ['levels_0',['QoS levels',['../group__group__qos.html',1,'']]]
 ];
