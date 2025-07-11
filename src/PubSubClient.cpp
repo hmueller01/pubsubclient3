@@ -489,11 +489,11 @@ bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t ple
     return false;
 }
 
-bool PubSubClient::publish_P(const char* topic, const char* payload, bool retained) {
-    return publish_P(topic, (const uint8_t*)payload, payload ? strnlen_P(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, retained);
+bool PubSubClient::publish_P(const char* topic, PGM_P payload, bool retained) {
+    return publish_P(topic, (const prog_uint8_t*)payload, payload ? strnlen_P(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, retained);
 }
 
-bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t plength, bool retained) {
+bool PubSubClient::publish_P(const char* topic, const prog_uint8_t* payload, size_t plength, bool retained) {
     if (beginPublish(topic, plength, retained)) {
         size_t rc = 0;
         for (size_t i = 0; i < plength; i++) {
@@ -648,6 +648,27 @@ size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, s
     } else {
         ERROR_PSC_PRINTF_P("writeString(): string (%zu) does not fit into buf (%zu)\n", pos + 2 + sLen, size);
     }
+    return pos;
+}
+
+size_t PubSubClient::writeString(const __FlashStringHelper* fstring, uint8_t* buf, size_t pos, size_t size) {
+    // convert FlashStringHelper in PROGMEM-pointer
+    return writeString_P(reinterpret_cast<const char*>(fstring), buf, pos, this->bufferSize);
+}
+
+size_t PubSubClient::writeString_P(PGM_P string, uint8_t* buf, size_t pos, size_t size) {
+    if (!string) return pos;
+
+    size_t sLen = strlen_P(string);
+    if ((pos + 2 + sLen) <= size && sLen <= 0xFFFF) {
+        buf[pos++] = (uint8_t)(sLen >> 8);
+        buf[pos++] = (uint8_t)(sLen & 0xFF);
+        memcpy_P(buf + pos, string, sLen);
+        pos += sLen;
+    } else {
+        ERROR_PSC_PRINTF_P("writeString_P(): string (%zu) does not fit into buf (%zu)\n", pos + 2 + sLen, size);
+    }
+
     return pos;
 }
 
