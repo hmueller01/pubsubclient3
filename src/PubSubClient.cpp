@@ -726,7 +726,7 @@ size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, s
 }
 
 bool PubSubClient::subscribe(const char* topic) {
-    return subscribe(topic, 0);
+    return subscribe(topic, MQTT_QOS0);
 }
 
 bool PubSubClient::subscribe(const char* topic, uint8_t qos) {
