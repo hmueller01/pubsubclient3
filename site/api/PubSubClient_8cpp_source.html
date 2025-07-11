@@ -746,166 +746,167 @@ $(function(){initNavTree('PubSubClient_8cpp_source.html',''); initResizable(true
 <div class="line"><a id="l00653" name="l00653"></a><span class="lineno">  653</span>    }</div>
 <div class="line"><a id="l00654" name="l00654"></a><span class="lineno">  654</span>    <span class="keywordflow">return</span> pos;</div>
 <div class="line"><a id="l00655" name="l00655"></a><span class="lineno">  655</span>}</div>
-<div class="line"><a id="l00656" name="l00656"></a><span class="lineno">  656</span> </div>
-<div class="foldopen" id="foldopen00657" data-start="{" data-end="}">
-<div class="line"><a id="l00657" name="l00657"></a><span class="lineno"><a class="line" href="classPubSubClient.html#a0c4f24c7e9f704c29ebd79482c97b071">  657</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="classPubSubClient.html#a0c4f24c7e9f704c29ebd79482c97b071">PubSubClient::subscribe</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* topic) {</div>
-<div class="line"><a id="l00658" name="l00658"></a><span class="lineno">  658</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="classPubSubClient.html#a0c4f24c7e9f704c29ebd79482c97b071">subscribe</a>(topic, 0);</div>
-<div class="line"><a id="l00659" name="l00659"></a><span class="lineno">  659</span>}</div>
+<div class="line"><a id="l00656" name="l00656"></a><span class="lineno">  656</span></div>
+<div class="line"><a id="l00666" name="l00666"></a><span class="lineno">  666</span><span class="keywordtype">size_t</span> PubSubClient::writeNextMsgId(uint8_t* buf, <span class="keywordtype">size_t</span> pos, <span class="keywordtype">size_t</span> size) {</div>
+<div class="line"><a id="l00667" name="l00667"></a><span class="lineno">  667</span>    <span class="keywordflow">if</span> (pos + 2 &lt;= size) {</div>
+<div class="line"><a id="l00668" name="l00668"></a><span class="lineno">  668</span>        nextMsgId = (++nextMsgId == 0) ? 1 : nextMsgId;  <span class="comment">// increment msgId (must not be 0, so start at 1)</span></div>
+<div class="line"><a id="l00669" name="l00669"></a><span class="lineno">  669</span>        buf[pos++] = (uint8_t)(nextMsgId &gt;&gt; 8);</div>
+<div class="line"><a id="l00670" name="l00670"></a><span class="lineno">  670</span>        buf[pos++] = (uint8_t)(nextMsgId &amp; 0xFF);</div>
+<div class="line"><a id="l00671" name="l00671"></a><span class="lineno">  671</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00672" name="l00672"></a><span class="lineno">  672</span>        ERROR_PSC_PRINTF_P(<span class="stringliteral">&quot;writeNextMsgId(): buffer (%zu) does not fit into buf (%zu)\n&quot;</span>, pos + 2, size);</div>
+<div class="line"><a id="l00673" name="l00673"></a><span class="lineno">  673</span>    }</div>
+<div class="line"><a id="l00674" name="l00674"></a><span class="lineno">  674</span>    <span class="keywordflow">return</span> pos;</div>
+<div class="line"><a id="l00675" name="l00675"></a><span class="lineno">  675</span>}</div>
+<div class="line"><a id="l00676" name="l00676"></a><span class="lineno">  676</span> </div>
+<div class="foldopen" id="foldopen00677" data-start="{" data-end="}">
+<div class="line"><a id="l00677" name="l00677"></a><span class="lineno"><a class="line" href="classPubSubClient.html#a0c4f24c7e9f704c29ebd79482c97b071">  677</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="classPubSubClient.html#a0c4f24c7e9f704c29ebd79482c97b071">PubSubClient::subscribe</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* topic) {</div>
+<div class="line"><a id="l00678" name="l00678"></a><span class="lineno">  678</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="classPubSubClient.html#a0c4f24c7e9f704c29ebd79482c97b071">subscribe</a>(topic, 0);</div>
+<div class="line"><a id="l00679" name="l00679"></a><span class="lineno">  679</span>}</div>
 </div>
-<div class="line"><a id="l00660" name="l00660"></a><span class="lineno">  660</span> </div>
-<div class="foldopen" id="foldopen00661" data-start="{" data-end="}">
-<div class="line"><a id="l00661" name="l00661"></a><span class="lineno"><a class="line" href="classPubSubClient.html#ad413967506d42f2119f4bcef4669db97">  661</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="classPubSubClient.html#a0c4f24c7e9f704c29ebd79482c97b071">PubSubClient::subscribe</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* topic, uint8_t qos) {</div>
-<div class="line"><a id="l00662" name="l00662"></a><span class="lineno">  662</span>    <span class="keywordflow">if</span> (!topic) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00663" name="l00663"></a><span class="lineno">  663</span>    <span class="keywordflow">if</span> (qos &gt; 1) <span class="keywordflow">return</span> <span class="keyword">false</span>;  <span class="comment">// only QoS 0 and 1 supported</span></div>
-<div class="line"><a id="l00664" name="l00664"></a><span class="lineno">  664</span> </div>
-<div class="line"><a id="l00665" name="l00665"></a><span class="lineno">  665</span>    <span class="keywordtype">size_t</span> topicLen = strnlen(topic, this-&gt;bufferSize);</div>
-<div class="line"><a id="l00666" name="l00666"></a><span class="lineno">  666</span>    <span class="keywordflow">if</span> (this-&gt;bufferSize &lt; MQTT_MAX_HEADER_SIZE + 2 + 2 + topicLen) {</div>
-<div class="line"><a id="l00667" name="l00667"></a><span class="lineno">  667</span>        <span class="comment">// Too long: header + nextMsgId (2) + topic length bytes (2) + topicLen</span></div>
-<div class="line"><a id="l00668" name="l00668"></a><span class="lineno">  668</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00669" name="l00669"></a><span class="lineno">  669</span>    }</div>
-<div class="line"><a id="l00670" name="l00670"></a><span class="lineno">  670</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="classPubSubClient.html#a7f2097ea474209f9454dbdcb671fa2e9">connected</a>()) {</div>
-<div class="line"><a id="l00671" name="l00671"></a><span class="lineno">  671</span>        <span class="comment">// Leave room in the buffer for header and variable length field</span></div>
-<div class="line"><a id="l00672" name="l00672"></a><span class="lineno">  672</span>        uint16_t length = MQTT_MAX_HEADER_SIZE;</div>
-<div class="line"><a id="l00673" name="l00673"></a><span class="lineno">  673</span>        nextMsgId++;</div>
-<div class="line"><a id="l00674" name="l00674"></a><span class="lineno">  674</span>        <span class="keywordflow">if</span> (nextMsgId == 0) {</div>
-<div class="line"><a id="l00675" name="l00675"></a><span class="lineno">  675</span>            nextMsgId = 1;</div>
-<div class="line"><a id="l00676" name="l00676"></a><span class="lineno">  676</span>        }</div>
-<div class="line"><a id="l00677" name="l00677"></a><span class="lineno">  677</span>        this-&gt;buffer[length++] = (nextMsgId &gt;&gt; 8);</div>
-<div class="line"><a id="l00678" name="l00678"></a><span class="lineno">  678</span>        this-&gt;buffer[length++] = (nextMsgId &amp; 0xFF);</div>
-<div class="line"><a id="l00679" name="l00679"></a><span class="lineno">  679</span>        length = writeString(topic, this-&gt;buffer, length);</div>
-<div class="line"><a id="l00680" name="l00680"></a><span class="lineno">  680</span>        this-&gt;buffer[length++] = qos;</div>
-<div class="line"><a id="l00681" name="l00681"></a><span class="lineno">  681</span>        <span class="keywordflow">return</span> write(MQTTSUBSCRIBE | <a class="code hl_define" href="PubSubClient_8h.html#a2365b1c4755e7dc1136c3f02488d1d41">MQTTQOS1</a>, this-&gt;buffer, length - MQTT_MAX_HEADER_SIZE);</div>
-<div class="line"><a id="l00682" name="l00682"></a><span class="lineno">  682</span>    }</div>
-<div class="line"><a id="l00683" name="l00683"></a><span class="lineno">  683</span>    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00684" name="l00684"></a><span class="lineno">  684</span>}</div>
+<div class="line"><a id="l00680" name="l00680"></a><span class="lineno">  680</span> </div>
+<div class="foldopen" id="foldopen00681" data-start="{" data-end="}">
+<div class="line"><a id="l00681" name="l00681"></a><span class="lineno"><a class="line" href="classPubSubClient.html#ad413967506d42f2119f4bcef4669db97">  681</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="classPubSubClient.html#a0c4f24c7e9f704c29ebd79482c97b071">PubSubClient::subscribe</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* topic, uint8_t qos) {</div>
+<div class="line"><a id="l00682" name="l00682"></a><span class="lineno">  682</span>    <span class="keywordflow">if</span> (!topic) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00683" name="l00683"></a><span class="lineno">  683</span>    <span class="keywordflow">if</span> (qos &gt; 1) <span class="keywordflow">return</span> <span class="keyword">false</span>;  <span class="comment">// only QoS 0 and 1 supported</span></div>
+<div class="line"><a id="l00684" name="l00684"></a><span class="lineno">  684</span> </div>
+<div class="line"><a id="l00685" name="l00685"></a><span class="lineno">  685</span>    <span class="keywordtype">size_t</span> topicLen = strnlen(topic, this-&gt;bufferSize);</div>
+<div class="line"><a id="l00686" name="l00686"></a><span class="lineno">  686</span>    <span class="keywordflow">if</span> (this-&gt;bufferSize &lt; MQTT_MAX_HEADER_SIZE + 2 + 2 + topicLen + 1) {</div>
+<div class="line"><a id="l00687" name="l00687"></a><span class="lineno">  687</span>        <span class="comment">// Too long: header + nextMsgId (2) + topic length bytes (2) + topicLen + QoS (1)</span></div>
+<div class="line"><a id="l00688" name="l00688"></a><span class="lineno">  688</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00689" name="l00689"></a><span class="lineno">  689</span>    }</div>
+<div class="line"><a id="l00690" name="l00690"></a><span class="lineno">  690</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="classPubSubClient.html#a7f2097ea474209f9454dbdcb671fa2e9">connected</a>()) {</div>
+<div class="line"><a id="l00691" name="l00691"></a><span class="lineno">  691</span>        <span class="comment">// Leave room in the buffer for header and variable length field</span></div>
+<div class="line"><a id="l00692" name="l00692"></a><span class="lineno">  692</span>        uint16_t length = MQTT_MAX_HEADER_SIZE;</div>
+<div class="line"><a id="l00693" name="l00693"></a><span class="lineno">  693</span>        length = writeNextMsgId(buffer, length, this-&gt;bufferSize);  <span class="comment">// buffer size is checked before</span></div>
+<div class="line"><a id="l00694" name="l00694"></a><span class="lineno">  694</span>        length = writeString(topic, this-&gt;buffer, length);</div>
+<div class="line"><a id="l00695" name="l00695"></a><span class="lineno">  695</span>        this-&gt;buffer[length++] = qos;</div>
+<div class="line"><a id="l00696" name="l00696"></a><span class="lineno">  696</span>        <span class="keywordflow">return</span> write(MQTTSUBSCRIBE | <a class="code hl_define" href="PubSubClient_8h.html#a2365b1c4755e7dc1136c3f02488d1d41">MQTTQOS1</a>, this-&gt;buffer, length - MQTT_MAX_HEADER_SIZE);</div>
+<div class="line"><a id="l00697" name="l00697"></a><span class="lineno">  697</span>    }</div>
+<div class="line"><a id="l00698" name="l00698"></a><span class="lineno">  698</span>    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00699" name="l00699"></a><span class="lineno">  699</span>}</div>
 </div>
-<div class="line"><a id="l00685" name="l00685"></a><span class="lineno">  685</span> </div>
-<div class="foldopen" id="foldopen00686" data-start="{" data-end="}">
-<div class="line"><a id="l00686" name="l00686"></a><span class="lineno"><a class="line" href="classPubSubClient.html#a38a147c2013ea040a822334c1464ef9c">  686</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="classPubSubClient.html#a38a147c2013ea040a822334c1464ef9c">PubSubClient::unsubscribe</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* topic) {</div>
-<div class="line"><a id="l00687" name="l00687"></a><span class="lineno">  687</span>    <span class="keywordflow">if</span> (!topic) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00688" name="l00688"></a><span class="lineno">  688</span> </div>
-<div class="line"><a id="l00689" name="l00689"></a><span class="lineno">  689</span>    <span class="keywordtype">size_t</span> topicLen = strnlen(topic, this-&gt;bufferSize);</div>
-<div class="line"><a id="l00690" name="l00690"></a><span class="lineno">  690</span>    <span class="keywordflow">if</span> (this-&gt;bufferSize &lt; MQTT_MAX_HEADER_SIZE + 2 + 2 + topicLen) {</div>
-<div class="line"><a id="l00691" name="l00691"></a><span class="lineno">  691</span>        <span class="comment">// Too long: header + nextMsgId (2) + topic length bytes (2) + topicLen</span></div>
-<div class="line"><a id="l00692" name="l00692"></a><span class="lineno">  692</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00693" name="l00693"></a><span class="lineno">  693</span>    }</div>
-<div class="line"><a id="l00694" name="l00694"></a><span class="lineno">  694</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="classPubSubClient.html#a7f2097ea474209f9454dbdcb671fa2e9">connected</a>()) {</div>
-<div class="line"><a id="l00695" name="l00695"></a><span class="lineno">  695</span>        uint16_t length = MQTT_MAX_HEADER_SIZE;</div>
-<div class="line"><a id="l00696" name="l00696"></a><span class="lineno">  696</span>        nextMsgId++;</div>
-<div class="line"><a id="l00697" name="l00697"></a><span class="lineno">  697</span>        <span class="keywordflow">if</span> (nextMsgId == 0) {</div>
-<div class="line"><a id="l00698" name="l00698"></a><span class="lineno">  698</span>            nextMsgId = 1;</div>
-<div class="line"><a id="l00699" name="l00699"></a><span class="lineno">  699</span>        }</div>
-<div class="line"><a id="l00700" name="l00700"></a><span class="lineno">  700</span>        this-&gt;buffer[length++] = (nextMsgId &gt;&gt; 8);</div>
-<div class="line"><a id="l00701" name="l00701"></a><span class="lineno">  701</span>        this-&gt;buffer[length++] = (nextMsgId &amp; 0xFF);</div>
-<div class="line"><a id="l00702" name="l00702"></a><span class="lineno">  702</span>        length = writeString(topic, this-&gt;buffer, length);</div>
-<div class="line"><a id="l00703" name="l00703"></a><span class="lineno">  703</span>        <span class="keywordflow">return</span> write(MQTTUNSUBSCRIBE | <a class="code hl_define" href="PubSubClient_8h.html#a2365b1c4755e7dc1136c3f02488d1d41">MQTTQOS1</a>, this-&gt;buffer, length - MQTT_MAX_HEADER_SIZE);</div>
-<div class="line"><a id="l00704" name="l00704"></a><span class="lineno">  704</span>    }</div>
-<div class="line"><a id="l00705" name="l00705"></a><span class="lineno">  705</span>    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00706" name="l00706"></a><span class="lineno">  706</span>}</div>
+<div class="line"><a id="l00700" name="l00700"></a><span class="lineno">  700</span> </div>
+<div class="foldopen" id="foldopen00701" data-start="{" data-end="}">
+<div class="line"><a id="l00701" name="l00701"></a><span class="lineno"><a class="line" href="classPubSubClient.html#a38a147c2013ea040a822334c1464ef9c">  701</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="classPubSubClient.html#a38a147c2013ea040a822334c1464ef9c">PubSubClient::unsubscribe</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* topic) {</div>
+<div class="line"><a id="l00702" name="l00702"></a><span class="lineno">  702</span>    <span class="keywordflow">if</span> (!topic) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00703" name="l00703"></a><span class="lineno">  703</span> </div>
+<div class="line"><a id="l00704" name="l00704"></a><span class="lineno">  704</span>    <span class="keywordtype">size_t</span> topicLen = strnlen(topic, this-&gt;bufferSize);</div>
+<div class="line"><a id="l00705" name="l00705"></a><span class="lineno">  705</span>    <span class="keywordflow">if</span> (this-&gt;bufferSize &lt; MQTT_MAX_HEADER_SIZE + 2 + 2 + topicLen) {</div>
+<div class="line"><a id="l00706" name="l00706"></a><span class="lineno">  706</span>        <span class="comment">// Too long: header + nextMsgId (2) + topic length bytes (2) + topicLen</span></div>
+<div class="line"><a id="l00707" name="l00707"></a><span class="lineno">  707</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00708" name="l00708"></a><span class="lineno">  708</span>    }</div>
+<div class="line"><a id="l00709" name="l00709"></a><span class="lineno">  709</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="classPubSubClient.html#a7f2097ea474209f9454dbdcb671fa2e9">connected</a>()) {</div>
+<div class="line"><a id="l00710" name="l00710"></a><span class="lineno">  710</span>        uint16_t length = MQTT_MAX_HEADER_SIZE;</div>
+<div class="line"><a id="l00711" name="l00711"></a><span class="lineno">  711</span>        length = writeNextMsgId(buffer, length, this-&gt;bufferSize);  <span class="comment">// buffer size is checked before</span></div>
+<div class="line"><a id="l00712" name="l00712"></a><span class="lineno">  712</span>        length = writeString(topic, this-&gt;buffer, length);</div>
+<div class="line"><a id="l00713" name="l00713"></a><span class="lineno">  713</span>        <span class="keywordflow">return</span> write(MQTTUNSUBSCRIBE | <a class="code hl_define" href="PubSubClient_8h.html#a2365b1c4755e7dc1136c3f02488d1d41">MQTTQOS1</a>, this-&gt;buffer, length - MQTT_MAX_HEADER_SIZE);</div>
+<div class="line"><a id="l00714" name="l00714"></a><span class="lineno">  714</span>    }</div>
+<div class="line"><a id="l00715" name="l00715"></a><span class="lineno">  715</span>    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00716" name="l00716"></a><span class="lineno">  716</span>}</div>
 </div>
-<div class="line"><a id="l00707" name="l00707"></a><span class="lineno">  707</span> </div>
-<div class="foldopen" id="foldopen00708" data-start="{" data-end="}">
-<div class="line"><a id="l00708" name="l00708"></a><span class="lineno"><a class="line" href="classPubSubClient.html#a4ef0b47a6c107d8e4ea71fead0d43673">  708</a></span><a class="code hl_function" href="classPubSubClient.html#a63abf28fee11df02d353b83cd08c255e">PubSubClient</a>&amp; <a class="code hl_function" href="classPubSubClient.html#a1acafb3015e083911b7ca205b79a3829">PubSubClient::setServer</a>(uint8_t* ip, uint16_t port) {</div>
-<div class="line"><a id="l00709" name="l00709"></a><span class="lineno">  709</span>    IPAddress addr(ip[0], ip[1], ip[2], ip[3]);</div>
-<div class="line"><a id="l00710" name="l00710"></a><span class="lineno">  710</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="classPubSubClient.html#a1acafb3015e083911b7ca205b79a3829">setServer</a>(addr, port);</div>
-<div class="line"><a id="l00711" name="l00711"></a><span class="lineno">  711</span>}</div>
+<div class="line"><a id="l00717" name="l00717"></a><span class="lineno">  717</span> </div>
+<div class="foldopen" id="foldopen00718" data-start="{" data-end="}">
+<div class="line"><a id="l00718" name="l00718"></a><span class="lineno"><a class="line" href="classPubSubClient.html#a4ef0b47a6c107d8e4ea71fead0d43673">  718</a></span><a class="code hl_function" href="classPubSubClient.html#a63abf28fee11df02d353b83cd08c255e">PubSubClient</a>&amp; <a class="code hl_function" href="classPubSubClient.html#a1acafb3015e083911b7ca205b79a3829">PubSubClient::setServer</a>(uint8_t* ip, uint16_t port) {</div>
+<div class="line"><a id="l00719" name="l00719"></a><span class="lineno">  719</span>    IPAddress addr(ip[0], ip[1], ip[2], ip[3]);</div>
+<div class="line"><a id="l00720" name="l00720"></a><span class="lineno">  720</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="classPubSubClient.html#a1acafb3015e083911b7ca205b79a3829">setServer</a>(addr, port);</div>
+<div class="line"><a id="l00721" name="l00721"></a><span class="lineno">  721</span>}</div>
 </div>
-<div class="line"><a id="l00712" name="l00712"></a><span class="lineno">  712</span> </div>
-<div class="foldopen" id="foldopen00713" data-start="{" data-end="}">
-<div class="line"><a id="l00713" name="l00713"></a><span class="lineno"><a class="line" href="classPubSubClient.html#a1acafb3015e083911b7ca205b79a3829">  713</a></span><a class="code hl_function" href="classPubSubClient.html#a63abf28fee11df02d353b83cd08c255e">PubSubClient</a>&amp; <a class="code hl_function" href="classPubSubClient.html#a1acafb3015e083911b7ca205b79a3829">PubSubClient::setServer</a>(IPAddress ip, uint16_t port) {</div>
-<div class="line"><a id="l00714" name="l00714"></a><span class="lineno">  714</span>    this-&gt;ip = ip;</div>
-<div class="line"><a id="l00715" name="l00715"></a><span class="lineno">  715</span>    this-&gt;port = port;</div>
-<div class="line"><a id="l00716" name="l00716"></a><span class="lineno">  716</span>    free(this-&gt;domain);</div>
-<div class="line"><a id="l00717" name="l00717"></a><span class="lineno">  717</span>    this-&gt;domain = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00718" name="l00718"></a><span class="lineno">  718</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
-<div class="line"><a id="l00719" name="l00719"></a><span class="lineno">  719</span>}</div>
+<div class="line"><a id="l00722" name="l00722"></a><span class="lineno">  722</span> </div>
+<div class="foldopen" id="foldopen00723" data-start="{" data-end="}">
+<div class="line"><a id="l00723" name="l00723"></a><span class="lineno"><a class="line" href="classPubSubClient.html#a1acafb3015e083911b7ca205b79a3829">  723</a></span><a class="code hl_function" href="classPubSubClient.html#a63abf28fee11df02d353b83cd08c255e">PubSubClient</a>&amp; <a class="code hl_function" href="classPubSubClient.html#a1acafb3015e083911b7ca205b79a3829">PubSubClient::setServer</a>(IPAddress ip, uint16_t port) {</div>
+<div class="line"><a id="l00724" name="l00724"></a><span class="lineno">  724</span>    this-&gt;ip = ip;</div>
+<div class="line"><a id="l00725" name="l00725"></a><span class="lineno">  725</span>    this-&gt;port = port;</div>
+<div class="line"><a id="l00726" name="l00726"></a><span class="lineno">  726</span>    free(this-&gt;domain);</div>
+<div class="line"><a id="l00727" name="l00727"></a><span class="lineno">  727</span>    this-&gt;domain = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00728" name="l00728"></a><span class="lineno">  728</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00729" name="l00729"></a><span class="lineno">  729</span>}</div>
 </div>
-<div class="line"><a id="l00720" name="l00720"></a><span class="lineno">  720</span> </div>
-<div class="foldopen" id="foldopen00721" data-start="{" data-end="}">
-<div class="line"><a id="l00721" name="l00721"></a><span class="lineno"><a class="line" href="classPubSubClient.html#af05f16377e871e039edd1c9cdfad9b2a">  721</a></span><a class="code hl_function" href="classPubSubClient.html#a63abf28fee11df02d353b83cd08c255e">PubSubClient</a>&amp; <a class="code hl_function" href="classPubSubClient.html#a1acafb3015e083911b7ca205b79a3829">PubSubClient::setServer</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* domain, uint16_t port) {</div>
-<div class="line"><a id="l00722" name="l00722"></a><span class="lineno">  722</span>    <span class="keywordtype">char</span>* newDomain = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00723" name="l00723"></a><span class="lineno">  723</span>    <span class="keywordflow">if</span> (domain) {</div>
-<div class="line"><a id="l00724" name="l00724"></a><span class="lineno">  724</span>        newDomain = (<span class="keywordtype">char</span>*)realloc(this-&gt;domain, strlen(domain) + 1);</div>
-<div class="line"><a id="l00725" name="l00725"></a><span class="lineno">  725</span>    }</div>
-<div class="line"><a id="l00726" name="l00726"></a><span class="lineno">  726</span>    <span class="keywordflow">if</span> (newDomain) {</div>
-<div class="line"><a id="l00727" name="l00727"></a><span class="lineno">  727</span>        strcpy(newDomain, domain);</div>
-<div class="line"><a id="l00728" name="l00728"></a><span class="lineno">  728</span>        this-&gt;domain = newDomain;</div>
-<div class="line"><a id="l00729" name="l00729"></a><span class="lineno">  729</span>        this-&gt;port = port;</div>
-<div class="line"><a id="l00730" name="l00730"></a><span class="lineno">  730</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00731" name="l00731"></a><span class="lineno">  731</span>        free(this-&gt;domain);</div>
-<div class="line"><a id="l00732" name="l00732"></a><span class="lineno">  732</span>        this-&gt;domain = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00733" name="l00733"></a><span class="lineno">  733</span>        this-&gt;port = 0;</div>
-<div class="line"><a id="l00734" name="l00734"></a><span class="lineno">  734</span>    }</div>
-<div class="line"><a id="l00735" name="l00735"></a><span class="lineno">  735</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
-<div class="line"><a id="l00736" name="l00736"></a><span class="lineno">  736</span>}</div>
-</div>
-<div class="line"><a id="l00737" name="l00737"></a><span class="lineno">  737</span> </div>
-<div class="foldopen" id="foldopen00738" data-start="{" data-end="}">
-<div class="line"><a id="l00738" name="l00738"></a><span class="lineno"><a class="line" href="classPubSubClient.html#a115733ca6dd337362375d3c4a45300fe">  738</a></span><a class="code hl_function" href="classPubSubClient.html#a63abf28fee11df02d353b83cd08c255e">PubSubClient</a>&amp; <a class="code hl_function" href="classPubSubClient.html#a115733ca6dd337362375d3c4a45300fe">PubSubClient::setCallback</a>(MQTT_CALLBACK_SIGNATURE) {</div>
-<div class="line"><a id="l00739" name="l00739"></a><span class="lineno">  739</span>    this-&gt;callback = callback;</div>
-<div class="line"><a id="l00740" name="l00740"></a><span class="lineno">  740</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
-<div class="line"><a id="l00741" name="l00741"></a><span class="lineno">  741</span>}</div>
-</div>
-<div class="line"><a id="l00742" name="l00742"></a><span class="lineno">  742</span> </div>
-<div class="foldopen" id="foldopen00743" data-start="{" data-end="}">
-<div class="line"><a id="l00743" name="l00743"></a><span class="lineno"><a class="line" href="classPubSubClient.html#ab661f30558142d81e88bf1ea83eb2ed7">  743</a></span><a class="code hl_function" href="classPubSubClient.html#a63abf28fee11df02d353b83cd08c255e">PubSubClient</a>&amp; <a class="code hl_function" href="classPubSubClient.html#ab661f30558142d81e88bf1ea83eb2ed7">PubSubClient::setClient</a>(Client&amp; client) {</div>
-<div class="line"><a id="l00744" name="l00744"></a><span class="lineno">  744</span>    this-&gt;_client = &amp;client;</div>
+<div class="line"><a id="l00730" name="l00730"></a><span class="lineno">  730</span> </div>
+<div class="foldopen" id="foldopen00731" data-start="{" data-end="}">
+<div class="line"><a id="l00731" name="l00731"></a><span class="lineno"><a class="line" href="classPubSubClient.html#af05f16377e871e039edd1c9cdfad9b2a">  731</a></span><a class="code hl_function" href="classPubSubClient.html#a63abf28fee11df02d353b83cd08c255e">PubSubClient</a>&amp; <a class="code hl_function" href="classPubSubClient.html#a1acafb3015e083911b7ca205b79a3829">PubSubClient::setServer</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* domain, uint16_t port) {</div>
+<div class="line"><a id="l00732" name="l00732"></a><span class="lineno">  732</span>    <span class="keywordtype">char</span>* newDomain = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00733" name="l00733"></a><span class="lineno">  733</span>    <span class="keywordflow">if</span> (domain) {</div>
+<div class="line"><a id="l00734" name="l00734"></a><span class="lineno">  734</span>        newDomain = (<span class="keywordtype">char</span>*)realloc(this-&gt;domain, strlen(domain) + 1);</div>
+<div class="line"><a id="l00735" name="l00735"></a><span class="lineno">  735</span>    }</div>
+<div class="line"><a id="l00736" name="l00736"></a><span class="lineno">  736</span>    <span class="keywordflow">if</span> (newDomain) {</div>
+<div class="line"><a id="l00737" name="l00737"></a><span class="lineno">  737</span>        strcpy(newDomain, domain);</div>
+<div class="line"><a id="l00738" name="l00738"></a><span class="lineno">  738</span>        this-&gt;domain = newDomain;</div>
+<div class="line"><a id="l00739" name="l00739"></a><span class="lineno">  739</span>        this-&gt;port = port;</div>
+<div class="line"><a id="l00740" name="l00740"></a><span class="lineno">  740</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00741" name="l00741"></a><span class="lineno">  741</span>        free(this-&gt;domain);</div>
+<div class="line"><a id="l00742" name="l00742"></a><span class="lineno">  742</span>        this-&gt;domain = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00743" name="l00743"></a><span class="lineno">  743</span>        this-&gt;port = 0;</div>
+<div class="line"><a id="l00744" name="l00744"></a><span class="lineno">  744</span>    }</div>
 <div class="line"><a id="l00745" name="l00745"></a><span class="lineno">  745</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
 <div class="line"><a id="l00746" name="l00746"></a><span class="lineno">  746</span>}</div>
 </div>
 <div class="line"><a id="l00747" name="l00747"></a><span class="lineno">  747</span> </div>
 <div class="foldopen" id="foldopen00748" data-start="{" data-end="}">
-<div class="line"><a id="l00748" name="l00748"></a><span class="lineno"><a class="line" href="classPubSubClient.html#af3983031103b719a0997424a3e44fcef">  748</a></span><a class="code hl_function" href="classPubSubClient.html#a63abf28fee11df02d353b83cd08c255e">PubSubClient</a>&amp; <a class="code hl_function" href="classPubSubClient.html#af3983031103b719a0997424a3e44fcef">PubSubClient::setStream</a>(Stream&amp; stream) {</div>
-<div class="line"><a id="l00749" name="l00749"></a><span class="lineno">  749</span>    this-&gt;stream = &amp;stream;</div>
+<div class="line"><a id="l00748" name="l00748"></a><span class="lineno"><a class="line" href="classPubSubClient.html#a115733ca6dd337362375d3c4a45300fe">  748</a></span><a class="code hl_function" href="classPubSubClient.html#a63abf28fee11df02d353b83cd08c255e">PubSubClient</a>&amp; <a class="code hl_function" href="classPubSubClient.html#a115733ca6dd337362375d3c4a45300fe">PubSubClient::setCallback</a>(MQTT_CALLBACK_SIGNATURE) {</div>
+<div class="line"><a id="l00749" name="l00749"></a><span class="lineno">  749</span>    this-&gt;callback = callback;</div>
 <div class="line"><a id="l00750" name="l00750"></a><span class="lineno">  750</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
 <div class="line"><a id="l00751" name="l00751"></a><span class="lineno">  751</span>}</div>
 </div>
 <div class="line"><a id="l00752" name="l00752"></a><span class="lineno">  752</span> </div>
 <div class="foldopen" id="foldopen00753" data-start="{" data-end="}">
-<div class="line"><a id="l00753" name="l00753"></a><span class="lineno"><a class="line" href="classPubSubClient.html#ae3d8b934862ae82af9bdf11bea1fb94a">  753</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="classPubSubClient.html#ae3d8b934862ae82af9bdf11bea1fb94a">PubSubClient::setBufferSize</a>(<span class="keywordtype">size_t</span> size) {</div>
-<div class="line"><a id="l00754" name="l00754"></a><span class="lineno">  754</span>    <span class="keywordflow">if</span> (size == 0) {</div>
-<div class="line"><a id="l00755" name="l00755"></a><span class="lineno">  755</span>        <span class="comment">// Cannot set it back to 0</span></div>
-<div class="line"><a id="l00756" name="l00756"></a><span class="lineno">  756</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00757" name="l00757"></a><span class="lineno">  757</span>    }</div>
-<div class="line"><a id="l00758" name="l00758"></a><span class="lineno">  758</span>    <span class="keywordflow">if</span> (this-&gt;bufferSize == 0) {</div>
-<div class="line"><a id="l00759" name="l00759"></a><span class="lineno">  759</span>        this-&gt;buffer = (uint8_t*)malloc(size);</div>
-<div class="line"><a id="l00760" name="l00760"></a><span class="lineno">  760</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00761" name="l00761"></a><span class="lineno">  761</span>        uint8_t* newBuffer = (uint8_t*)realloc(this-&gt;buffer, size);</div>
-<div class="line"><a id="l00762" name="l00762"></a><span class="lineno">  762</span>        <span class="keywordflow">if</span> (newBuffer) {</div>
-<div class="line"><a id="l00763" name="l00763"></a><span class="lineno">  763</span>            this-&gt;buffer = newBuffer;</div>
-<div class="line"><a id="l00764" name="l00764"></a><span class="lineno">  764</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00765" name="l00765"></a><span class="lineno">  765</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00766" name="l00766"></a><span class="lineno">  766</span>        }</div>
+<div class="line"><a id="l00753" name="l00753"></a><span class="lineno"><a class="line" href="classPubSubClient.html#ab661f30558142d81e88bf1ea83eb2ed7">  753</a></span><a class="code hl_function" href="classPubSubClient.html#a63abf28fee11df02d353b83cd08c255e">PubSubClient</a>&amp; <a class="code hl_function" href="classPubSubClient.html#ab661f30558142d81e88bf1ea83eb2ed7">PubSubClient::setClient</a>(Client&amp; client) {</div>
+<div class="line"><a id="l00754" name="l00754"></a><span class="lineno">  754</span>    this-&gt;_client = &amp;client;</div>
+<div class="line"><a id="l00755" name="l00755"></a><span class="lineno">  755</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00756" name="l00756"></a><span class="lineno">  756</span>}</div>
+</div>
+<div class="line"><a id="l00757" name="l00757"></a><span class="lineno">  757</span> </div>
+<div class="foldopen" id="foldopen00758" data-start="{" data-end="}">
+<div class="line"><a id="l00758" name="l00758"></a><span class="lineno"><a class="line" href="classPubSubClient.html#af3983031103b719a0997424a3e44fcef">  758</a></span><a class="code hl_function" href="classPubSubClient.html#a63abf28fee11df02d353b83cd08c255e">PubSubClient</a>&amp; <a class="code hl_function" href="classPubSubClient.html#af3983031103b719a0997424a3e44fcef">PubSubClient::setStream</a>(Stream&amp; stream) {</div>
+<div class="line"><a id="l00759" name="l00759"></a><span class="lineno">  759</span>    this-&gt;stream = &amp;stream;</div>
+<div class="line"><a id="l00760" name="l00760"></a><span class="lineno">  760</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00761" name="l00761"></a><span class="lineno">  761</span>}</div>
+</div>
+<div class="line"><a id="l00762" name="l00762"></a><span class="lineno">  762</span> </div>
+<div class="foldopen" id="foldopen00763" data-start="{" data-end="}">
+<div class="line"><a id="l00763" name="l00763"></a><span class="lineno"><a class="line" href="classPubSubClient.html#ae3d8b934862ae82af9bdf11bea1fb94a">  763</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="classPubSubClient.html#ae3d8b934862ae82af9bdf11bea1fb94a">PubSubClient::setBufferSize</a>(<span class="keywordtype">size_t</span> size) {</div>
+<div class="line"><a id="l00764" name="l00764"></a><span class="lineno">  764</span>    <span class="keywordflow">if</span> (size == 0) {</div>
+<div class="line"><a id="l00765" name="l00765"></a><span class="lineno">  765</span>        <span class="comment">// Cannot set it back to 0</span></div>
+<div class="line"><a id="l00766" name="l00766"></a><span class="lineno">  766</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00767" name="l00767"></a><span class="lineno">  767</span>    }</div>
-<div class="line"><a id="l00768" name="l00768"></a><span class="lineno">  768</span>    this-&gt;bufferSize = size;</div>
-<div class="line"><a id="l00769" name="l00769"></a><span class="lineno">  769</span>    <span class="keywordflow">return</span> (this-&gt;buffer != <span class="keyword">nullptr</span>);</div>
-<div class="line"><a id="l00770" name="l00770"></a><span class="lineno">  770</span>}</div>
+<div class="line"><a id="l00768" name="l00768"></a><span class="lineno">  768</span>    <span class="keywordflow">if</span> (this-&gt;bufferSize == 0) {</div>
+<div class="line"><a id="l00769" name="l00769"></a><span class="lineno">  769</span>        this-&gt;buffer = (uint8_t*)malloc(size);</div>
+<div class="line"><a id="l00770" name="l00770"></a><span class="lineno">  770</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00771" name="l00771"></a><span class="lineno">  771</span>        uint8_t* newBuffer = (uint8_t*)realloc(this-&gt;buffer, size);</div>
+<div class="line"><a id="l00772" name="l00772"></a><span class="lineno">  772</span>        <span class="keywordflow">if</span> (newBuffer) {</div>
+<div class="line"><a id="l00773" name="l00773"></a><span class="lineno">  773</span>            this-&gt;buffer = newBuffer;</div>
+<div class="line"><a id="l00774" name="l00774"></a><span class="lineno">  774</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00775" name="l00775"></a><span class="lineno">  775</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00776" name="l00776"></a><span class="lineno">  776</span>        }</div>
+<div class="line"><a id="l00777" name="l00777"></a><span class="lineno">  777</span>    }</div>
+<div class="line"><a id="l00778" name="l00778"></a><span class="lineno">  778</span>    this-&gt;bufferSize = size;</div>
+<div class="line"><a id="l00779" name="l00779"></a><span class="lineno">  779</span>    <span class="keywordflow">return</span> (this-&gt;buffer != <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00780" name="l00780"></a><span class="lineno">  780</span>}</div>
 </div>
-<div class="line"><a id="l00771" name="l00771"></a><span class="lineno">  771</span> </div>
-<div class="foldopen" id="foldopen00772" data-start="{" data-end="}">
-<div class="line"><a id="l00772" name="l00772"></a><span class="lineno"><a class="line" href="classPubSubClient.html#acaa57fdcdb00d3a0fa69b03fc57f70bf">  772</a></span><span class="keywordtype">size_t</span> <a class="code hl_function" href="classPubSubClient.html#acaa57fdcdb00d3a0fa69b03fc57f70bf">PubSubClient::getBufferSize</a>() {</div>
-<div class="line"><a id="l00773" name="l00773"></a><span class="lineno">  773</span>    <span class="keywordflow">return</span> this-&gt;bufferSize;</div>
-<div class="line"><a id="l00774" name="l00774"></a><span class="lineno">  774</span>}</div>
-</div>
-<div class="line"><a id="l00775" name="l00775"></a><span class="lineno">  775</span> </div>
-<div class="foldopen" id="foldopen00776" data-start="{" data-end="}">
-<div class="line"><a id="l00776" name="l00776"></a><span class="lineno"><a class="line" href="classPubSubClient.html#a6657187a319c2bd8cfa6c02f97186525">  776</a></span><a class="code hl_function" href="classPubSubClient.html#a63abf28fee11df02d353b83cd08c255e">PubSubClient</a>&amp; <a class="code hl_function" href="classPubSubClient.html#a6657187a319c2bd8cfa6c02f97186525">PubSubClient::setKeepAlive</a>(uint16_t keepAlive) {</div>
-<div class="line"><a id="l00777" name="l00777"></a><span class="lineno">  777</span>    this-&gt;keepAliveMillis = keepAlive * 1000UL;</div>
-<div class="line"><a id="l00778" name="l00778"></a><span class="lineno">  778</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
-<div class="line"><a id="l00779" name="l00779"></a><span class="lineno">  779</span>}</div>
-</div>
-<div class="line"><a id="l00780" name="l00780"></a><span class="lineno">  780</span> </div>
-<div class="foldopen" id="foldopen00781" data-start="{" data-end="}">
-<div class="line"><a id="l00781" name="l00781"></a><span class="lineno"><a class="line" href="classPubSubClient.html#a6337d6b919fb5fd79bc4a00019bbd70c">  781</a></span><a class="code hl_function" href="classPubSubClient.html#a63abf28fee11df02d353b83cd08c255e">PubSubClient</a>&amp; <a class="code hl_function" href="classPubSubClient.html#a6337d6b919fb5fd79bc4a00019bbd70c">PubSubClient::setSocketTimeout</a>(uint16_t timeout) {</div>
-<div class="line"><a id="l00782" name="l00782"></a><span class="lineno">  782</span>    this-&gt;socketTimeoutMillis = timeout * 1000UL;</div>
-<div class="line"><a id="l00783" name="l00783"></a><span class="lineno">  783</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00781" name="l00781"></a><span class="lineno">  781</span> </div>
+<div class="foldopen" id="foldopen00782" data-start="{" data-end="}">
+<div class="line"><a id="l00782" name="l00782"></a><span class="lineno"><a class="line" href="classPubSubClient.html#acaa57fdcdb00d3a0fa69b03fc57f70bf">  782</a></span><span class="keywordtype">size_t</span> <a class="code hl_function" href="classPubSubClient.html#acaa57fdcdb00d3a0fa69b03fc57f70bf">PubSubClient::getBufferSize</a>() {</div>
+<div class="line"><a id="l00783" name="l00783"></a><span class="lineno">  783</span>    <span class="keywordflow">return</span> this-&gt;bufferSize;</div>
 <div class="line"><a id="l00784" name="l00784"></a><span class="lineno">  784</span>}</div>
 </div>
 <div class="line"><a id="l00785" name="l00785"></a><span class="lineno">  785</span> </div>
 <div class="foldopen" id="foldopen00786" data-start="{" data-end="}">
-<div class="line"><a id="l00786" name="l00786"></a><span class="lineno"><a class="line" href="classPubSubClient.html#a8a7025562e55ee15fd4469b75d535b1d">  786</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="classPubSubClient.html#a8a7025562e55ee15fd4469b75d535b1d">PubSubClient::state</a>() {</div>
-<div class="line"><a id="l00787" name="l00787"></a><span class="lineno">  787</span>    <span class="keywordflow">return</span> this-&gt;_state;</div>
-<div class="line"><a id="l00788" name="l00788"></a><span class="lineno">  788</span>}</div>
+<div class="line"><a id="l00786" name="l00786"></a><span class="lineno"><a class="line" href="classPubSubClient.html#a6657187a319c2bd8cfa6c02f97186525">  786</a></span><a class="code hl_function" href="classPubSubClient.html#a63abf28fee11df02d353b83cd08c255e">PubSubClient</a>&amp; <a class="code hl_function" href="classPubSubClient.html#a6657187a319c2bd8cfa6c02f97186525">PubSubClient::setKeepAlive</a>(uint16_t keepAlive) {</div>
+<div class="line"><a id="l00787" name="l00787"></a><span class="lineno">  787</span>    this-&gt;keepAliveMillis = keepAlive * 1000UL;</div>
+<div class="line"><a id="l00788" name="l00788"></a><span class="lineno">  788</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00789" name="l00789"></a><span class="lineno">  789</span>}</div>
+</div>
+<div class="line"><a id="l00790" name="l00790"></a><span class="lineno">  790</span> </div>
+<div class="foldopen" id="foldopen00791" data-start="{" data-end="}">
+<div class="line"><a id="l00791" name="l00791"></a><span class="lineno"><a class="line" href="classPubSubClient.html#a6337d6b919fb5fd79bc4a00019bbd70c">  791</a></span><a class="code hl_function" href="classPubSubClient.html#a63abf28fee11df02d353b83cd08c255e">PubSubClient</a>&amp; <a class="code hl_function" href="classPubSubClient.html#a6337d6b919fb5fd79bc4a00019bbd70c">PubSubClient::setSocketTimeout</a>(uint16_t timeout) {</div>
+<div class="line"><a id="l00792" name="l00792"></a><span class="lineno">  792</span>    this-&gt;socketTimeoutMillis = timeout * 1000UL;</div>
+<div class="line"><a id="l00793" name="l00793"></a><span class="lineno">  793</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00794" name="l00794"></a><span class="lineno">  794</span>}</div>
+</div>
+<div class="line"><a id="l00795" name="l00795"></a><span class="lineno">  795</span> </div>
+<div class="foldopen" id="foldopen00796" data-start="{" data-end="}">
+<div class="line"><a id="l00796" name="l00796"></a><span class="lineno"><a class="line" href="classPubSubClient.html#a8a7025562e55ee15fd4469b75d535b1d">  796</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="classPubSubClient.html#a8a7025562e55ee15fd4469b75d535b1d">PubSubClient::state</a>() {</div>
+<div class="line"><a id="l00797" name="l00797"></a><span class="lineno">  797</span>    <span class="keywordflow">return</span> this-&gt;_state;</div>
+<div class="line"><a id="l00798" name="l00798"></a><span class="lineno">  798</span>}</div>
 </div>
 <div class="ttc" id="aPubSubClient_8h_html"><div class="ttname"><a href="PubSubClient_8h.html">PubSubClient.h</a></div><div class="ttdoc">A simple client for MQTT.</div></div>
 <div class="ttc" id="aPubSubClient_8h_html_a092cc564e4d7f03fdab6137e30a7f05b"><div class="ttname"><a href="PubSubClient_8h.html#a092cc564e4d7f03fdab6137e30a7f05b">MQTT_SOCKET_TIMEOUT</a></div><div class="ttdeci">#define MQTT_SOCKET_TIMEOUT</div><div class="ttdoc">Sets the timeout, in seconds, when reading from the network. This also applies as the timeout for cal...</div><div class="ttdef"><b>Definition</b> <a href="PubSubClient_8h_source.html#l00067">PubSubClient.h:67</a></div></div>
@@ -917,26 +918,26 @@ $(function(){initNavTree('PubSubClient_8cpp_source.html',''); initResizable(true
 <div class="ttc" id="aPubSubClient_8h_html_ae09b594688a59f1427c7e45259e039b9"><div class="ttname"><a href="PubSubClient_8h.html#ae09b594688a59f1427c7e45259e039b9">MQTT_MAX_PACKET_SIZE</a></div><div class="ttdeci">#define MQTT_MAX_PACKET_SIZE</div><div class="ttdoc">Sets the largest packet size, in bytes, the client will handle. Any packet received that exceeds this...</div><div class="ttdef"><b>Definition</b> <a href="PubSubClient_8h_source.html#l00047">PubSubClient.h:47</a></div></div>
 <div class="ttc" id="aPubSubClient_8h_html_afb4dd8c75385ab30e659314df7c2c335"><div class="ttname"><a href="PubSubClient_8h.html#afb4dd8c75385ab30e659314df7c2c335">MQTT_KEEPALIVE</a></div><div class="ttdeci">#define MQTT_KEEPALIVE</div><div class="ttdoc">Sets the keepalive interval, in seconds, the client will use. This is used to maintain the connection...</div><div class="ttdef"><b>Definition</b> <a href="PubSubClient_8h_source.html#l00057">PubSubClient.h:57</a></div></div>
 <div class="ttc" id="aclassPubSubClient_html_a08f4240c1f1fc10b9c6f5f063b13d240"><div class="ttname"><a href="classPubSubClient.html#a08f4240c1f1fc10b9c6f5f063b13d240">PubSubClient::loop</a></div><div class="ttdeci">bool loop()</div><div class="ttdoc">This should be called regularly to allow the client to process incoming messages and maintain its con...</div><div class="ttdef"><b>Definition</b> <a href="#l00434">PubSubClient.cpp:434</a></div></div>
-<div class="ttc" id="aclassPubSubClient_html_a0c4f24c7e9f704c29ebd79482c97b071"><div class="ttname"><a href="classPubSubClient.html#a0c4f24c7e9f704c29ebd79482c97b071">PubSubClient::subscribe</a></div><div class="ttdeci">bool subscribe(const char *topic)</div><div class="ttdoc">Subscribes to messages published to the specified topic.</div><div class="ttdef"><b>Definition</b> <a href="#l00657">PubSubClient.cpp:657</a></div></div>
-<div class="ttc" id="aclassPubSubClient_html_a115733ca6dd337362375d3c4a45300fe"><div class="ttname"><a href="classPubSubClient.html#a115733ca6dd337362375d3c4a45300fe">PubSubClient::setCallback</a></div><div class="ttdeci">PubSubClient &amp; setCallback(MQTT_CALLBACK_SIGNATURE)</div><div class="ttdoc">Sets the message callback function.</div><div class="ttdef"><b>Definition</b> <a href="#l00738">PubSubClient.cpp:738</a></div></div>
-<div class="ttc" id="aclassPubSubClient_html_a1acafb3015e083911b7ca205b79a3829"><div class="ttname"><a href="classPubSubClient.html#a1acafb3015e083911b7ca205b79a3829">PubSubClient::setServer</a></div><div class="ttdeci">PubSubClient &amp; setServer(IPAddress ip, uint16_t port)</div><div class="ttdoc">Sets the server details.</div><div class="ttdef"><b>Definition</b> <a href="#l00713">PubSubClient.cpp:713</a></div></div>
+<div class="ttc" id="aclassPubSubClient_html_a0c4f24c7e9f704c29ebd79482c97b071"><div class="ttname"><a href="classPubSubClient.html#a0c4f24c7e9f704c29ebd79482c97b071">PubSubClient::subscribe</a></div><div class="ttdeci">bool subscribe(const char *topic)</div><div class="ttdoc">Subscribes to messages published to the specified topic.</div><div class="ttdef"><b>Definition</b> <a href="#l00677">PubSubClient.cpp:677</a></div></div>
+<div class="ttc" id="aclassPubSubClient_html_a115733ca6dd337362375d3c4a45300fe"><div class="ttname"><a href="classPubSubClient.html#a115733ca6dd337362375d3c4a45300fe">PubSubClient::setCallback</a></div><div class="ttdeci">PubSubClient &amp; setCallback(MQTT_CALLBACK_SIGNATURE)</div><div class="ttdoc">Sets the message callback function.</div><div class="ttdef"><b>Definition</b> <a href="#l00748">PubSubClient.cpp:748</a></div></div>
+<div class="ttc" id="aclassPubSubClient_html_a1acafb3015e083911b7ca205b79a3829"><div class="ttname"><a href="classPubSubClient.html#a1acafb3015e083911b7ca205b79a3829">PubSubClient::setServer</a></div><div class="ttdeci">PubSubClient &amp; setServer(IPAddress ip, uint16_t port)</div><div class="ttdoc">Sets the server details.</div><div class="ttdef"><b>Definition</b> <a href="#l00723">PubSubClient.cpp:723</a></div></div>
 <div class="ttc" id="aclassPubSubClient_html_a366090418dd09369df33d583b39c45db"><div class="ttname"><a href="classPubSubClient.html#a366090418dd09369df33d583b39c45db">PubSubClient::beginPublish</a></div><div class="ttdeci">bool beginPublish(const char *topic, size_t plength, bool retained)</div><div class="ttdoc">Start to publish a message. This API: beginPublish(...) one or more calls to write(....</div><div class="ttdef"><b>Definition</b> <a href="#l00511">PubSubClient.cpp:511</a></div></div>
-<div class="ttc" id="aclassPubSubClient_html_a38a147c2013ea040a822334c1464ef9c"><div class="ttname"><a href="classPubSubClient.html#a38a147c2013ea040a822334c1464ef9c">PubSubClient::unsubscribe</a></div><div class="ttdeci">bool unsubscribe(const char *topic)</div><div class="ttdoc">Unsubscribes from the specified topic.</div><div class="ttdef"><b>Definition</b> <a href="#l00686">PubSubClient.cpp:686</a></div></div>
+<div class="ttc" id="aclassPubSubClient_html_a38a147c2013ea040a822334c1464ef9c"><div class="ttname"><a href="classPubSubClient.html#a38a147c2013ea040a822334c1464ef9c">PubSubClient::unsubscribe</a></div><div class="ttdeci">bool unsubscribe(const char *topic)</div><div class="ttdoc">Unsubscribes from the specified topic.</div><div class="ttdef"><b>Definition</b> <a href="#l00701">PubSubClient.cpp:701</a></div></div>
 <div class="ttc" id="aclassPubSubClient_html_a501d46ac5e4296634aad8aa2452ac986"><div class="ttname"><a href="classPubSubClient.html#a501d46ac5e4296634aad8aa2452ac986">PubSubClient::publish_P</a></div><div class="ttdeci">bool publish_P(const char *topic, const char *payload, bool retained)</div><div class="ttdoc">Publishes a message stored in PROGMEM to the specified topic.</div><div class="ttdef"><b>Definition</b> <a href="#l00495">PubSubClient.cpp:495</a></div></div>
 <div class="ttc" id="aclassPubSubClient_html_a59500b307e27b6ec9007ef1f3a0c24db"><div class="ttname"><a href="classPubSubClient.html#a59500b307e27b6ec9007ef1f3a0c24db">PubSubClient::publish</a></div><div class="ttdeci">bool publish(const char *topic, const char *payload)</div><div class="ttdoc">Publishes a non retained message to the specified topic.</div><div class="ttdef"><b>Definition</b> <a href="#l00474">PubSubClient.cpp:474</a></div></div>
 <div class="ttc" id="aclassPubSubClient_html_a597a07b746c33a77f77486f426dc85fd"><div class="ttname"><a href="classPubSubClient.html#a597a07b746c33a77f77486f426dc85fd">PubSubClient::~PubSubClient</a></div><div class="ttdeci">~PubSubClient()</div><div class="ttdoc">Destructor for the PubSubClient class.</div><div class="ttdef"><b>Definition</b> <a href="#l00108">PubSubClient.cpp:108</a></div></div>
-<div class="ttc" id="aclassPubSubClient_html_a6337d6b919fb5fd79bc4a00019bbd70c"><div class="ttname"><a href="classPubSubClient.html#a6337d6b919fb5fd79bc4a00019bbd70c">PubSubClient::setSocketTimeout</a></div><div class="ttdeci">PubSubClient &amp; setSocketTimeout(uint16_t timeout)</div><div class="ttdoc">Sets the socket timeout used by the client. This determines how long the client will wait for incomin...</div><div class="ttdef"><b>Definition</b> <a href="#l00781">PubSubClient.cpp:781</a></div></div>
+<div class="ttc" id="aclassPubSubClient_html_a6337d6b919fb5fd79bc4a00019bbd70c"><div class="ttname"><a href="classPubSubClient.html#a6337d6b919fb5fd79bc4a00019bbd70c">PubSubClient::setSocketTimeout</a></div><div class="ttdeci">PubSubClient &amp; setSocketTimeout(uint16_t timeout)</div><div class="ttdoc">Sets the socket timeout used by the client. This determines how long the client will wait for incomin...</div><div class="ttdef"><b>Definition</b> <a href="#l00791">PubSubClient.cpp:791</a></div></div>
 <div class="ttc" id="aclassPubSubClient_html_a63abf28fee11df02d353b83cd08c255e"><div class="ttname"><a href="classPubSubClient.html#a63abf28fee11df02d353b83cd08c255e">PubSubClient::PubSubClient</a></div><div class="ttdeci">PubSubClient()</div><div class="ttdoc">Creates an uninitialised client instance.</div><div class="ttdef"><b>Definition</b> <a href="#l00026">PubSubClient.cpp:26</a></div></div>
-<div class="ttc" id="aclassPubSubClient_html_a6657187a319c2bd8cfa6c02f97186525"><div class="ttname"><a href="classPubSubClient.html#a6657187a319c2bd8cfa6c02f97186525">PubSubClient::setKeepAlive</a></div><div class="ttdeci">PubSubClient &amp; setKeepAlive(uint16_t keepAlive)</div><div class="ttdoc">Sets the keep alive interval used by the client. This value should only be changed when the client is...</div><div class="ttdef"><b>Definition</b> <a href="#l00776">PubSubClient.cpp:776</a></div></div>
+<div class="ttc" id="aclassPubSubClient_html_a6657187a319c2bd8cfa6c02f97186525"><div class="ttname"><a href="classPubSubClient.html#a6657187a319c2bd8cfa6c02f97186525">PubSubClient::setKeepAlive</a></div><div class="ttdeci">PubSubClient &amp; setKeepAlive(uint16_t keepAlive)</div><div class="ttdoc">Sets the keep alive interval used by the client. This value should only be changed when the client is...</div><div class="ttdef"><b>Definition</b> <a href="#l00786">PubSubClient.cpp:786</a></div></div>
 <div class="ttc" id="aclassPubSubClient_html_a7f2097ea474209f9454dbdcb671fa2e9"><div class="ttname"><a href="classPubSubClient.html#a7f2097ea474209f9454dbdcb671fa2e9">PubSubClient::connected</a></div><div class="ttdeci">bool connected()</div><div class="ttdoc">Checks whether the client is connected to the server.</div><div class="ttdef"><b>Definition</b> <a href="#l00230">PubSubClient.cpp:230</a></div></div>
-<div class="ttc" id="aclassPubSubClient_html_a8a7025562e55ee15fd4469b75d535b1d"><div class="ttname"><a href="classPubSubClient.html#a8a7025562e55ee15fd4469b75d535b1d">PubSubClient::state</a></div><div class="ttdeci">int state()</div><div class="ttdoc">Returns the current state of the client. If a connection attempt fails, this can be used to get more ...</div><div class="ttdef"><b>Definition</b> <a href="#l00786">PubSubClient.cpp:786</a></div></div>
+<div class="ttc" id="aclassPubSubClient_html_a8a7025562e55ee15fd4469b75d535b1d"><div class="ttname"><a href="classPubSubClient.html#a8a7025562e55ee15fd4469b75d535b1d">PubSubClient::state</a></div><div class="ttdeci">int state()</div><div class="ttdoc">Returns the current state of the client. If a connection attempt fails, this can be used to get more ...</div><div class="ttdef"><b>Definition</b> <a href="#l00796">PubSubClient.cpp:796</a></div></div>
 <div class="ttc" id="aclassPubSubClient_html_a8c658db7eb23241aa0c1bc16f703cdb2"><div class="ttname"><a href="classPubSubClient.html#a8c658db7eb23241aa0c1bc16f703cdb2">PubSubClient::endPublish</a></div><div class="ttdeci">bool endPublish()</div><div class="ttdoc">Finish sending a message that was started with a call to beginPublish.</div><div class="ttdef"><b>Definition</b> <a href="#l00529">PubSubClient.cpp:529</a></div></div>
-<div class="ttc" id="aclassPubSubClient_html_ab661f30558142d81e88bf1ea83eb2ed7"><div class="ttname"><a href="classPubSubClient.html#ab661f30558142d81e88bf1ea83eb2ed7">PubSubClient::setClient</a></div><div class="ttdeci">PubSubClient &amp; setClient(Client &amp;client)</div><div class="ttdoc">Sets the network client instance to use.</div><div class="ttdef"><b>Definition</b> <a href="#l00743">PubSubClient.cpp:743</a></div></div>
+<div class="ttc" id="aclassPubSubClient_html_ab661f30558142d81e88bf1ea83eb2ed7"><div class="ttname"><a href="classPubSubClient.html#ab661f30558142d81e88bf1ea83eb2ed7">PubSubClient::setClient</a></div><div class="ttdeci">PubSubClient &amp; setClient(Client &amp;client)</div><div class="ttdoc">Sets the network client instance to use.</div><div class="ttdef"><b>Definition</b> <a href="#l00753">PubSubClient.cpp:753</a></div></div>
 <div class="ttc" id="aclassPubSubClient_html_ac0d1c6de8a88a9f9fda04126c8cf2fe0"><div class="ttname"><a href="classPubSubClient.html#ac0d1c6de8a88a9f9fda04126c8cf2fe0">PubSubClient::disconnect</a></div><div class="ttdeci">void disconnect()</div><div class="ttdoc">Disconnects the client.</div><div class="ttdef"><b>Definition</b> <a href="#l00244">PubSubClient.cpp:244</a></div></div>
-<div class="ttc" id="aclassPubSubClient_html_acaa57fdcdb00d3a0fa69b03fc57f70bf"><div class="ttname"><a href="classPubSubClient.html#acaa57fdcdb00d3a0fa69b03fc57f70bf">PubSubClient::getBufferSize</a></div><div class="ttdeci">size_t getBufferSize()</div><div class="ttdoc">Gets the current size of the internal buffer.</div><div class="ttdef"><b>Definition</b> <a href="#l00772">PubSubClient.cpp:772</a></div></div>
-<div class="ttc" id="aclassPubSubClient_html_ae3d8b934862ae82af9bdf11bea1fb94a"><div class="ttname"><a href="classPubSubClient.html#ae3d8b934862ae82af9bdf11bea1fb94a">PubSubClient::setBufferSize</a></div><div class="ttdeci">bool setBufferSize(size_t size)</div><div class="ttdoc">Sets the size, in bytes, of the internal send and receive buffer. This must be large enough to contai...</div><div class="ttdef"><b>Definition</b> <a href="#l00753">PubSubClient.cpp:753</a></div></div>
+<div class="ttc" id="aclassPubSubClient_html_acaa57fdcdb00d3a0fa69b03fc57f70bf"><div class="ttname"><a href="classPubSubClient.html#acaa57fdcdb00d3a0fa69b03fc57f70bf">PubSubClient::getBufferSize</a></div><div class="ttdeci">size_t getBufferSize()</div><div class="ttdoc">Gets the current size of the internal buffer.</div><div class="ttdef"><b>Definition</b> <a href="#l00782">PubSubClient.cpp:782</a></div></div>
+<div class="ttc" id="aclassPubSubClient_html_ae3d8b934862ae82af9bdf11bea1fb94a"><div class="ttname"><a href="classPubSubClient.html#ae3d8b934862ae82af9bdf11bea1fb94a">PubSubClient::setBufferSize</a></div><div class="ttdeci">bool setBufferSize(size_t size)</div><div class="ttdoc">Sets the size, in bytes, of the internal send and receive buffer. This must be large enough to contai...</div><div class="ttdef"><b>Definition</b> <a href="#l00763">PubSubClient.cpp:763</a></div></div>
 <div class="ttc" id="aclassPubSubClient_html_ae7a37521960b158aff48b7fa17d1e825"><div class="ttname"><a href="classPubSubClient.html#ae7a37521960b158aff48b7fa17d1e825">PubSubClient::connect</a></div><div class="ttdeci">bool connect(const char *id)</div><div class="ttdoc">Connects the client using a clean session without username and password.</div><div class="ttdef"><b>Definition</b> <a href="#l00113">PubSubClient.cpp:113</a></div></div>
-<div class="ttc" id="aclassPubSubClient_html_af3983031103b719a0997424a3e44fcef"><div class="ttname"><a href="classPubSubClient.html#af3983031103b719a0997424a3e44fcef">PubSubClient::setStream</a></div><div class="ttdeci">PubSubClient &amp; setStream(Stream &amp;stream)</div><div class="ttdoc">Sets the stream to write received messages to.</div><div class="ttdef"><b>Definition</b> <a href="#l00748">PubSubClient.cpp:748</a></div></div>
+<div class="ttc" id="aclassPubSubClient_html_af3983031103b719a0997424a3e44fcef"><div class="ttname"><a href="classPubSubClient.html#af3983031103b719a0997424a3e44fcef">PubSubClient::setStream</a></div><div class="ttdeci">PubSubClient &amp; setStream(Stream &amp;stream)</div><div class="ttdoc">Sets the stream to write received messages to.</div><div class="ttdef"><b>Definition</b> <a href="#l00758">PubSubClient.cpp:758</a></div></div>
 <div class="ttc" id="agroup__group__state_html_ga4c164f322b892ab16d49dafea0073ca3"><div class="ttname"><a href="group__group__state.html#ga4c164f322b892ab16d49dafea0073ca3">MQTT_CONNECTION_TIMEOUT</a></div><div class="ttdeci">#define MQTT_CONNECTION_TIMEOUT</div><div class="ttdoc">The network connection timed out or server didn&#39;t respond within the keepalive time.</div><div class="ttdef"><b>Definition</b> <a href="PubSubClient_8h_source.html#l00086">PubSubClient.h:86</a></div></div>
 <div class="ttc" id="agroup__group__state_html_gabb5539db14c26155eebe929fa84d1e96"><div class="ttname"><a href="group__group__state.html#gabb5539db14c26155eebe929fa84d1e96">MQTT_CONNECTED</a></div><div class="ttdeci">#define MQTT_CONNECTED</div><div class="ttdoc">The client is connected.</div><div class="ttdef"><b>Definition</b> <a href="PubSubClient_8h_source.html#l00090">PubSubClient.h:90</a></div></div>
 <div class="ttc" id="agroup__group__state_html_gac80cae63b769440c31b8c294ac5ea191"><div class="ttname"><a href="group__group__state.html#gac80cae63b769440c31b8c294ac5ea191">MQTT_CONNECT_FAILED</a></div><div class="ttdeci">#define MQTT_CONNECT_FAILED</div><div class="ttdoc">The network connection failed.</div><div class="ttdef"><b>Definition</b> <a href="PubSubClient_8h_source.html#l00088">PubSubClient.h:88</a></div></div>
