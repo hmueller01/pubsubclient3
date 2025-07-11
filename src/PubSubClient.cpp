@@ -683,8 +683,8 @@ bool PubSubClient::subscribe(const char* topic, uint8_t qos) {
     if (qos > 1) return false;  // only QoS 0 and 1 supported
 
     size_t topicLen = strnlen(topic, this->bufferSize);
-    if (this->bufferSize < MQTT_MAX_HEADER_SIZE + 2 + 2 + topicLen) {
-        // Too long: header + nextMsgId (2) + topic length bytes (2) + topicLen
+    if (this->bufferSize < MQTT_MAX_HEADER_SIZE + 2 + 2 + topicLen + 1) {
+        // Too long: header + nextMsgId (2) + topic length bytes (2) + topicLen + QoS (1)
         return false;
     }
     if (connected()) {
