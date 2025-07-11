@@ -13,6 +13,7 @@
 extern "C" {
 typedef uint8_t byte;
 typedef uint8_t boolean;
+typedef uint8_t prog_uint8_t;
 
 /* sketch */
 extern void setup(void);
@@ -21,6 +22,9 @@ unsigned long millis(void);
 }
 
 #define PROGMEM
+#define PGM_P  const char *
+#define memcpy_P memcpy
+#define strlen_P strlen
 #define strnlen_P strnlen
 #define pgm_read_byte_near(x) *(x)
 
