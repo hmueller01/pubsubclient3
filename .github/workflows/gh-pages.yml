@@ -37,7 +37,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Doxygenize
         #uses: langroodi/doxygenize@v1.7.0
-        uses: hmueller01/doxygenize@update-alpine-linux+patches
+        #uses: hmueller01/doxygenize@update-alpine-linux+patches
+        uses: langroodi/doxygenize@6e92068
         with:
           # Doxygen configuration file path
           doxygenconf: ./Doxyfile
