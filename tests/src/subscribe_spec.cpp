@@ -21,7 +21,7 @@ void callback(_UNUSED_ char* topic, _UNUSED_ uint8_t* payload, _UNUSED_ size_t l
 }
 
 int test_subscribe_no_qos() {
-    IT("subscribe without qos defaults to 0");
+    IT("subscribe without QoS (defaults to 0)");
     ShimClient shimClient;
     shimClient.setAllowConnect(true);
 
@@ -46,7 +46,7 @@ int test_subscribe_no_qos() {
 }
 
 int test_subscribe_qos_1() {
-    IT("subscribes qos 1");
+    IT("subscribe with QoS 1");
     ShimClient shimClient;
     shimClient.setAllowConnect(true);
 
@@ -62,7 +62,7 @@ int test_subscribe_qos_1() {
     byte suback[] = {0x90, 0x3, 0x0, 0x2, 0x1};
     shimClient.respond(suback, 5);
 
-    rc = client.subscribe("topic", 1);
+    rc = client.subscribe("topic", MQTT_QOS1);
     IS_TRUE(rc);
 
     IS_FALSE(shimClient.error());
@@ -85,7 +85,7 @@ int test_subscribe_not_connected() {
 }
 
 int test_subscribe_invalid_qos() {
-    IT("subscribe fails with invalid qos values");
+    IT("subscribe fails with invalid QoS values");
     ShimClient shimClient;
     shimClient.setAllowConnect(true);
 
@@ -96,7 +96,7 @@ int test_subscribe_invalid_qos() {
     bool rc = client.connect("client_test1");
     IS_TRUE(rc);
 
-    rc = client.subscribe("topic", 2);
+    rc = client.subscribe("topic", MQTT_QOS2);
     IS_FALSE(rc);
     rc = client.subscribe("topic", 254);
     IS_FALSE(rc);
