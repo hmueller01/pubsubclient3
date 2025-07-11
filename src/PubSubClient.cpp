@@ -586,10 +586,10 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, 
 
 bool PubSubClient::endPublish() {
     if (connected()) {
-        if (this->_qos) {
+        if (this->_qos > MQTT_QOS0) {
             // QoS == 1 or 2, send the msgId
-            nextMsgId = (++nextMsgId == 0) ? 1 : nextMsgId;  // msgId must not be 0, so start at 1
-            const uint8_t buf[2] = {(uint8_t)(nextMsgId >> 8), (uint8_t)(nextMsgId & 0xFF)};
+            uint8_t buf[2];
+            writeNextMsgId(buf, 0, 2);
             size_t rc = _client->write(buf, 2);
             lastOutActivity = millis();
             return (rc == 2);
