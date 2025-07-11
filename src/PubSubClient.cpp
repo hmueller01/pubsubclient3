@@ -1,9 +1,12 @@
-/*
-  PubSubClient.cpp - A simple client for MQTT.
-  Nick O'Leary, Holger Mueller
-  http://knolleary.net
-  https://github.com/hmueller01/pubsubclient3
-*/
+/**
+ * @file PubSubClient.cpp
+ * @brief A simple client for MQTT.
+ * @author Nicholas O'Leary - http://knolleary.net
+ * @author Holger Mueller - https://github.com/hmueller01/pubsubclient3
+ * @copyright MIT License 2008-2025
+ *
+ * This file is part of the PubSubClient library.
+ */
 
 #include "PubSubClient.h"
 
@@ -108,20 +111,20 @@ PubSubClient::~PubSubClient() {
 }
 
 bool PubSubClient::connect(const char* id) {
-    return connect(id, nullptr, nullptr, 0, 0, 0, 0, 1);
+    return connect(id, nullptr, nullptr, nullptr, MQTTQOS0, false, nullptr, true);
 }
 
 bool PubSubClient::connect(const char* id, const char* user, const char* pass) {
-    return connect(id, user, pass, 0, 0, 0, 0, 1);
+    return connect(id, user, pass, nullptr, MQTTQOS0, false, nullptr, true);
 }
 
 bool PubSubClient::connect(const char* id, const char* willTopic, uint8_t willQos, bool willRetain, const char* willMessage) {
-    return connect(id, nullptr, nullptr, willTopic, willQos, willRetain, willMessage, 1);
+    return connect(id, nullptr, nullptr, willTopic, willQos, willRetain, willMessage, true);
 }
 
 bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
                            const char* willMessage) {
-    return connect(id, user, pass, willTopic, willQos, willRetain, willMessage, 1);
+    return connect(id, user, pass, willTopic, willQos, willRetain, willMessage, true);
 }
 
 bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
