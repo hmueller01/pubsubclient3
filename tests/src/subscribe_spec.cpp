@@ -7,7 +7,7 @@
 byte server[] = {172, 16, 0, 2};
 
 // function declarations
-void callback(char* topic, uint8_t* payload, size_t length);
+void callback(char* topic, uint8_t* payload, size_t plength);
 int test_subscribe_no_qos();
 int test_subscribe_qos_1();
 int test_subscribe_not_connected();
@@ -16,7 +16,7 @@ int test_subscribe_too_long();
 int test_unsubscribe();
 int test_unsubscribe_not_connected();
 
-void callback(_UNUSED_ char* topic, _UNUSED_ uint8_t* payload, _UNUSED_ size_t length) {
+void callback(_UNUSED_ char* topic, _UNUSED_ uint8_t* payload, _UNUSED_ size_t plength) {
     // handle message arrived
 }
 

@@ -7,7 +7,7 @@
 byte server[] = {172, 16, 0, 2};
 
 // function declarations
-void callback(char* topic, uint8_t* payload, size_t length);
+void callback(char* topic, uint8_t* payload, size_t plength);
 int test_publish();
 int test_publish_bytes();
 int test_publish_retained();
@@ -23,7 +23,7 @@ int test_publish_qos2();
 int test_publish_P_qos1();
 int test_publish_P_qos2();
 
-void callback(_UNUSED_ char* topic, _UNUSED_ uint8_t* payload, _UNUSED_ size_t length) {
+void callback(_UNUSED_ char* topic, _UNUSED_ uint8_t* payload, _UNUSED_ size_t plength) {
     // handle message arrived
 }
 
