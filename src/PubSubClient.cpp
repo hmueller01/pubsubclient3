@@ -111,11 +111,11 @@ PubSubClient::~PubSubClient() {
 }
 
 bool PubSubClient::connect(const char* id) {
-    return connect(id, nullptr, nullptr, nullptr, MQTTQOS0, false, nullptr, true);
+    return connect(id, nullptr, nullptr, nullptr, MQTT_QOS0, false, nullptr, true);
 }
 
 bool PubSubClient::connect(const char* id, const char* user, const char* pass) {
-    return connect(id, user, pass, nullptr, MQTTQOS0, false, nullptr, true);
+    return connect(id, user, pass, nullptr, MQTT_QOS0, false, nullptr, true);
 }
 
 bool PubSubClient::connect(const char* id, const char* willTopic, uint8_t willQos, bool willRetain, const char* willMessage) {
@@ -330,7 +330,7 @@ size_t PubSubClient::readPacket(uint8_t* hdrLen) {
         if (!readByte(this->buffer, &len)) return 0;
         skip = (this->buffer[*hdrLen + 1] << 8) + this->buffer[*hdrLen + 2];
         start = 2;
-        if (this->buffer[0] & MQTT_QOS_GET_HDR(MQTTQOS1)) {
+        if (this->buffer[0] & MQTT_QOS_GET_HDR(MQTT_QOS1)) {
             // skip message id for QoS 1
             skip += 2;
         }
@@ -393,7 +393,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 memmove(topic, topic + 1, topicLen);  // move topic inside buffer 1 byte to front
                 topic[topicLen] = '\0';               // end the topic as a 'C' string with \x00
 
-                if (MQTT_HDR_GET_QOS(this->buffer[0]) == MQTTQOS0) {
+                if (MQTT_HDR_GET_QOS(this->buffer[0]) == MQTT_QOS0) {
                     // No msgId for QOS == 0
                     callback(topic, payload, payloadLen);
                 } else {
@@ -502,11 +502,11 @@ bool PubSubClient::loop() {
 }
 
 bool PubSubClient::publish(const char* topic, const char* payload) {
-    return publish(topic, payload, MQTTQOS0, false);
+    return publish(topic, payload, MQTT_QOS0, false);
 }
 
 bool PubSubClient::publish(const char* topic, const char* payload, bool retained) {
-    return publish(topic, payload, MQTTQOS0, retained);
+    return publish(topic, payload, MQTT_QOS0, retained);
 }
 
 bool PubSubClient::publish(const char* topic, const char* payload, uint8_t qos, bool retained) {
@@ -514,11 +514,11 @@ bool PubSubClient::publish(const char* topic, const char* payload, uint8_t qos, 
 }
 
 bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t plength) {
-    return publish(topic, payload, plength, MQTTQOS0, false);
+    return publish(topic, payload, plength, MQTT_QOS0, false);
 }
 
 bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t plength, bool retained) {
-    return publish(topic, payload, plength, MQTTQOS0, retained);
+    return publish(topic, payload, plength, MQTT_QOS0, retained);
 }
 
 bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained) {
@@ -531,7 +531,7 @@ bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t ple
 }
 
 bool PubSubClient::publish_P(const char* topic, const char* payload, bool retained) {
-    return publish_P(topic, payload, MQTTQOS0, retained);
+    return publish_P(topic, payload, MQTT_QOS0, retained);
 }
 
 bool PubSubClient::publish_P(const char* topic, const char* payload, uint8_t qos, bool retained) {
@@ -539,7 +539,7 @@ bool PubSubClient::publish_P(const char* topic, const char* payload, uint8_t qos
 }
 
 bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t plength, bool retained) {
-    return publish_P(topic, payload, plength, MQTTQOS0, retained);
+    return publish_P(topic, payload, plength, MQTT_QOS0, retained);
 }
 
 bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained) {
@@ -555,14 +555,14 @@ bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t p
 }
 
 bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained) {
-    return beginPublish(topic, plength, MQTTQOS0, retained);
+    return beginPublish(topic, plength, MQTT_QOS0, retained);
 }
 
 bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained) {
     if (!topic) return false;
     if (strlen(topic) == 0) return false;  // empty topic is not allowed
-    if (qos > MQTTQOS2) {                  // only valid QoS supported
-        this->_qos = MQTTQOS0;             // reset QoS to 0, that endPublish() will not send a nextMsgId
+    if (qos > MQTT_QOS2) {                 // only valid QoS supported
+        this->_qos = MQTT_QOS0;            // reset QoS to 0, that endPublish() will not send a nextMsgId
         ERROR_PSC_PRINTF_P("beginPublish() called with invalid QoS %u\n", qos);
         return false;
     }
@@ -731,7 +731,7 @@ bool PubSubClient::subscribe(const char* topic) {
 
 bool PubSubClient::subscribe(const char* topic, uint8_t qos) {
     if (!topic) return false;
-    if (qos > MQTTQOS1) return false;  // only QoS 0 and 1 supported
+    if (qos > MQTT_QOS1) return false;  // only QoS 0 and 1 supported
 
     size_t topicLen = strnlen(topic, this->bufferSize);
     if (this->bufferSize < MQTT_MAX_HEADER_SIZE + 2 + 2 + topicLen) {
@@ -749,7 +749,7 @@ bool PubSubClient::subscribe(const char* topic, uint8_t qos) {
         this->buffer[length++] = (nextMsgId & 0xFF);
         length = writeString(topic, this->buffer, length);
         this->buffer[length++] = qos;
-        return write(MQTTSUBSCRIBE | MQTT_QOS_GET_HDR(MQTTQOS1), this->buffer, length - MQTT_MAX_HEADER_SIZE);
+        return write(MQTTSUBSCRIBE | MQTT_QOS_GET_HDR(MQTT_QOS1), this->buffer, length - MQTT_MAX_HEADER_SIZE);
     }
     return false;
 }
@@ -771,7 +771,7 @@ bool PubSubClient::unsubscribe(const char* topic) {
         this->buffer[length++] = (nextMsgId >> 8);
         this->buffer[length++] = (nextMsgId & 0xFF);
         length = writeString(topic, this->buffer, length);
-        return write(MQTTUNSUBSCRIBE | MQTT_QOS_GET_HDR(MQTTQOS1), this->buffer, length - MQTT_MAX_HEADER_SIZE);
+        return write(MQTTUNSUBSCRIBE | MQTT_QOS_GET_HDR(MQTT_QOS1), this->buffer, length - MQTT_MAX_HEADER_SIZE);
     }
     return false;
 }

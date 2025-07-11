@@ -119,9 +119,9 @@
  * @brief Quality of Service (QoS) levels for MQTT messages.
  * @{
  */
-#define MQTTQOS0 ((uint8_t)0)  ///< Quality of Service 0: At most once
-#define MQTTQOS1 ((uint8_t)1)  ///< Quality of Service 1: At least once
-#define MQTTQOS2 ((uint8_t)2)  ///< Quality of Service 2: Exactly once
+#define MQTT_QOS0 ((uint8_t)0)  ///< Quality of Service 0: At most once
+#define MQTT_QOS1 ((uint8_t)1)  ///< Quality of Service 1: At least once
+#define MQTT_QOS2 ((uint8_t)2)  ///< Quality of Service 2: Exactly once
 /// \cond
 #define MQTT_QOS_GET_HDR(qos) (((qos) & 0x03) << 1) // Get QoS header bits from QoS value
 #define MQTT_HDR_GET_QOS(header) (((header) & 0x06 ) >> 1) // Get QoS value from MQTT header
@@ -190,7 +190,7 @@ class PubSubClient : public Print {
     uint16_t port{};
     Stream* stream{};
     int _state{MQTT_DISCONNECTED};
-    uint8_t _qos{MQTTQOS0};
+    uint8_t _qos{MQTT_QOS0};
 
     size_t readPacket(uint8_t* hdrLen);
     bool handlePacket(uint8_t hdrLen, size_t len);
