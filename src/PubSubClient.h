@@ -652,7 +652,7 @@ class PubSubClient : public Print {
     virtual size_t write(const uint8_t* buffer, size_t size);
 
     /**
-     * @brief Subscribes to messages published to the specified topic.
+     * @brief Subscribes to messages published to the specified topic using QoS 0.
      * @param topic The topic to subscribe to.
      * @return true If sending the subscribe succeeded.
      * false If sending the subscribe failed, either connection lost or message too large.
