@@ -2,7 +2,7 @@
 
 # Project related configuration options
 PROJECT_NAME           = "PubSubClient3"
-PROJECT_NUMBER         = "v3.1.0"
+PROJECT_NUMBER         = "automatically updated by update-doxygen-version.sh"
 PROJECT_BRIEF          = "Located at <a href='https://github.com/hmueller01/pubsubclient3'>GitHub</a>"
 OUTPUT_DIRECTORY       = ./site
 INPUT                  = ./src
@@ -18,7 +18,7 @@ EXCLUDE_SYMBOLS        = CHECK_STRING_LENGTH
 GENERATE_HTML          = YES
 HTML_OUTPUT            = api
 HTML_COLORSTYLE        = AUTO_LIGHT
-HTML_HEADER            = ./site/header.html
+HTML_HEADER            = .github/doxygen-header.html
 
 # LaTeX output (disable if not needed)
 GENERATE_LATEX         = NO
