@@ -35,6 +35,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Update Doxyfile PROJECT_NUMBER
+        run: bash .github/update-doxygen-version.sh
       - name: Doxygenize
         #uses: langroodi/doxygenize@v1.7.0
         #uses: hmueller01/doxygenize@update-alpine-linux+patches
