@@ -531,7 +531,11 @@ bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t ple
 }
 
 bool PubSubClient::publish_P(const char* topic, PGM_P payload, bool retained) {
-    return publish_P(topic, (const prog_uint8_t*)payload, payload ? strnlen_P(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, retained);
+    return publish_P(topic, payload, MQTT_QOS0, retained);
+}
+
+bool PubSubClient::publish_P(const char* topic, PGM_P payload, uint8_t qos, bool retained) {
+    return publish_P(topic, (const prog_uint8_t*)payload, payload ? strnlen_P(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
 }
 
 bool PubSubClient::publish_P(const char* topic, const prog_uint8_t* payload, size_t plength, bool retained) {
@@ -723,7 +727,7 @@ size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, s
 
 size_t PubSubClient::writeString(const __FlashStringHelper* fstring, uint8_t* buf, size_t pos, size_t size) {
     // convert FlashStringHelper in PROGMEM-pointer
-    return writeString_P(reinterpret_cast<const char*>(fstring), buf, pos, this->bufferSize);
+    return writeString_P(reinterpret_cast<const char*>(fstring), buf, pos, size);
 }
 
 size_t PubSubClient::writeString_P(PGM_P string, uint8_t* buf, size_t pos, size_t size) {
