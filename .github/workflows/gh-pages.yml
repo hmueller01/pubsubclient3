@@ -35,9 +35,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Update Doxyfile PROJECT_NUMBER
+        run: bash .github/doxygen-update-version.sh
       - name: Doxygenize
-        #uses: langroodi/doxygenize@v1.7.0
-        uses: hmueller01/doxygenize@update-alpine-linux+patches
+        #uses: langroodi/doxygenize@v1.7.1 # waiting for update ...
+        uses: langroodi/doxygenize@6e920681c5d838e9a1b5cd273b814d1e4023b63d
+        #uses: hmueller01/doxygenize@update-alpine-linux+patches
         with:
           # Doxygen configuration file path
           doxygenconf: ./Doxyfile
@@ -47,10 +50,6 @@ jobs:
           ghpagesbranch: gh-pages
           # GitHub Pages directory path
           ghpagesdir: ./site/api
-          # Toggle dark mode CSS
-          #darkmode: true # optional, default is false
-          # Custom Doxygen pages header HTML file URL
-          #customheader: # optional, default is
       # - name: List site contents
       #   run: |
       #     find ./site
