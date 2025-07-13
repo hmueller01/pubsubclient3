@@ -21,6 +21,7 @@ extern void loop(void);
 unsigned long millis(void);
 }
 
+class __FlashStringHelper;
 #define PROGMEM
 #define PGM_P  const char *
 #define memcpy_P memcpy
