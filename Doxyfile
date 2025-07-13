@@ -1,8 +1,10 @@
-# Minimal Doxyfile for Doxygen 1.9.2
+# Minimal Doxyfile for Doxygen 1.13.2
 
 # Project related configuration options
 PROJECT_NAME           = "PubSubClient3"
-OUTPUT_DIRECTORY       = ./
+PROJECT_NUMBER         = "automatically updated by doxygen-update-version.sh"
+PROJECT_BRIEF          = "Located at <a href='https://github.com/hmueller01/pubsubclient3'>GitHub</a>"
+OUTPUT_DIRECTORY       = ./site
 INPUT                  = ./src
 RECURSIVE              = YES
 
@@ -14,8 +16,9 @@ EXCLUDE_SYMBOLS        = CHECK_STRING_LENGTH
 
 # HTML output
 GENERATE_HTML          = YES
-HTML_OUTPUT            = ./site/api
+HTML_OUTPUT            = api
 HTML_COLORSTYLE        = AUTO_LIGHT
+HTML_HEADER            = .github/doxygen-header.html
 
 # LaTeX output (disable if not needed)
 GENERATE_LATEX         = NO
