@@ -79,6 +79,18 @@
 #endif
 
 /**
+ * @brief Sets the maximum number of times the network client is checked for the amount of bytes is available to be written.
+ * Some hardware has a work buffer limit. Before a message to the MQTT server is sent in 'publish' or 'subscribe'
+ * the ehternet client is checked weather is has enough buffer to be able to send the entire message.
+ * Use 50 on hardware such as the Teensy 4.1 with lwip/QNEthernet lib.
+ * @note Defaults to undefined, which does not use the client function 'availableForWrite' at all.
+ */
+#ifndef MQTT_MAX_RETRY_FOR_AVAILABLE_FOR_WRITE  // just a hack that it gets shown in Doxygen
+#define MQTT_MAX_RETRY_FOR_AVAILABLE_FOR_WRITE 50
+#undef MQTT_MAX_RETRY_FOR_AVAILABLE_FOR_WRITE
+#endif
+
+/**
  * @defgroup group_state state() result
  * @brief These values indicate the current PubSubClient::state() of the client.
  * @{
