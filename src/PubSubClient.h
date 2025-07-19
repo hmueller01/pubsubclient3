@@ -178,6 +178,7 @@ class PubSubClient : public Print {
     Client* _client{};
     uint8_t* buffer{};
     size_t bufferSize{};
+    size_t _bufferWritePos{};
     unsigned long keepAliveMillis{};
     unsigned long socketTimeoutMillis{};
     uint16_t nextMsgId{};
@@ -190,7 +191,6 @@ class PubSubClient : public Print {
     uint16_t port{};
     Stream* stream{};
     int _state{MQTT_DISCONNECTED};
-    int _bufferWritePos = 0;
     uint8_t _qos{MQTT_QOS0};
 
     size_t readPacket(uint8_t* hdrLen);
