@@ -178,6 +178,7 @@ class PubSubClient : public Print {
     Client* _client{};
     uint8_t* buffer{};
     size_t bufferSize{};
+    size_t _bufferWritePos{};
     unsigned long keepAliveMillis{};
     unsigned long socketTimeoutMillis{};
     uint16_t nextMsgId{};
@@ -200,6 +201,11 @@ class PubSubClient : public Print {
     bool write(uint8_t header, uint8_t* buf, size_t length);
     size_t writeString(const char* string, uint8_t* buf, size_t pos, size_t size);
     size_t writeNextMsgId(uint8_t* buf, size_t pos, size_t size);
+
+    // Add to buffer and flush if full (only to be used with beginPublish/endPublish)Add commentMore actions
+    size_t appendBuffer(uint8_t data);
+    size_t appendBuffer(const uint8_t* data, size_t size);
+    size_t flushBuffer();
 
    public:
     /**
@@ -638,6 +644,8 @@ class PubSubClient : public Print {
 
     /**
      * @brief Writes a single byte as a component of a publish started with a call to beginPublish.
+     *        For performance reasons, this will be appended to the internal buffer,
+     *        which will be flushed when full or on a call to endPublish().
      * @param data A byte to write to the publish payload.
      * @return The number of bytes written.
      */
@@ -645,7 +653,8 @@ class PubSubClient : public Print {
 
     /**
      * @brief Writes an array of bytes as a component of a publish started with a call to beginPublish.
-     * @param buffer The bytes to write.
+     *        For performance reasons, this will be appended to the internal buffer,
+     *        which will be flushed when full or on a call to endPublish().     * @param buffer The bytes to write.
      * @param size The length of the payload to be sent.
      * @return The number of bytes written.
      */
