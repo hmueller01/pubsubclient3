@@ -717,7 +717,6 @@ size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, s
     return pos;
 }
 
-
 size_t PubSubClient::appendBuffer(uint8_t data) {
     buffer[_bufferWritePos] = data;
     ++_bufferWritePos;
@@ -727,7 +726,7 @@ size_t PubSubClient::appendBuffer(uint8_t data) {
     return 1;
 }
 
-size_t PubSubClient::appendBuffer(const uint8_t *data, size_t size) {
+size_t PubSubClient::appendBuffer(const uint8_t* data, size_t size) {
     for (size_t i = 0; i < size; ++i) {
         if (appendBuffer(data[i]) == 0) return i;
     }
