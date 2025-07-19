@@ -568,6 +568,28 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, 
     }
     this->_qos = qos;  // save the QoS for later endPublish() operation
     // check if the header and the topic (including 2 length bytes) fit into the buffer
+
+#if MQTT_MAX_RETRY_FOR_AVAILABLE_FOR_WRITE > 0
+    int total_msg_len = MQTT_MAX_HEADER_SIZE + strlen(topic) + 2 + plength;  // header + topic length + topic + payload
+    if (total_msg_len > this->_client->availableForWrite()) {
+        for (uint16_t i = 0; i < MQTT_MAX_RETRY_FOR_AVAILABLE_FOR_WRITE; i++)
+        {
+            if (this->_client->availableForWrite() > total_msg_len)
+            {
+                break; // Enough space in the client(socket) buffer
+            } else
+            {
+                // Not enough space in the client(socket) buffer
+                // so let's empty the buffer first
+                _client->flush();
+                this->loop();
+
+                delay(1); // Give some time to the client to flush
+            }
+        }
+    }
+#endif
+
     if (connected() && MQTT_MAX_HEADER_SIZE + strlen(topic) + 2 <= this->bufferSize) {
         // first write the topic at the end of the maximal variable header (MQTT_MAX_HEADER_SIZE) to the buffer
         size_t topicLen = writeString(topic, this->buffer, MQTT_MAX_HEADER_SIZE, this->bufferSize) - MQTT_MAX_HEADER_SIZE;
@@ -749,6 +771,26 @@ bool PubSubClient::subscribe(const char* topic, uint8_t qos) {
         length = writeNextMsgId(buffer, length, this->bufferSize);  // buffer size is checked before
         length = writeString(topic, this->buffer, length, this->bufferSize);
         this->buffer[length++] = qos;
+
+#if MQTT_MAX_RETRY_FOR_AVAILABLE_FOR_WRITE > 0
+        if (int(length) > this->_client->availableForWrite()) {
+            for (uint16_t i = 0; i < MQTT_MAX_RETRY_FOR_AVAILABLE_FOR_WRITE; i++)
+            {
+                if (this->_client->availableForWrite() > int(length))
+                {
+                    break; // Enough space in the client(socket) buffer
+                } else
+                {
+                    // Not enough space in the client(socket) buffer
+                    // so let's empty the buffer first
+                    _client->flush();
+                    this->loop();
+
+                    delay(1); // Give some time to the client to flush
+                }
+            }
+        }
+#endif
         return write(MQTTSUBSCRIBE | MQTT_QOS_GET_HDR(MQTT_QOS1), this->buffer, length - MQTT_MAX_HEADER_SIZE);
     }
     return false;
