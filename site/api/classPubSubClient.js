@@ -50,6 +50,6 @@ var classPubSubClient =
     [ "subscribe", "classPubSubClient.html#a0c4f24c7e9f704c29ebd79482c97b071", null ],
     [ "subscribe", "classPubSubClient.html#ad413967506d42f2119f4bcef4669db97", null ],
     [ "unsubscribe", "classPubSubClient.html#a38a147c2013ea040a822334c1464ef9c", null ],
-    [ "write", "classPubSubClient.html#acab06be609ad663253882ace39077f87", null ],
+    [ "write", "classPubSubClient.html#ace9fe94ce4462809675d165c58256b4c", null ],
     [ "write", "classPubSubClient.html#a5911478ded602f6fd8831921a77079f8", null ]
 ];

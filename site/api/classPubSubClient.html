@@ -265,9 +265,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5911478ded602f6fd8831921a77079f8" id="r_a5911478ded602f6fd8831921a77079f8"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5911478ded602f6fd8831921a77079f8">write</a> (uint8_t data)</td></tr>
 <tr class="memdesc:a5911478ded602f6fd8831921a77079f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a single byte as a component of a publish started with a call to beginPublish.  <br /></td></tr>
 <tr class="separator:a5911478ded602f6fd8831921a77079f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acab06be609ad663253882ace39077f87" id="r_acab06be609ad663253882ace39077f87"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acab06be609ad663253882ace39077f87">write</a> (const uint8_t *buffer, size_t size)</td></tr>
-<tr class="memdesc:acab06be609ad663253882ace39077f87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes an array of bytes as a component of a publish started with a call to beginPublish.  <br /></td></tr>
-<tr class="separator:acab06be609ad663253882ace39077f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace9fe94ce4462809675d165c58256b4c" id="r_ace9fe94ce4462809675d165c58256b4c"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace9fe94ce4462809675d165c58256b4c">write</a> (const uint8_t *buf, size_t size)</td></tr>
+<tr class="memdesc:ace9fe94ce4462809675d165c58256b4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes an array of bytes as a component of a publish started with a call to beginPublish.  <br /></td></tr>
+<tr class="separator:ace9fe94ce4462809675d165c58256b4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c4f24c7e9f704c29ebd79482c97b071" id="r_a0c4f24c7e9f704c29ebd79482c97b071"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0c4f24c7e9f704c29ebd79482c97b071">subscribe</a> (const char *topic)</td></tr>
 <tr class="memdesc:a0c4f24c7e9f704c29ebd79482c97b071"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscribes to messages published to the specified topic using QoS 0.  <br /></td></tr>
 <tr class="separator:a0c4f24c7e9f704c29ebd79482c97b071"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2160,8 +2160,8 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 
 </div>
 </div>
-<a id="acab06be609ad663253882ace39077f87" name="acab06be609ad663253882ace39077f87"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acab06be609ad663253882ace39077f87">&#9670;&#160;</a></span>write() <span class="overload">[1/2]</span></h2>
+<a id="ace9fe94ce4462809675d165c58256b4c" name="ace9fe94ce4462809675d165c58256b4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace9fe94ce4462809675d165c58256b4c">&#9670;&#160;</a></span>write() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2172,7 +2172,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
         <tr>
           <td class="memname">size_t PubSubClient::write </td>
           <td>(</td>
-          <td class="paramtype">const uint8_t *</td>          <td class="paramname"><span class="paramname"><em>buffer</em></span>, </td>
+          <td class="paramtype">const uint8_t *</td>          <td class="paramname"><span class="paramname"><em>buf</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -2190,7 +2190,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <p>Writes an array of bytes as a component of a publish started with a call to beginPublish. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">buffer</td><td>The bytes to write. </td></tr>
+    <tr><td class="paramname">buf</td><td>The bytes to write. </td></tr>
     <tr><td class="paramname">size</td><td>The length of the payload to be sent. </td></tr>
   </table>
   </dd>
