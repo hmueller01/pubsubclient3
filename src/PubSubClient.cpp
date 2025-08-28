@@ -562,39 +562,32 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, 
     if (!topic) return false;
     if (strlen(topic) == 0) return false;  // empty topic is not allowed
     if (qos > MQTT_QOS2) {                 // only valid QoS supported
-        this->_qos = MQTT_QOS0;            // reset QoS to 0, that endPublish() will not send a nextMsgId
         ERROR_PSC_PRINTF_P("beginPublish() called with invalid QoS %u\n", qos);
         return false;
     }
-    this->_qos = qos;  // save the QoS for later endPublish() operation
-    // check if the header and the topic (including 2 length bytes) fit into the buffer
-    if (connected() && MQTT_MAX_HEADER_SIZE + strlen(topic) + 2 <= this->bufferSize) {
+    const size_t nextMsgLen = (qos > MQTT_QOS0) ? 2 : 0;  // add 2 bytes for nextMsgId if QoS > 0
+    // check if the header, the topic (including 2 length bytes) and nextMsgId fit into the buffer
+    if (connected() && MQTT_MAX_HEADER_SIZE + strlen(topic) + 2 + nextMsgLen <= this->bufferSize) {
         // first write the topic at the end of the maximal variable header (MQTT_MAX_HEADER_SIZE) to the buffer
         size_t topicLen = writeString(topic, this->buffer, MQTT_MAX_HEADER_SIZE, this->bufferSize) - MQTT_MAX_HEADER_SIZE;
+        if (qos > MQTT_QOS0) {
+            // if QoS 1 or 2, we need to send the nextMsgId (packet identifier) after topic
+            writeNextMsgId(this->buffer, MQTT_MAX_HEADER_SIZE + topicLen, this->bufferSize);
+        }
         // we now know the length of the topic string (lenght + 2 bytes signalling the length) and can build the variable header information
         const uint8_t header = MQTTPUBLISH | MQTT_QOS_GET_HDR(qos) | (retained ? MQTTRETAINED : 0);
-        const size_t nextMsgLen = (qos) ? 2 : 0;  // add 2 bytes for the nextMsgId if QoS > 0
-        uint8_t hdrLen = buildHeader(header, this->buffer, topicLen + plength + nextMsgLen);
+        uint8_t hdrLen = buildHeader(header, this->buffer, topicLen + nextMsgLen + plength);
         if (hdrLen == 0) return false;  // exit here in case of header generation failure
         // as the header length is variable, it starts at MQTT_MAX_HEADER_SIZE - hdrLen (see buildHeader() documentation)
-        size_t rc = _client->write(this->buffer + (MQTT_MAX_HEADER_SIZE - hdrLen), hdrLen + topicLen);
+        size_t rc = _client->write(this->buffer + (MQTT_MAX_HEADER_SIZE - hdrLen), hdrLen + topicLen + nextMsgLen);
         lastOutActivity = millis();
-        return (rc == (hdrLen + topicLen));
+        return (rc == (hdrLen + topicLen + nextMsgLen));
     }
     return false;
 }
 
 bool PubSubClient::endPublish() {
     if (connected()) {
-        if (this->_qos > MQTT_QOS0) {
-            // QoS == 1 or 2, send the msgId
-            uint8_t buf[2];
-            writeNextMsgId(buf, 0, 2);
-            size_t rc = _client->write(buf, 2);
-            lastOutActivity = millis();
-            return (rc == 2);
-        }
-        // QoS == 0, no msgId to send
         return true;
     }
     return false;

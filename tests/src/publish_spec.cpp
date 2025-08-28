@@ -275,7 +275,7 @@ int test_publish_qos1() {
     IS_TRUE(rc);
 
     // Example publish packet for QoS 1 (0x32)
-    byte publish[] = {0x32, 0x10, 0x00, 0x05, 't', 'o', 'p', 'i', 'c', 'p', 'a', 'y', 'l', 'o', 'a', 'd', 0x00, 0x02};
+    byte publish[] = {0x32, 0x10, 0x00, 0x05, 't', 'o', 'p', 'i', 'c', 0x00, 0x02, 'p', 'a', 'y', 'l', 'o', 'a', 'd'};
     shimClient.expect(publish, sizeof(publish));
 
     rc = client.publish("topic", "payload", MQTT_QOS1, false);
@@ -299,7 +299,7 @@ int test_publish_qos2() {
     IS_TRUE(rc);
 
     // Example publish packet for QoS 2 (0x34)
-    byte publish[] = {0x34, 0x10, 0x00, 0x05, 't', 'o', 'p', 'i', 'c', 'p', 'a', 'y', 'l', 'o', 'a', 'd', 0x00, 0x02};
+    byte publish[] = {0x34, 0x10, 0x00, 0x05, 't', 'o', 'p', 'i', 'c', 0x00, 0x02, 'p', 'a', 'y', 'l', 'o', 'a', 'd'};
     shimClient.expect(publish, sizeof(publish));
 
     rc = client.publish("topic", "payload", MQTT_QOS2, false);
@@ -325,7 +325,7 @@ int test_publish_P_qos1() {
     bool rc = client.connect("client_test1");
     IS_TRUE(rc);
 
-    byte publish[] = {0x33, 0x0e, 0x00, 0x05, 't', 'o', 'p', 'i', 'c', 0x01, 0x02, 0x03, 0x04, 0x05, 0x00, 0x02};
+    byte publish[] = {0x33, 0x0e, 0x00, 0x05, 't', 'o', 'p', 'i', 'c', 0x00, 0x02, 0x01, 0x02, 0x03, 0x04, 0x05};
     shimClient.expect(publish, sizeof(publish));
 
     rc = client.publish_P("topic", payload, length, MQTT_QOS1, true);
@@ -351,7 +351,7 @@ int test_publish_P_qos2() {
     bool rc = client.connect("client_test1");
     IS_TRUE(rc);
 
-    byte publish[] = {0x35, 0x0e, 0x00, 0x05, 't', 'o', 'p', 'i', 'c', 0x01, 0x02, 0x03, 0x04, 0x05, 0x00, 0x02};
+    byte publish[] = {0x35, 0x0e, 0x00, 0x05, 't', 'o', 'p', 'i', 'c', 0x00, 0x02, 0x01, 0x02, 0x03, 0x04, 0x05};
     shimClient.expect(publish, sizeof(publish));
 
     rc = client.publish_P("topic", payload, length, MQTT_QOS2, true);
