@@ -654,11 +654,12 @@ class PubSubClient : public Print {
     /**
      * @brief Writes an array of bytes as a component of a publish started with a call to beginPublish.
      *        For performance reasons, this will be appended to the internal buffer,
-     *        which will be flushed when full or on a call to endPublish().     * @param buffer The bytes to write.
+     *        which will be flushed when full or on a call to endPublish().
+     * @param buf The bytes to write.
      * @param size The length of the payload to be sent.
      * @return The number of bytes written.
      */
-    virtual size_t write(const uint8_t* buffer, size_t size);
+    virtual size_t write(const uint8_t* buf, size_t size);
 
     /**
      * @brief Subscribes to messages published to the specified topic using QoS 0.

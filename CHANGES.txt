@@ -1,3 +1,12 @@
+3.2.0
+   * Support publish at QoS 1 and 2 by @hmueller01 #49
+   * Add check for nullptr in CHECK_STRING_LENGTH by @TD-er #48
+   * Move CHECK_STRING_LENGTH to PubSubClient.cpp by @hmueller01 #50
+   * Add Doxygen API documentaion on ph-pages by @hmueller01 #51
+   * Get rid of these lazy calling parameter by @hmueller01 #53
+   * Implemented writeNextMsgId() by @hmueller01 #54
+   * Cleanup writeString() by @hmueller01 #55
+
 3.1.0
    * Fix setServer(domain, ...) by copy domain string to own buffer (prevent potential dangling string pointer) #10
    * Connect to broker only if port != 0 (e.g. in case of incorrect PubSubClient initialization) #10

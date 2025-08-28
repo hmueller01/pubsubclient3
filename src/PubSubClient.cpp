@@ -643,8 +643,8 @@ size_t PubSubClient::write(uint8_t data) {
     return rc;
 }
 
-size_t PubSubClient::write(const uint8_t* buffer, size_t size) {
-    const size_t rc = appendBuffer(buffer, size);
+size_t PubSubClient::write(const uint8_t* buf, size_t size) {
+    const size_t rc = appendBuffer(buf, size);
     if (rc != 0) {
         lastOutActivity = millis();
     }
