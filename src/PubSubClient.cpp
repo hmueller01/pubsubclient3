@@ -654,7 +654,7 @@ size_t PubSubClient::write(const uint8_t* buf, size_t size) {
     return size;
 }
 
-size_t PubSubClient::write_P(const prog_uint8_t* buf, size_t size) {
+size_t PubSubClient::write_P(const uint8_t* buf, size_t size) {
     for (size_t i = 0; i < size; i++) {
         if (appendBuffer((uint8_t)pgm_read_byte_near(buf + i)) == 0) return i;
     }

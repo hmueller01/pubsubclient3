@@ -668,7 +668,7 @@ class PubSubClient : public Print {
      * @param size The length of the payload to be sent.
      * @return The number of bytes written.
      */
-    size_t write_P(const prog_uint8_t* buf, size_t size);
+    size_t write_P(const uint8_t* buf, size_t size);
 
     /**
      * @brief Subscribes to messages published to the specified topic using QoS 0.
