@@ -202,9 +202,9 @@ class PubSubClient : public Print {
     size_t writeString(const char* string, uint8_t* buf, size_t pos, size_t size);
     size_t writeNextMsgId(uint8_t* buf, size_t pos, size_t size);
 
-    // Add to buffer and flush if full (only to be used with beginPublish/endPublish)Add commentMore actions
+    // Add to buffer and flush if full (only to be used with beginPublish/endPublish)
     size_t appendBuffer(uint8_t data);
-    size_t appendBuffer(const uint8_t* data, size_t size);
+    size_t appendBuffer(const uint8_t* buf, size_t size);
     size_t flushBuffer();
 
    public:
