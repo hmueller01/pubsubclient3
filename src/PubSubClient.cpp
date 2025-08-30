@@ -748,12 +748,30 @@ size_t PubSubClient::flushBuffer() {
     size_t rc = 0;
     if (_bufferWritePos > 0) {
         if (connected()) {
+#ifdef MQTT_MAX_TRANSFER_SIZE
+            uint8_t* writeBuf = buffer;
+            size_t bytesRemaining = _bufferWritePos;
+            bool result = true;
+            while ((bytesRemaining > 0) && result) {
+                size_t bytesToWrite = (bytesRemaining > MQTT_MAX_TRANSFER_SIZE) ? MQTT_MAX_TRANSFER_SIZE : bytesRemaining;
+                size_t bytesWritten = _client->write(writeBuf, bytesToWrite);
+                result = (bytesWritten == bytesToWrite);
+                bytesRemaining -= bytesWritten;
+                writeBuf += bytesWritten;
+                if (result) {
+                    lastOutActivity = millis();
+                }
+                yield();
+            }
+            rc = result ? _bufferWritePos : 0;  // if result is false indicate a write error
+#else
             rc = _client->write(buffer, _bufferWritePos);
             if (rc == _bufferWritePos) {
                 lastOutActivity = millis();
             } else {
                 rc = 0;  // indicate a write error
             }
+#endif
         }
         _bufferWritePos = 0;
     }
