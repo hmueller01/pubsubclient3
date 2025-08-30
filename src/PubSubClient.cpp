@@ -724,8 +724,7 @@ size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, s
  * @return Number of bytes appended to the buffer (0 or 1).
  */
 size_t PubSubClient::appendBuffer(uint8_t data) {
-    buffer[_bufferWritePos] = data;
-    ++_bufferWritePos;
+    buffer[_bufferWritePos++] = data;
     if (_bufferWritePos >= bufferSize) {
         if (flushBuffer() == 0) return 0;
     }
