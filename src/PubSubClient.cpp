@@ -532,7 +532,6 @@ bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t ple
 bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained) {
     if (beginPublish(topic, plength, qos, retained)) {
         size_t rc = write(payload, plength);
-        lastOutActivity = millis();
         return endPublish() && (rc == plength);
     }
     return false;
@@ -553,7 +552,6 @@ bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t p
 bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained) {
     if (beginPublish(topic, plength, qos, retained)) {
         size_t rc = write_P(payload, plength);
-        lastOutActivity = millis();
         return endPublish() && (rc == plength);
     }
     return false;
