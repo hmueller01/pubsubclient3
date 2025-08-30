@@ -552,10 +552,7 @@ bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t p
 
 bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained) {
     if (beginPublish(topic, plength, qos, retained)) {
-        size_t rc = 0;
-        for (size_t i = 0; i < plength; i++) {
-            rc += _client->write((uint8_t)pgm_read_byte_near(payload + i));
-        }
+        size_t rc = write_P(payload, plength);
         lastOutActivity = millis();
         return endPublish() && (rc == plength);
     }
@@ -648,7 +645,17 @@ size_t PubSubClient::write(uint8_t data) {
 }
 
 size_t PubSubClient::write(const uint8_t* buf, size_t size) {
-    return appendBuffer(buf, size);
+    for (size_t i = 0; i < size; i++) {
+        if (appendBuffer(buf[i]) == 0) return i;
+    }
+    return size;
+}
+
+size_t PubSubClient::write_P(const prog_uint8_t* buf, size_t size) {
+    for (size_t i = 0; i < size; i++) {
+        if (appendBuffer((uint8_t)pgm_read_byte_near(buf + i)) == 0) return i;
+    }
+    return size;
 }
 
 /**
@@ -729,20 +736,6 @@ size_t PubSubClient::appendBuffer(uint8_t data) {
         if (flushBuffer() == 0) return 0;
     }
     return 1;
-}
-
-/**
- * @brief  Append an array of bytes to the internal buffer. If the buffer is full it is flushed to the client / MQTT broker.
- *
- * @param  buf Buffer to append to the internal buffer.
- * @param  size Number of bytes to append to the buffer.
- * @return Number of bytes appended to the buffer (0 .. size). If less than size is returned a write error to the client occurred.
- */
-size_t PubSubClient::appendBuffer(const uint8_t* buf, size_t size) {
-    for (size_t i = 0; i < size; ++i) {
-        if (appendBuffer(buf[i]) == 0) return i;
-    }
-    return size;
 }
 
 /**

@@ -13,6 +13,7 @@
 extern "C" {
 typedef uint8_t byte;
 typedef uint8_t boolean;
+typedef uint8_t prog_uint8_t;
 
 /* sketch */
 extern void setup(void);
