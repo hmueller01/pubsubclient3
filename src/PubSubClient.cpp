@@ -755,8 +755,10 @@ size_t PubSubClient::flushBuffer() {
     if (_bufferWritePos > 0) {
         if (connected()) {
             rc = _client->write(buffer, _bufferWritePos);
-            if (rc != 0) {
+            if (rc == _bufferWritePos) {
                 lastOutActivity = millis();
+            } else {
+                rc = 0;  // indicate a write error
             }
         }
         _bufferWritePos = 0;
