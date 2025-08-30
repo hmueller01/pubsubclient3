@@ -717,6 +717,12 @@ size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, s
     return pos;
 }
 
+/**
+ * @brief  Append a byte to the internal buffer. If the buffer is full it is flushed to the client / MQTT broker.
+ *
+ * @param  data Byte to append to the buffer.
+ * @return Number of bytes appended to the buffer (0 or 1).
+ */
 size_t PubSubClient::appendBuffer(uint8_t data) {
     buffer[_bufferWritePos] = data;
     ++_bufferWritePos;
@@ -726,13 +732,25 @@ size_t PubSubClient::appendBuffer(uint8_t data) {
     return 1;
 }
 
-size_t PubSubClient::appendBuffer(const uint8_t* data, size_t size) {
+/**
+ * @brief  Append an array of bytes to the internal buffer. If the buffer is full it is flushed to the client / MQTT broker.
+ *
+ * @param  buf Buffer to append to the internal buffer.
+ * @param  size Number of bytes to append to the buffer.
+ * @return Number of bytes appended to the buffer (0 .. size). If less than size is returned a write error to the client occurred.
+ */
+size_t PubSubClient::appendBuffer(const uint8_t* buf, size_t size) {
     for (size_t i = 0; i < size; ++i) {
-        if (appendBuffer(data[i]) == 0) return i;
+        if (appendBuffer(buf[i]) == 0) return i;
     }
     return size;
 }
 
+/**
+ * @brief  Flush the internal buffer to the client / MQTT broker.
+ *
+ * @return Number of bytes written to the client / MQTT broker (0 .. bufferSize). If 0 is returned a write error occurred or the buffer was empty.
+ */
 size_t PubSubClient::flushBuffer() {
     size_t rc = 0;
     if (_bufferWritePos > 0) {
