@@ -474,6 +474,14 @@ bool PubSubClient::loop() {
             _client->stop();
             pingOutstanding = false;
             return false;
+        } else if (_bufferWritePos > 0) {
+            // There is still data in the buffer to be sent, so send it now instead of a ping
+            if (flushBuffer() == 0) {
+                _state = MQTT_CONNECTION_TIMEOUT;
+                _client->stop();
+                pingOutstanding = false;
+                return false;
+            }
         } else {
             this->buffer[0] = MQTTPINGREQ;
             this->buffer[1] = 0;
@@ -636,19 +644,11 @@ uint8_t PubSubClient::buildHeader(uint8_t header, uint8_t* buf, size_t length) {
 }
 
 size_t PubSubClient::write(uint8_t data) {
-    const size_t rc = appendBuffer(data);
-    if (rc != 0) {
-        lastOutActivity = millis();
-    }
-    return rc;
+    return appendBuffer(data);
 }
 
 size_t PubSubClient::write(const uint8_t* buf, size_t size) {
-    const size_t rc = appendBuffer(buf, size);
-    if (rc != 0) {
-        lastOutActivity = millis();
-    }
-    return rc;
+    return appendBuffer(buf, size);
 }
 
 /**
