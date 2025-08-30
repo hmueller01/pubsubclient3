@@ -590,8 +590,11 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, 
 }
 
 bool PubSubClient::endPublish() {
-    flushBuffer();
     if (connected()) {
+        if (_bufferWritePos > 0) {
+            // still data in the buffer to be sent
+            if (flushBuffer() == 0) return false;
+        }
         if (this->_qos > MQTT_QOS0) {
             // QoS == 1 or 2, send the msgId
             uint8_t buf[2];
