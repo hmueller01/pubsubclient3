@@ -668,34 +668,48 @@ size_t PubSubClient::write_P(const uint8_t* buf, size_t size) {
  * @return True if successfully sent, otherwise false if buildHeader() failed or buf could not be written.
  */
 bool PubSubClient::write(uint8_t header, uint8_t* buf, size_t length) {
-    bool result = true;
-    size_t rc;
     uint8_t hdrLen = buildHeader(header, buf, length);
     if (hdrLen == 0) return false;  // exit here in case of header generation failure
 
+    return writeBuffer(MQTT_MAX_HEADER_SIZE - hdrLen, hdrLen + length);
+}
+
+/**
+ * @brief  Write the internal buffer to the client / MQTT broker.
+ *
+ * @param  pos Position in the buffer to start writing from.
+ * @param  size Number of bytes to write from the buffer.
+ * @return Number of bytes written to the client / MQTT broker (0 .. bufferSize). If 0 is returned a write error occurred or buffer index error.
+ */
+size_t PubSubClient::writeBuffer(size_t pos, size_t size) {
+    size_t rc = 0;
+    if (size > 0 && pos + size <= this->bufferSize) {
 #ifdef MQTT_MAX_TRANSFER_SIZE
-    uint8_t* writeBuf = buf + (MQTT_MAX_HEADER_SIZE - hdrLen);
-    size_t bytesRemaining = length + hdrLen;  // Match the length type
-    size_t bytesToWrite;
-    while ((bytesRemaining > 0) && result) {
-        yield();
-        bytesToWrite = (bytesRemaining > MQTT_MAX_TRANSFER_SIZE) ? MQTT_MAX_TRANSFER_SIZE : bytesRemaining;
-        rc = _client->write(writeBuf, bytesToWrite);
-        result = (rc == bytesToWrite);
-        bytesRemaining -= rc;
-        writeBuf += rc;
-        if (result) {
-            lastOutActivity = millis();
+        uint8_t* writeBuf = buffer + pos;
+        size_t bytesRemaining = size;
+        bool result = true;
+        while ((bytesRemaining > 0) && result) {
+            size_t bytesToWrite = (bytesRemaining > MQTT_MAX_TRANSFER_SIZE) ? MQTT_MAX_TRANSFER_SIZE : bytesRemaining;
+            size_t bytesWritten = _client->write(writeBuf, bytesToWrite);
+            result = (bytesWritten == bytesToWrite);
+            bytesRemaining -= bytesWritten;
+            writeBuf += bytesWritten;
+            if (result) {
+                lastOutActivity = millis();
+            }
+            yield();
         }
-    }
+        rc = result ? size : 0;  // if result is false indicate a write error
 #else
-    rc = _client->write(buf + (MQTT_MAX_HEADER_SIZE - hdrLen), length + hdrLen);
-    result = (rc == length + hdrLen);
-    if (result) {
-        lastOutActivity = millis();
-    }
+        rc = _client->write(buffer + pos, size);
+        if (rc == size) {
+            lastOutActivity = millis();
+        } else {
+            rc = 0;  // indicate a write error
+        }
 #endif
-    return result;
+    }
+    return rc;
 }
 
 /**
@@ -726,59 +740,6 @@ size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, s
 }
 
 /**
- * @brief  Append a byte to the internal buffer. If the buffer is full it is flushed to the client / MQTT broker.
- *
- * @param  data Byte to append to the buffer.
- * @return Number of bytes appended to the buffer (0 or 1).
- */
-size_t PubSubClient::appendBuffer(uint8_t data) {
-    buffer[_bufferWritePos++] = data;
-    if (_bufferWritePos >= bufferSize) {
-        if (flushBuffer() == 0) return 0;
-    }
-    return 1;
-}
-
-/**
- * @brief  Flush the internal buffer to the client / MQTT broker.
- *
- * @return Number of bytes written to the client / MQTT broker (0 .. bufferSize). If 0 is returned a write error occurred or the buffer was empty.
- */
-size_t PubSubClient::flushBuffer() {
-    size_t rc = 0;
-    if (_bufferWritePos > 0) {
-        if (connected()) {
-#ifdef MQTT_MAX_TRANSFER_SIZE
-            uint8_t* writeBuf = buffer;
-            size_t bytesRemaining = _bufferWritePos;
-            bool result = true;
-            while ((bytesRemaining > 0) && result) {
-                size_t bytesToWrite = (bytesRemaining > MQTT_MAX_TRANSFER_SIZE) ? MQTT_MAX_TRANSFER_SIZE : bytesRemaining;
-                size_t bytesWritten = _client->write(writeBuf, bytesToWrite);
-                result = (bytesWritten == bytesToWrite);
-                bytesRemaining -= bytesWritten;
-                writeBuf += bytesWritten;
-                if (result) {
-                    lastOutActivity = millis();
-                }
-                yield();
-            }
-            rc = result ? _bufferWritePos : 0;  // if result is false indicate a write error
-#else
-            rc = _client->write(buffer, _bufferWritePos);
-            if (rc == _bufferWritePos) {
-                lastOutActivity = millis();
-            } else {
-                rc = 0;  // indicate a write error
-            }
-#endif
-        }
-        _bufferWritePos = 0;
-    }
-    return rc;
-}
-
-/**
  * @brief  Write nextMsgId to the give buffer and position.
  * @note   If the nextMsgId (2 bytes) does not fit in the buffer nothing is written to the buffer and the returned position is unchanged.
  *
@@ -796,6 +757,35 @@ size_t PubSubClient::writeNextMsgId(uint8_t* buf, size_t pos, size_t size) {
         ERROR_PSC_PRINTF_P("writeNextMsgId(): buffer (%zu) does not fit into buf (%zu)\n", pos + 2, size);
     }
     return pos;
+}
+
+/**
+ * @brief  Append a byte to the internal buffer. If the buffer is full it is flushed to the client / MQTT broker.
+ *
+ * @param  data Byte to append to the buffer.
+ * @return Number of bytes appended to the buffer (0 or 1).
+ */
+size_t PubSubClient::appendBuffer(uint8_t data) {
+    buffer[_bufferWritePos++] = data;
+    if (_bufferWritePos >= bufferSize) {
+        if (flushBuffer() == 0) return 0;
+    }
+    return 1;
+}
+
+/**
+ * @brief  Flush the internal buffer (bytes 0 .. _bufferWritePos) to the client / MQTT broker.
+ * This is used by endPublish() to flush data written by appendBuffer().
+ *
+ * @return Number of bytes written to the client / MQTT broker (0 .. bufferSize). If 0 is returned a write error occurred or the buffer was empty.
+ */
+size_t PubSubClient::flushBuffer() {
+    size_t rc = 0;
+    if (connected()) {
+        rc = writeBuffer(0, _bufferWritePos);
+    }
+    _bufferWritePos = 0;
+    return rc;
 }
 
 bool PubSubClient::subscribe(const char* topic) {
