@@ -763,7 +763,7 @@ size_t PubSubClient::writeNextMsgId(uint8_t* buf, size_t pos, size_t size) {
  * @brief  Append a byte to the internal buffer. If the buffer is full it is flushed to the client / MQTT broker.
  *
  * @param  data Byte to append to the buffer.
- * @return Number of bytes appended to the buffer (0 or 1).
+ * @return Number of bytes appended to the buffer (0 or 1). If 0 is returned a write error occurred.
  */
 size_t PubSubClient::appendBuffer(uint8_t data) {
     buffer[_bufferWritePos++] = data;

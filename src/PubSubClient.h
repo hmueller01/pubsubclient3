@@ -647,7 +647,7 @@ class PubSubClient : public Print {
      *        For performance reasons, this will be appended to the internal buffer,
      *        which will be flushed when full or on a call to endPublish().
      * @param data A byte to write to the publish payload.
-     * @return The number of bytes written.
+     * @return The number of bytes written (0 or 1). If 0 is returned a write error occurred.
      */
     virtual size_t write(uint8_t data);
 
@@ -657,7 +657,7 @@ class PubSubClient : public Print {
      *        which will be flushed when full or on a call to endPublish().
      * @param buf The bytes to write.
      * @param size The length of the payload to be sent.
-     * @return The number of bytes written.
+     * @return The number of bytes written. If return value is != size a write error occurred.
      */
     virtual size_t write(const uint8_t* buf, size_t size);
 
@@ -667,7 +667,7 @@ class PubSubClient : public Print {
      *        which will be flushed when full or on a call to endPublish().
      * @param buf The bytes to write.
      * @param size The length of the payload to be sent.
-     * @return The number of bytes written.
+     * @return The number of bytes written. If return value is != size a write error occurred.
      */
     size_t write_P(const uint8_t* buf, size_t size);
 
