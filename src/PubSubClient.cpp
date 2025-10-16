@@ -340,7 +340,7 @@ size_t PubSubClient::readPacket(uint8_t* hdrLen) {
     for (size_t i = start; i < length; i++) {
         if (!readByte(&digit)) return 0;
         if (this->stream) {
-            if (isPublish && idx - *hdrLen - 2 > skip) {
+            if (isPublish && (idx - *hdrLen - 2 > skip)) {
                 this->stream->write(digit);
             }
         }
@@ -351,7 +351,7 @@ size_t PubSubClient::readPacket(uint8_t* hdrLen) {
         idx++;
     }
 
-    if (!this->stream && idx > this->bufferSize) {
+    if (!this->stream && (idx > this->bufferSize)) {
         DEBUG_PSC_PRINTF("readPacket ignoring packet of size %zu exceeding buffer of size %zu\n", length, this->bufferSize);
         len = 0;  // This will cause the packet to be ignored.
     }
@@ -570,7 +570,7 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, 
     }
     const size_t nextMsgLen = (qos > MQTT_QOS0) ? 2 : 0;  // add 2 bytes for nextMsgId if QoS > 0
     // check if the header, the topic (including 2 length bytes) and nextMsgId fit into the buffer
-    if (connected() && MQTT_MAX_HEADER_SIZE + strlen(topic) + 2 + nextMsgLen <= this->bufferSize) {
+    if (connected() && (MQTT_MAX_HEADER_SIZE + strlen(topic) + 2 + nextMsgLen <= this->bufferSize)) {
         // first write the topic at the end of the maximal variable header (MQTT_MAX_HEADER_SIZE) to the buffer
         size_t topicLen = writeString(topic, this->buffer, MQTT_MAX_HEADER_SIZE, this->bufferSize) - MQTT_MAX_HEADER_SIZE;
         if (qos > MQTT_QOS0) {
@@ -622,7 +622,7 @@ uint8_t PubSubClient::buildHeader(uint8_t header, uint8_t* buf, size_t length) {
             digit |= 0x80;
         }
         hdrBuf[hdrLen++] = digit;
-    } while (len > 0 && hdrLen < MQTT_MAX_HEADER_SIZE - 1);
+    } while ((len > 0) && (hdrLen < MQTT_MAX_HEADER_SIZE - 1));
 
     if (len > 0) {
         ERROR_PSC_PRINTF_P("buildHeader() length too big %zu, left %zu\n", length, len);
@@ -676,7 +676,7 @@ bool PubSubClient::write(uint8_t header, uint8_t* buf, size_t length) {
  */
 size_t PubSubClient::writeBuffer(size_t pos, size_t size) {
     size_t rc = 0;
-    if (size > 0 && pos + size <= this->bufferSize) {
+    if ((size > 0) && (pos + size <= this->bufferSize)) {
 #ifdef MQTT_MAX_TRANSFER_SIZE
         uint8_t* writeBuf = buffer + pos;
         size_t bytesRemaining = size;
@@ -721,7 +721,7 @@ size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, s
     if (!string) return pos;
 
     size_t sLen = strlen(string);
-    if (pos + 2 + sLen <= size && sLen <= 0xFFFF) {
+    if ((pos + 2 + sLen <= size) && (sLen <= 0xFFFF)) {
         buf[pos++] = (uint8_t)(sLen >> 8);
         buf[pos++] = (uint8_t)(sLen & 0xFF);
         memcpy(buf + pos, string, sLen);
@@ -742,7 +742,7 @@ size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, s
  * @return New position in the buffer (pos + 2), or pos if a buffer overrun would occur.
  */
 size_t PubSubClient::writeNextMsgId(uint8_t* buf, size_t pos, size_t size) {
-    if (pos + 2 <= size) {
+    if ((pos + 2) <= size) {
         nextMsgId = (++nextMsgId == 0) ? 1 : nextMsgId;  // increment msgId (must not be 0, so start at 1)
         buf[pos++] = (uint8_t)(nextMsgId >> 8);
         buf[pos++] = (uint8_t)(nextMsgId & 0xFF);
