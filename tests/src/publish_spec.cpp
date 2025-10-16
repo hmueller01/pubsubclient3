@@ -13,6 +13,7 @@ int test_publish_bytes();
 int test_publish_retained();
 int test_publish_retained_2();
 int test_publish_not_connected();
+int test_publish_long();
 int test_publish_too_long();
 int test_publish_P();
 int test_publish_P_too_long();
@@ -133,6 +134,49 @@ int test_publish_not_connected() {
 
     bool rc = client.publish("topic", "payload");
     IS_FALSE(rc);
+
+    IS_FALSE(shimClient.error());
+
+    END_IT
+}
+
+int test_publish_long() {
+    IT("publishes with long payload message (> buffer size)");
+    ShimClient shimClient;
+    shimClient.setAllowConnect(true);
+
+    // buffer size 64 bytes - 5 bytes header - 2 bytes topic length = max. 57 bytes topic
+    //              0        1         2         3         4         5         6         7         8         9         0         1         2
+    char topic[] = "123456789012345678901234567890123456789012345678901234567";
+
+    //                0        1         2         3         4         5         6         7         8         9         0         1         2
+    char payload[] = "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
+    size_t plength = strlen(payload);
+
+    byte connack[] = {0x20, 0x02, 0x00, 0x00};
+    shimClient.respond(connack, 4);
+
+    PubSubClient client(server, 1883, callback, shimClient);
+    client.setBufferSize(64);
+    bool rc = client.connect("client_test1");
+    IS_TRUE(rc);
+
+    byte publish[256];
+    publish[0] = 0x30;  // PUBLISH, QoS 0, no retain
+    publish[1] = 0xb3;  // Remaining length byte 1: 2 + 57 + 120 bytes (topic length bytes + topic length + payload length = 179)
+    publish[2] = 0x01;  // Remaining length byte 2
+    publish[3] = 0x00;  // Topic length MSB
+    publish[4] = 0x39;  // Topic length LSB (57 bytes)
+    memcpy(&publish[5], topic, sizeof(topic) - 1);
+    memcpy(&publish[5 + sizeof(topic) - 1], payload, sizeof(payload) - 1);
+    shimClient.expect(publish, 5 + sizeof(topic) - 1 + sizeof(payload) - 1);
+
+    rc = client.beginPublish(topic, plength, 0, false);
+    IS_TRUE(rc);
+    plength = client.write((uint8_t*)payload, plength);
+    IS_EQUAL(plength, strlen(payload));
+    rc = client.endPublish();
+    IS_TRUE(rc);
 
     IS_FALSE(shimClient.error());
 
@@ -371,6 +415,7 @@ int main() {
     test_publish_qos1();
     test_publish_qos2();
     test_publish_null_payload();
+    test_publish_long();
     test_publish_not_connected();
     test_publish_empty_topic();
     test_publish_too_long();
