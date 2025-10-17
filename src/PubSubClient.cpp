@@ -192,7 +192,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
 
             write(MQTTCONNECT, _buffer, length - MQTT_MAX_HEADER_SIZE);
 
-            lastInActivity = lastOutActivity = millis();
+            lastInActivity = _lastOutActivity = millis();
             pingOutstanding = false;
 
             while (!_client->available()) {
@@ -249,7 +249,7 @@ void PubSubClient::disconnect() {
     _state = MQTT_DISCONNECTED;
     _client->flush();
     _client->stop();
-    lastInActivity = lastOutActivity = millis();
+    lastInActivity = _lastOutActivity = millis();
     pingOutstanding = false;
 }
 
@@ -410,7 +410,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                     _buffer[2] = (msgId >> 8);
                     _buffer[3] = (msgId & 0xFF);
                     if (_client->write(_buffer, 4) == 4) {
-                        lastOutActivity = millis();
+                        _lastOutActivity = millis();
                     }
                 }
             }
@@ -433,7 +433,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
             _buffer[0] = MQTTPUBREL | 2;  // PUBREL with bit 1 set
             // bytes 1-3 of PUBREL are the same as of PUBREC
             if (_client->write(_buffer, 4) == 4) {
-                lastOutActivity = millis();
+                _lastOutActivity = millis();
             }
             break;
         case MQTTPUBCOMP:
@@ -449,7 +449,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
             _buffer[0] = MQTTPINGRESP;
             _buffer[1] = 0;
             if (_client->write(_buffer, 2) == 2) {
-                lastOutActivity = millis();
+                _lastOutActivity = millis();
             }
             break;
         case MQTTPINGRESP:
@@ -467,7 +467,7 @@ bool PubSubClient::loop() {
     }
     bool ret = true;
     const unsigned long t = millis();
-    if (_keepAliveMillis && ((t - lastInActivity > _keepAliveMillis) || (t - lastOutActivity > _keepAliveMillis))) {
+    if (_keepAliveMillis && ((t - lastInActivity > _keepAliveMillis) || (t - _lastOutActivity > _keepAliveMillis))) {
         if (pingOutstanding) {
             DEBUG_PSC_PRINTF("loop aborting due to timeout\n");
             _state = MQTT_CONNECTION_TIMEOUT;
@@ -486,7 +486,7 @@ bool PubSubClient::loop() {
             _buffer[0] = MQTTPINGREQ;
             _buffer[1] = 0;
             if (_client->write(_buffer, 2) == 2) {
-                lastInActivity = lastOutActivity = t;
+                lastInActivity = _lastOutActivity = t;
                 pingOutstanding = true;
             }
         }
@@ -583,7 +583,7 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, 
         if (hdrLen == 0) return false;  // exit here in case of header generation failure
         // as the header length is variable, it starts at MQTT_MAX_HEADER_SIZE - hdrLen (see buildHeader() documentation)
         size_t rc = _client->write(_buffer + (MQTT_MAX_HEADER_SIZE - hdrLen), hdrLen + topicLen + nextMsgLen);
-        lastOutActivity = millis();
+        _lastOutActivity = millis();
         return (rc == (hdrLen + topicLen + nextMsgLen));
     }
     return false;
@@ -688,7 +688,7 @@ size_t PubSubClient::writeBuffer(size_t pos, size_t size) {
             bytesRemaining -= bytesWritten;
             writeBuf += bytesWritten;
             if (result) {
-                lastOutActivity = millis();
+                _lastOutActivity = millis();
             }
             yield();
         }
@@ -696,7 +696,7 @@ size_t PubSubClient::writeBuffer(size_t pos, size_t size) {
 #else
         rc = _client->write(_buffer + pos, size);
         if (rc == size) {
-            lastOutActivity = millis();
+            _lastOutActivity = millis();
         } else {
             rc = 0;  // indicate a write error
         }
