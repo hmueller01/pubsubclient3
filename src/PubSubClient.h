@@ -187,7 +187,7 @@ class PubSubClient : public Print {
     bool _pingOutstanding{};
     MQTT_CALLBACK_SIGNATURE{};
     IPAddress _ip{};
-    char* domain{};
+    char* _domain{};
     uint16_t _port{};
     Stream* _stream{};
     int _state{MQTT_DISCONNECTED};
