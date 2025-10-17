@@ -167,7 +167,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
                     flags = flags | (0x01 << 6);  // set password flag bit 6
                 }
             }
-            const uint16_t keepAlive = this->keepAliveMillis / 1000;
+            const uint16_t keepAlive = _keepAliveMillis / 1000;
             _buffer[length++] = flags;
             _buffer[length++] = keepAlive >> 8;
             _buffer[length++] = keepAlive & 0xFF;
@@ -467,7 +467,7 @@ bool PubSubClient::loop() {
     }
     bool ret = true;
     const unsigned long t = millis();
-    if (keepAliveMillis && ((t - lastInActivity > this->keepAliveMillis) || (t - lastOutActivity > this->keepAliveMillis))) {
+    if (_keepAliveMillis && ((t - lastInActivity > _keepAliveMillis) || (t - lastOutActivity > _keepAliveMillis))) {
         if (pingOutstanding) {
             DEBUG_PSC_PRINTF("loop aborting due to timeout\n");
             _state = MQTT_CONNECTION_TIMEOUT;
@@ -891,7 +891,7 @@ size_t PubSubClient::getBufferSize() {
 }
 
 PubSubClient& PubSubClient::setKeepAlive(uint16_t keepAlive) {
-    this->keepAliveMillis = keepAlive * 1000UL;
+    _keepAliveMillis = keepAlive * 1000UL;
     return *this;
 }
 
