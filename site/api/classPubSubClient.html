@@ -263,11 +263,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a8c658db7eb23241aa0c1bc16f703cdb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finish sending a message that was started with a call to beginPublish.  <br /></td></tr>
 <tr class="separator:a8c658db7eb23241aa0c1bc16f703cdb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5911478ded602f6fd8831921a77079f8" id="r_a5911478ded602f6fd8831921a77079f8"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5911478ded602f6fd8831921a77079f8">write</a> (uint8_t data)</td></tr>
-<tr class="memdesc:a5911478ded602f6fd8831921a77079f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a single byte as a component of a publish started with a call to beginPublish.  <br /></td></tr>
+<tr class="memdesc:a5911478ded602f6fd8831921a77079f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a single byte as a component of a publish started with a call to beginPublish. For performance reasons, this will be appended to the internal buffer, which will be flushed when full or on a call to <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a>.  <br /></td></tr>
 <tr class="separator:a5911478ded602f6fd8831921a77079f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace9fe94ce4462809675d165c58256b4c" id="r_ace9fe94ce4462809675d165c58256b4c"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace9fe94ce4462809675d165c58256b4c">write</a> (const uint8_t *buf, size_t size)</td></tr>
-<tr class="memdesc:ace9fe94ce4462809675d165c58256b4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes an array of bytes as a component of a publish started with a call to beginPublish.  <br /></td></tr>
+<tr class="memdesc:ace9fe94ce4462809675d165c58256b4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes an array of bytes as a component of a publish started with a call to beginPublish. For performance reasons, this will be appended to the internal buffer, which will be flushed when full or on a call to <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a>.  <br /></td></tr>
 <tr class="separator:ace9fe94ce4462809675d165c58256b4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc11b726f557542c0b68c3f1a77052a3" id="r_adc11b726f557542c0b68c3f1a77052a3"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc11b726f557542c0b68c3f1a77052a3">write_P</a> (const uint8_t *buf, size_t size)</td></tr>
+<tr class="memdesc:adc11b726f557542c0b68c3f1a77052a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes an array of progmem bytes as a component of a publish started with a call to beginPublish. For performance reasons, this will be appended to the internal buffer, which will be flushed when full or on a call to <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a>.  <br /></td></tr>
+<tr class="separator:adc11b726f557542c0b68c3f1a77052a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c4f24c7e9f704c29ebd79482c97b071" id="r_a0c4f24c7e9f704c29ebd79482c97b071"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0c4f24c7e9f704c29ebd79482c97b071">subscribe</a> (const char *topic)</td></tr>
 <tr class="memdesc:a0c4f24c7e9f704c29ebd79482c97b071"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscribes to messages published to the specified topic using QoS 0.  <br /></td></tr>
 <tr class="separator:a0c4f24c7e9f704c29ebd79482c97b071"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -927,7 +930,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00557">557</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00560">560</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -972,7 +975,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00561">561</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00564">564</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1301,7 +1304,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <p>Finish sending a message that was started with a call to beginPublish. </p>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00589">589</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00592">592</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1323,7 +1326,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <p>Gets the current size of the internal buffer. </p>
 <dl class="section return"><dt>Returns</dt><dd>The size of the internal buffer. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00831">831</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00889">889</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1378,7 +1381,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00504">504</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00512">512</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1417,7 +1420,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00508">508</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00516">516</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1462,7 +1465,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00512">512</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00520">520</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1501,7 +1504,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00516">516</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00524">524</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1546,7 +1549,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00520">520</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00528">528</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1597,7 +1600,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00524">524</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00532">532</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1636,7 +1639,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00533">533</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00540">540</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1681,7 +1684,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00537">537</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00544">544</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1726,7 +1729,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00541">541</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00548">548</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1777,7 +1780,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00545">545</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00552">552</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1805,7 +1808,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the buffer was resized. false If the buffer could not be resized. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00812">812</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00870">870</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1833,7 +1836,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00797">797</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00855">855</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1861,7 +1864,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00802">802</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00860">860</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1889,7 +1892,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00835">835</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00893">893</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1922,7 +1925,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00780">780</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00838">838</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1955,7 +1958,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00772">772</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00830">830</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1988,7 +1991,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00767">767</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00825">825</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2016,7 +2019,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00840">840</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00898">898</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2044,7 +2047,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00807">807</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00865">865</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2067,7 +2070,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>All of the values have corresponding constants defined in <a class="el" href="PubSubClient_8h.html" title="A simple client for MQTT.">PubSubClient.h</a>. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>See <a class="el" href="group__group__state.html">state() result</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00845">845</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00903">903</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2095,7 +2098,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If sending the subscribe succeeded. false If sending the subscribe failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00726">726</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00784">784</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2128,7 +2131,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If sending the subscribe succeeded. false If sending the subscribe failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00730">730</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00788">788</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2156,7 +2159,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If sending the unsubscribe succeeded. false If sending the unsubscribe failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00750">750</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00808">808</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2187,7 +2190,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p>Writes an array of bytes as a component of a publish started with a call to beginPublish. </p>
+<p>Writes an array of bytes as a component of a publish started with a call to beginPublish. For performance reasons, this will be appended to the internal buffer, which will be flushed when full or on a call to <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">buf</td><td>The bytes to write. </td></tr>
@@ -2195,9 +2198,9 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The number of bytes written. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of bytes written. If return value is != size a write error occurred. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00635">635</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00641">641</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2224,16 +2227,49 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p>Writes a single byte as a component of a publish started with a call to beginPublish. </p>
+<p>Writes a single byte as a component of a publish started with a call to beginPublish. For performance reasons, this will be appended to the internal buffer, which will be flushed when full or on a call to <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">data</td><td>A byte to write to the publish payload. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The number of bytes written. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of bytes written (0 or 1). If 0 is returned a write error occurred. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00630">630</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00637">637</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
+</div>
+</div>
+<a id="adc11b726f557542c0b68c3f1a77052a3" name="adc11b726f557542c0b68c3f1a77052a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc11b726f557542c0b68c3f1a77052a3">&#9670;&#160;</a></span>write_P()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t PubSubClient::write_P </td>
+          <td>(</td>
+          <td class="paramtype">const uint8_t *</td>          <td class="paramname"><span class="paramname"><em>buf</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>size</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Writes an array of progmem bytes as a component of a publish started with a call to beginPublish. For performance reasons, this will be appended to the internal buffer, which will be flushed when full or on a call to <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buf</td><td>The bytes to write. </td></tr>
+    <tr><td class="paramname">size</td><td>The length of the payload to be sent. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of bytes written. If return value is != size a write error occurred. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00648">648</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
