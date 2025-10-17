@@ -176,8 +176,8 @@
 class PubSubClient : public Print {
    private:
     Client* _client{};
-    uint8_t* buffer{};
-    size_t bufferSize{};
+    uint8_t* _buffer{};
+    size_t _bufferSize{};
     size_t _bufferWritePos{};
     unsigned long keepAliveMillis{};
     unsigned long socketTimeoutMillis{};
