@@ -192,13 +192,13 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
 
             write(MQTTCONNECT, _buffer, length - MQTT_MAX_HEADER_SIZE);
 
-            lastInActivity = _lastOutActivity = millis();
+            _lastInActivity = _lastOutActivity = millis();
             pingOutstanding = false;
 
             while (!_client->available()) {
                 yield();
                 unsigned long t = millis();
-                if (t - lastInActivity >= _socketTimeoutMillis) {
+                if (t - _lastInActivity >= _socketTimeoutMillis) {
                     DEBUG_PSC_PRINTF("connect aborting due to timeout\n");
                     _state = MQTT_CONNECTION_TIMEOUT;
                     _client->stop();
@@ -210,7 +210,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
 
             if (len == 4) {
                 if (_buffer[3] == 0) {
-                    lastInActivity = millis();
+                    _lastInActivity = millis();
                     _state = MQTT_CONNECTED;
                     return true;
                 } else {
@@ -249,7 +249,7 @@ void PubSubClient::disconnect() {
     _state = MQTT_DISCONNECTED;
     _client->flush();
     _client->stop();
-    lastInActivity = _lastOutActivity = millis();
+    _lastInActivity = _lastOutActivity = millis();
     pingOutstanding = false;
 }
 
@@ -467,7 +467,7 @@ bool PubSubClient::loop() {
     }
     bool ret = true;
     const unsigned long t = millis();
-    if (_keepAliveMillis && ((t - lastInActivity > _keepAliveMillis) || (t - _lastOutActivity > _keepAliveMillis))) {
+    if (_keepAliveMillis && ((t - _lastInActivity > _keepAliveMillis) || (t - _lastOutActivity > _keepAliveMillis))) {
         if (pingOutstanding) {
             DEBUG_PSC_PRINTF("loop aborting due to timeout\n");
             _state = MQTT_CONNECTION_TIMEOUT;
@@ -486,7 +486,7 @@ bool PubSubClient::loop() {
             _buffer[0] = MQTTPINGREQ;
             _buffer[1] = 0;
             if (_client->write(_buffer, 2) == 2) {
-                lastInActivity = _lastOutActivity = t;
+                _lastInActivity = _lastOutActivity = t;
                 pingOutstanding = true;
             }
         }
@@ -495,7 +495,7 @@ bool PubSubClient::loop() {
         uint8_t hdrLen;
         size_t len = readPacket(&hdrLen);
         if (len > 0) {
-            lastInActivity = t;
+            _lastInActivity = t;
             ret = handlePacket(hdrLen, len);
             if (!ret) {
                 _state = MQTT_DISCONNECTED;

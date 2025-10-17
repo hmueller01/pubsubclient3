@@ -183,7 +183,7 @@ class PubSubClient : public Print {
     unsigned long _socketTimeoutMillis{};
     uint16_t _nextMsgId{};
     unsigned long _lastOutActivity{};
-    unsigned long lastInActivity{};
+    unsigned long _lastInActivity{};
     bool pingOutstanding{};
     MQTT_CALLBACK_SIGNATURE{};
     IPAddress ip{};
