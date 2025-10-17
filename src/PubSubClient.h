@@ -189,7 +189,7 @@ class PubSubClient : public Print {
     IPAddress _ip{};
     char* domain{};
     uint16_t _port{};
-    Stream* stream{};
+    Stream* _stream{};
     int _state{MQTT_DISCONNECTED};
 
     size_t readPacket(uint8_t* hdrLen);

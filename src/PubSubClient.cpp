@@ -339,9 +339,9 @@ size_t PubSubClient::readPacket(uint8_t* hdrLen) {
 
     for (size_t i = start; i < length; i++) {
         if (!readByte(&digit)) return 0;
-        if (this->stream) {
+        if (_stream) {
             if (isPublish && (idx - *hdrLen - 2 > skip)) {
-                this->stream->write(digit);
+                _stream->write(digit);
             }
         }
 
@@ -351,7 +351,7 @@ size_t PubSubClient::readPacket(uint8_t* hdrLen) {
         idx++;
     }
 
-    if (!this->stream && (idx > _bufferSize)) {
+    if (!_stream && (idx > _bufferSize)) {
         DEBUG_PSC_PRINTF("readPacket ignoring packet of size %zu exceeding buffer of size %zu\n", length, _bufferSize);
         len = 0;  // This will cause the packet to be ignored.
     }
@@ -858,12 +858,12 @@ PubSubClient& PubSubClient::setCallback(MQTT_CALLBACK_SIGNATURE) {
 }
 
 PubSubClient& PubSubClient::setClient(Client& client) {
-    this->_client = &client;
+    _client = &client;
     return *this;
 }
 
 PubSubClient& PubSubClient::setStream(Stream& stream) {
-    this->stream = &stream;
+    _stream = &stream;
     return *this;
 }
 
@@ -901,5 +901,5 @@ PubSubClient& PubSubClient::setSocketTimeout(uint16_t timeout) {
 }
 
 int PubSubClient::state() {
-    return this->_state;
+    return _state;
 }
