@@ -143,7 +143,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
         }
 
         if (result == 1) {
-            nextMsgId = 1;  // init msgId (packet identifier)
+            _nextMsgId = 1;  // init msgId (packet identifier)
 
 #if MQTT_VERSION == MQTT_VERSION_3_1
             const uint8_t protocol[9] = {0x00, 0x06, 'M', 'Q', 'I', 's', 'd', 'p', MQTT_VERSION};
@@ -198,7 +198,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
             while (!_client->available()) {
                 yield();
                 unsigned long t = millis();
-                if (t - lastInActivity >= this->socketTimeoutMillis) {
+                if (t - lastInActivity >= _socketTimeoutMillis) {
                     DEBUG_PSC_PRINTF("connect aborting due to timeout\n");
                     _state = MQTT_CONNECTION_TIMEOUT;
                     _client->stop();
@@ -264,7 +264,7 @@ bool PubSubClient::readByte(uint8_t* result) {
     while (!_client->available()) {
         yield();
         unsigned long currentMillis = millis();
-        if (currentMillis - previousMillis >= this->socketTimeoutMillis) {
+        if (currentMillis - previousMillis >= _socketTimeoutMillis) {
             return false;
         }
     }
@@ -743,9 +743,9 @@ size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, s
  */
 size_t PubSubClient::writeNextMsgId(uint8_t* buf, size_t pos, size_t size) {
     if ((pos + 2) <= size) {
-        nextMsgId = (++nextMsgId == 0) ? 1 : nextMsgId;  // increment msgId (must not be 0, so start at 1)
-        buf[pos++] = (uint8_t)(nextMsgId >> 8);
-        buf[pos++] = (uint8_t)(nextMsgId & 0xFF);
+        _nextMsgId = (++_nextMsgId == 0) ? 1 : _nextMsgId;  // increment msgId (must not be 0, so start at 1)
+        buf[pos++] = (uint8_t)(_nextMsgId >> 8);
+        buf[pos++] = (uint8_t)(_nextMsgId & 0xFF);
     } else {
         ERROR_PSC_PRINTF_P("writeNextMsgId(): buffer (%zu) does not fit into buf (%zu)\n", pos + 2, size);
     }
@@ -896,7 +896,7 @@ PubSubClient& PubSubClient::setKeepAlive(uint16_t keepAlive) {
 }
 
 PubSubClient& PubSubClient::setSocketTimeout(uint16_t timeout) {
-    this->socketTimeoutMillis = timeout * 1000UL;
+    _socketTimeoutMillis = timeout * 1000UL;
     return *this;
 }
 

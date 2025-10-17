@@ -180,8 +180,8 @@ class PubSubClient : public Print {
     size_t _bufferSize{};
     size_t _bufferWritePos{};
     unsigned long _keepAliveMillis{};
-    unsigned long socketTimeoutMillis{};
-    uint16_t nextMsgId{};
+    unsigned long _socketTimeoutMillis{};
+    uint16_t _nextMsgId{};
     unsigned long lastOutActivity{};
     unsigned long lastInActivity{};
     bool pingOutstanding{};
