@@ -134,11 +134,11 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
 
         if (_client->connected()) {
             result = 1;
-        } else if (this->port != 0) {
+        } else if (_port != 0) {
             if (this->domain) {
-                result = _client->connect(this->domain, this->port);
+                result = _client->connect(this->domain, _port);
             } else {
-                result = _client->connect(this->ip, this->port);
+                result = _client->connect(_ip, _port);
             }
         }
 
@@ -828,8 +828,8 @@ PubSubClient& PubSubClient::setServer(uint8_t* ip, uint16_t port) {
 }
 
 PubSubClient& PubSubClient::setServer(IPAddress ip, uint16_t port) {
-    this->ip = ip;
-    this->port = port;
+    _ip = ip;
+    _port = port;
     free(this->domain);
     this->domain = nullptr;
     return *this;
@@ -843,11 +843,11 @@ PubSubClient& PubSubClient::setServer(const char* domain, uint16_t port) {
     if (newDomain) {
         strcpy(newDomain, domain);
         this->domain = newDomain;
-        this->port = port;
+        _port = port;
     } else {
         free(this->domain);
         this->domain = nullptr;
-        this->port = 0;
+        _port = 0;
     }
     return *this;
 }
