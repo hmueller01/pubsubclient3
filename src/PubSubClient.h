@@ -184,7 +184,7 @@ class PubSubClient : public Print {
     uint16_t _nextMsgId{};
     unsigned long _lastOutActivity{};
     unsigned long _lastInActivity{};
-    bool pingOutstanding{};
+    bool _pingOutstanding{};
     MQTT_CALLBACK_SIGNATURE{};
     IPAddress ip{};
     char* domain{};

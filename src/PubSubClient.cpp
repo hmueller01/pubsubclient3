@@ -193,7 +193,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
             write(MQTTCONNECT, _buffer, length - MQTT_MAX_HEADER_SIZE);
 
             _lastInActivity = _lastOutActivity = millis();
-            pingOutstanding = false;
+            _pingOutstanding = false;
 
             while (!_client->available()) {
                 yield();
@@ -236,7 +236,7 @@ bool PubSubClient::connected() {
         DEBUG_PSC_PRINTF("lost connection (client may have more details)\n");
         _state = MQTT_CONNECTION_LOST;
         _client->stop();
-        pingOutstanding = false;
+        _pingOutstanding = false;
     }
     return false;
 }
@@ -250,7 +250,7 @@ void PubSubClient::disconnect() {
     _client->flush();
     _client->stop();
     _lastInActivity = _lastOutActivity = millis();
-    pingOutstanding = false;
+    _pingOutstanding = false;
 }
 
 /**
@@ -453,7 +453,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
             }
             break;
         case MQTTPINGRESP:
-            pingOutstanding = false;
+            _pingOutstanding = false;
             break;
         default:
             break;
@@ -468,18 +468,18 @@ bool PubSubClient::loop() {
     bool ret = true;
     const unsigned long t = millis();
     if (_keepAliveMillis && ((t - _lastInActivity > _keepAliveMillis) || (t - _lastOutActivity > _keepAliveMillis))) {
-        if (pingOutstanding) {
+        if (_pingOutstanding) {
             DEBUG_PSC_PRINTF("loop aborting due to timeout\n");
             _state = MQTT_CONNECTION_TIMEOUT;
             _client->stop();
-            pingOutstanding = false;
+            _pingOutstanding = false;
             return false;
         } else if (_bufferWritePos > 0) {
             // There is still data in the _buffer to be sent, so send it now instead of a ping
             if (flushBuffer() == 0) {
                 _state = MQTT_CONNECTION_TIMEOUT;
                 _client->stop();
-                pingOutstanding = false;
+                _pingOutstanding = false;
                 return false;
             }
         } else {
@@ -487,7 +487,7 @@ bool PubSubClient::loop() {
             _buffer[1] = 0;
             if (_client->write(_buffer, 2) == 2) {
                 _lastInActivity = _lastOutActivity = t;
-                pingOutstanding = true;
+                _pingOutstanding = true;
             }
         }
     }
