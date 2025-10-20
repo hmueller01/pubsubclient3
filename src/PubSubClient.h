@@ -589,7 +589,7 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    bool publish_P(const char* topic, const prog_uint8_t* payload, size_t plength, bool retained);
+    bool publish_P(const char* topic, const uint8_t* payload, size_t plength, bool retained);
 
     /**
      * @brief Publishes a message stored in PROGMEM to the specified topic.
@@ -601,7 +601,7 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    bool publish_P(const char* topic, const prog_uint8_t* payload, size_t plength, uint8_t qos, bool retained);
+    bool publish_P(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained);
 
     /**
      * @brief Start to publish a message using QoS 0.

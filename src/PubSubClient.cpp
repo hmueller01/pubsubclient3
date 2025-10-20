@@ -542,14 +542,14 @@ bool PubSubClient::publish_P(const char* topic, PGM_P payload, bool retained) {
 }
 
 bool PubSubClient::publish_P(const char* topic, PGM_P payload, uint8_t qos, bool retained) {
-    return publish_P(topic, (const prog_uint8_t*)payload, payload ? strnlen_P(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
+    return publish_P(topic, (const uint8_t*)payload, payload ? strnlen_P(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
 }
 
-bool PubSubClient::publish_P(const char* topic, const prog_uint8_t* payload, size_t plength, bool retained) {
+bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t plength, bool retained) {
     return publish_P(topic, payload, plength, MQTT_QOS0, retained);
 }
 
-bool PubSubClient::publish_P(const char* topic, const prog_uint8_t* payload, size_t plength, uint8_t qos, bool retained) {
+bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained) {
     if (beginPublish(topic, plength, qos, retained)) {
         size_t rc = write_P(payload, plength);
         return endPublish() && (rc == plength);
