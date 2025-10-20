@@ -178,6 +178,7 @@ class PubSubClient : public Print {
     Client* _client{};
     uint8_t* buffer{};
     size_t bufferSize{};
+    size_t _bufferWritePos{};
     unsigned long keepAliveMillis{};
     unsigned long socketTimeoutMillis{};
     uint16_t nextMsgId{};
@@ -190,7 +191,6 @@ class PubSubClient : public Print {
     uint16_t port{};
     Stream* stream{};
     int _state{MQTT_DISCONNECTED};
-    uint8_t _qos{MQTT_QOS0};
 
     size_t readPacket(uint8_t* hdrLen);
     bool handlePacket(uint8_t hdrLen, size_t len);
@@ -198,10 +198,15 @@ class PubSubClient : public Print {
     bool readByte(uint8_t* result, size_t* pos);
     uint8_t buildHeader(uint8_t header, uint8_t* buf, size_t length);
     bool write(uint8_t header, uint8_t* buf, size_t length);
+    size_t writeBuffer(size_t pos, size_t size);
     size_t writeString(const char* string, uint8_t* buf, size_t pos, size_t size);
     size_t writeString(const __FlashStringHelper* fstring, uint8_t* buf, size_t pos, size_t size);
     size_t writeString_P(PGM_P string, uint8_t* buf, size_t pos, size_t size);
     size_t writeNextMsgId(uint8_t* buf, size_t pos, size_t size);
+
+    // Add to buffer and flush if full (only to be used with beginPublish/endPublish)
+    size_t appendBuffer(uint8_t data);
+    size_t flushBuffer();
 
    public:
     /**
@@ -640,18 +645,32 @@ class PubSubClient : public Print {
 
     /**
      * @brief Writes a single byte as a component of a publish started with a call to beginPublish.
+     *        For performance reasons, this will be appended to the internal buffer,
+     *        which will be flushed when full or on a call to endPublish().
      * @param data A byte to write to the publish payload.
-     * @return The number of bytes written.
+     * @return The number of bytes written (0 or 1). If 0 is returned a write error occurred.
      */
     virtual size_t write(uint8_t data);
 
     /**
      * @brief Writes an array of bytes as a component of a publish started with a call to beginPublish.
-     * @param buffer The bytes to write.
+     *        For performance reasons, this will be appended to the internal buffer,
+     *        which will be flushed when full or on a call to endPublish().
+     * @param buf The bytes to write.
      * @param size The length of the payload to be sent.
-     * @return The number of bytes written.
+     * @return The number of bytes written. If return value is != size a write error occurred.
      */
-    virtual size_t write(const uint8_t* buffer, size_t size);
+    virtual size_t write(const uint8_t* buf, size_t size);
+
+    /**
+     * @brief Writes an array of progmem bytes as a component of a publish started with a call to beginPublish.
+     *        For performance reasons, this will be appended to the internal buffer,
+     *        which will be flushed when full or on a call to endPublish().
+     * @param buf The bytes to write.
+     * @param size The length of the payload to be sent.
+     * @return The number of bytes written. If return value is != size a write error occurred.
+     */
+    size_t write_P(const uint8_t* buf, size_t size);
 
     /**
      * @brief Subscribes to messages published to the specified topic using QoS 0.

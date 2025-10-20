@@ -1,3 +1,6 @@
+3.2.1
+   * Fixed bug introduced with QoS > 0 support #65
+
 3.2.0
    * Support publish at QoS 1 and 2 by @hmueller01 #49
    * Add check for nullptr in CHECK_STRING_LENGTH by @TD-er #48
