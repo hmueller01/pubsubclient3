@@ -129,6 +129,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
 
 bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
                            const char* willMessage, bool cleanSession) {
+    if (!_client) return false;  // do not crash if client not set
     if (!connected()) {
         int result = 0;
 
@@ -243,13 +244,15 @@ bool PubSubClient::connected() {
 
 void PubSubClient::disconnect() {
     DEBUG_PSC_PRINTF("disconnect called\n");
-    _buffer[0] = MQTTDISCONNECT;
-    _buffer[1] = 0;
-    _client->write(_buffer, 2);
     _state = MQTT_DISCONNECTED;
-    _client->flush();
-    _client->stop();
-    _lastInActivity = _lastOutActivity = millis();
+    if (_client) {
+        _buffer[0] = MQTTDISCONNECT;
+        _buffer[1] = 0;
+        _client->write(_buffer, 2);
+        _client->flush();
+        _client->stop();
+        _lastInActivity = _lastOutActivity = millis();
+    }
     _pingOutstanding = false;
 }
 
