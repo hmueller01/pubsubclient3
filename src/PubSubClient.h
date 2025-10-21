@@ -196,11 +196,11 @@ class PubSubClient : public Print {
     bool handlePacket(uint8_t hdrLen, size_t len);
     bool readByte(uint8_t* result);
     bool readByte(uint8_t* result, size_t* pos);
-    uint8_t buildHeader(uint8_t header, uint8_t* buf, size_t length);
-    bool write(uint8_t header, uint8_t* buf, size_t length);
+    uint8_t buildHeader(uint8_t header, size_t length);
+    bool writeControlPacket(uint8_t header, size_t length);
     size_t writeBuffer(size_t pos, size_t size);
-    size_t writeString(const char* string, uint8_t* buf, size_t pos, size_t size);
-    size_t writeNextMsgId(uint8_t* buf, size_t pos, size_t size);
+    size_t writeString(const char* string, size_t pos);
+    size_t writeNextMsgId(size_t pos);
 
     // Add to buffer and flush if full (only to be used with beginPublish/endPublish)
     size_t appendBuffer(uint8_t data);
