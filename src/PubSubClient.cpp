@@ -229,7 +229,10 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
 }
 
 bool PubSubClient::connected() {
-    if (!_client) return false;
+    if (!_client) {
+        _state = MQTT_DISCONNECTED;
+        return false;
+    }
 
     if (_client->connected()) {
         return (_state == MQTT_CONNECTED);
