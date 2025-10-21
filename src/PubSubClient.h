@@ -176,20 +176,20 @@
 class PubSubClient : public Print {
    private:
     Client* _client{};
-    uint8_t* buffer{};
-    size_t bufferSize{};
+    uint8_t* _buffer{};
+    size_t _bufferSize{};
     size_t _bufferWritePos{};
-    unsigned long keepAliveMillis{};
-    unsigned long socketTimeoutMillis{};
-    uint16_t nextMsgId{};
-    unsigned long lastOutActivity{};
-    unsigned long lastInActivity{};
-    bool pingOutstanding{};
+    unsigned long _keepAliveMillis{};
+    unsigned long _socketTimeoutMillis{};
+    uint16_t _nextMsgId{};
+    unsigned long _lastOutActivity{};
+    unsigned long _lastInActivity{};
+    bool _pingOutstanding{};
     MQTT_CALLBACK_SIGNATURE{};
-    IPAddress ip{};
-    char* domain{};
-    uint16_t port{};
-    Stream* stream{};
+    IPAddress _ip{};
+    char* _domain{};
+    uint16_t _port{};
+    Stream* _stream{};
     int _state{MQTT_DISCONNECTED};
 
     size_t readPacket(uint8_t* hdrLen);
