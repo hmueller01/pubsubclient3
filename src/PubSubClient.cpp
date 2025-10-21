@@ -173,25 +173,28 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
             _buffer[length++] = keepAlive & 0xFF;
 
             CHECK_STRING_LENGTH(length, id)
-            length = writeString(id, _buffer, length, _bufferSize);
+            length = writeString(id, length);
             if (willTopic) {
                 CHECK_STRING_LENGTH(length, willTopic)
-                length = writeString(willTopic, _buffer, length, _bufferSize);
+                length = writeString(willTopic, length);
                 CHECK_STRING_LENGTH(length, willMessage)
-                length = writeString(willMessage, _buffer, length, _bufferSize);
+                length = writeString(willMessage, length);
             }
 
             if (user) {
                 CHECK_STRING_LENGTH(length, user)
-                length = writeString(user, _buffer, length, _bufferSize);
+                length = writeString(user, length);
                 if (pass) {
                     CHECK_STRING_LENGTH(length, pass)
-                    length = writeString(pass, _buffer, length, _bufferSize);
+                    length = writeString(pass, length);
                 }
             }
 
-            write(MQTTCONNECT, _buffer, length - MQTT_MAX_HEADER_SIZE);
-
+            if (!writeControlPacket(MQTTCONNECT, length - MQTT_MAX_HEADER_SIZE)) {
+                _state = MQTT_CONNECT_FAILED;
+                _client->stop();
+                return false;
+            }
             _lastInActivity = _lastOutActivity = millis();
             _pingOutstanding = false;
 
@@ -572,14 +575,14 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, 
     // check if the header, the topic (including 2 length bytes) and nextMsgId fit into the _buffer
     if (connected() && (MQTT_MAX_HEADER_SIZE + strlen(topic) + 2 + nextMsgLen <= _bufferSize)) {
         // first write the topic at the end of the maximal variable header (MQTT_MAX_HEADER_SIZE) to the _buffer
-        size_t topicLen = writeString(topic, _buffer, MQTT_MAX_HEADER_SIZE, _bufferSize) - MQTT_MAX_HEADER_SIZE;
+        size_t topicLen = writeString(topic, MQTT_MAX_HEADER_SIZE) - MQTT_MAX_HEADER_SIZE;
         if (qos > MQTT_QOS0) {
             // if QoS 1 or 2, we need to send the nextMsgId (packet identifier) after topic
-            writeNextMsgId(_buffer, MQTT_MAX_HEADER_SIZE + topicLen, _bufferSize);
+            writeNextMsgId(MQTT_MAX_HEADER_SIZE + topicLen);
         }
         // we now know the length of the topic string (lenght + 2 bytes signalling the length) and can build the variable header information
         const uint8_t header = MQTTPUBLISH | MQTT_QOS_GET_HDR(qos) | (retained ? MQTTRETAINED : 0);
-        uint8_t hdrLen = buildHeader(header, _buffer, topicLen + nextMsgLen + plength);
+        uint8_t hdrLen = buildHeader(header, topicLen + nextMsgLen + plength);
         if (hdrLen == 0) return false;  // exit here in case of header generation failure
         // as the header length is variable, it starts at MQTT_MAX_HEADER_SIZE - hdrLen (see buildHeader() documentation)
         size_t rc = _client->write(_buffer + (MQTT_MAX_HEADER_SIZE - hdrLen), hdrLen + topicLen + nextMsgLen);
@@ -606,11 +609,10 @@ bool PubSubClient::endPublish() {
  * (MQTT_MAX_HEADER_SIZE - <returned size>) bytes into the _buffer.
  *
  * @param  header Header byte, e.g. MQTTCONNECT, MQTTPUBLISH, MQTTSUBSCRIBE, MQTTUNSUBSCRIBE.
- * @param  buf Buffer to write header to.
  * @param  length Length to encode in the header.
  * @return Returns the size of the header (1 .. MQTT_MAX_HEADER_SIZE), or 0 in case of a failure (e.g. length to big).
  */
-uint8_t PubSubClient::buildHeader(uint8_t header, uint8_t* buf, size_t length) {
+uint8_t PubSubClient::buildHeader(uint8_t header, size_t length) {
     uint8_t hdrBuf[MQTT_MAX_HEADER_SIZE - 1];
     uint8_t hdrLen = 0;
     uint8_t digit;
@@ -629,8 +631,8 @@ uint8_t PubSubClient::buildHeader(uint8_t header, uint8_t* buf, size_t length) {
         return 0;
     }
 
-    buf[MQTT_MAX_HEADER_SIZE - 1 - hdrLen] = header;
-    memcpy(buf + MQTT_MAX_HEADER_SIZE - hdrLen, hdrBuf, hdrLen);
+    _buffer[MQTT_MAX_HEADER_SIZE - 1 - hdrLen] = header;
+    memcpy(_buffer + MQTT_MAX_HEADER_SIZE - hdrLen, hdrBuf, hdrLen);
     return hdrLen + 1;  // Full header size is variable length bit plus the 1-byte fixed header
 }
 
@@ -653,15 +655,14 @@ size_t PubSubClient::write_P(const uint8_t* buf, size_t size) {
 }
 
 /**
- * @brief  Send the header and the prepared data to the client / MQTT broker.
+ * @brief  Write a MQTT Control Packet (header and the prepared data) to the client / MQTT broker.
  *
  * @param  header Header byte, e.g. MQTTCONNECT, MQTTPUBLISH, MQTTSUBSCRIBE, MQTTUNSUBSCRIBE.
- * @param  buf Buffer of data to write.
- * @param  length Length of buf to write.
+ * @param  length Length of _buffer to write.
  * @return True if successfully sent, otherwise false if buildHeader() failed or buf could not be written.
  */
-bool PubSubClient::write(uint8_t header, uint8_t* buf, size_t length) {
-    uint8_t hdrLen = buildHeader(header, buf, length);
+bool PubSubClient::writeControlPacket(uint8_t header, size_t length) {
+    uint8_t hdrLen = buildHeader(header, length);
     if (hdrLen == 0) return false;  // exit here in case of header generation failure
 
     return writeBuffer(MQTT_MAX_HEADER_SIZE - hdrLen, hdrLen + length);
@@ -706,48 +707,44 @@ size_t PubSubClient::writeBuffer(size_t pos, size_t size) {
 }
 
 /**
- * @brief  Write an UTF-8 encoded string to the give buffer and position. The string can have a length of 0 to 65535 bytes. The buffer is prefixed with
- * two bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol specification.
+ * @brief  Write an UTF-8 encoded string to the internal buffer at a given position. The string can have a length of 0 to 65535 bytes (depending on size of
+ * internal buffer). The buffer is prefixed with two bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol specification.
  * @note   If the string does not fit in the buffer or is longer than 65535 bytes nothing is written to the buffer and the returned position is
  * unchanged.
  *
  * @param  string 'C' string of the data that shall be written in the buffer.
- * @param  buf Buffer to write the string into.
- * @param  pos Position in the buffer buf to write the string.
- * @param  size Maximal size of the buffer buf.
- * @return New position in the buffer buf (pos + 2 + string length), or pos if a buffer overrun would occur or the string is a nullptr.
+ * @param  pos Position in the internal buffer to write the string.
+ * @return New position in the internal buffer (pos + 2 + string length), or pos if a buffer overrun would occur or the string is a nullptr.
  */
-size_t PubSubClient::writeString(const char* string, uint8_t* buf, size_t pos, size_t size) {
+size_t PubSubClient::writeString(const char* string, size_t pos) {
     if (!string) return pos;
 
     size_t sLen = strlen(string);
-    if ((pos + 2 + sLen <= size) && (sLen <= 0xFFFF)) {
-        buf[pos++] = (uint8_t)(sLen >> 8);
-        buf[pos++] = (uint8_t)(sLen & 0xFF);
-        memcpy(buf + pos, string, sLen);
+    if ((pos + 2 + sLen <= _bufferSize) && (sLen <= 0xFFFF)) {
+        _buffer[pos++] = (uint8_t)(sLen >> 8);
+        _buffer[pos++] = (uint8_t)(sLen & 0xFF);
+        memcpy(_buffer + pos, string, sLen);
         pos += sLen;
     } else {
-        ERROR_PSC_PRINTF_P("writeString(): string (%zu) does not fit into buf (%zu)\n", pos + 2 + sLen, size);
+        ERROR_PSC_PRINTF_P("writeString(): string (%zu) does not fit into buf (%zu)\n", pos + 2 + sLen, _bufferSize);
     }
     return pos;
 }
 
 /**
- * @brief  Write nextMsgId to the give buffer and position.
+ * @brief  Write nextMsgId to the internal buffer at the given position.
  * @note   If the nextMsgId (2 bytes) does not fit in the buffer nothing is written to the buffer and the returned position is unchanged.
  *
- * @param  buf Buffer to write the nextMsgId into.
- * @param  pos Position in the buffer buf to write the nextMsgId.
- * @param  size Maximal size of the buffer buf.
- * @return New position in the buffer buf (pos + 2), or pos if a buffer overrun would occur.
+ * @param  pos Position in the internal buffer to write the nextMsgId.
+ * @return New position in the internal buffer (pos + 2), or pos if a buffer overrun would occur.
  */
-size_t PubSubClient::writeNextMsgId(uint8_t* buf, size_t pos, size_t size) {
-    if ((pos + 2) <= size) {
+size_t PubSubClient::writeNextMsgId(size_t pos) {
+    if ((pos + 2) <= _bufferSize) {
         _nextMsgId = (++_nextMsgId == 0) ? 1 : _nextMsgId;  // increment msgId (must not be 0, so start at 1)
-        buf[pos++] = (uint8_t)(_nextMsgId >> 8);
-        buf[pos++] = (uint8_t)(_nextMsgId & 0xFF);
+        _buffer[pos++] = (uint8_t)(_nextMsgId >> 8);
+        _buffer[pos++] = (uint8_t)(_nextMsgId & 0xFF);
     } else {
-        ERROR_PSC_PRINTF_P("writeNextMsgId(): buffer (%zu) does not fit into buf (%zu)\n", pos + 2, size);
+        ERROR_PSC_PRINTF_P("writeNextMsgId(): buffer overrun (%zu) \n", pos + 2);
     }
     return pos;
 }
@@ -797,10 +794,10 @@ bool PubSubClient::subscribe(const char* topic, uint8_t qos) {
     if (connected()) {
         // Leave room in the _buffer for header and variable length field
         uint16_t length = MQTT_MAX_HEADER_SIZE;
-        length = writeNextMsgId(_buffer, length, _bufferSize);  // _buffer size is checked before
-        length = writeString(topic, _buffer, length, _bufferSize);
+        length = writeNextMsgId(length);  // _buffer size is checked before
+        length = writeString(topic, length);
         _buffer[length++] = qos;
-        return write(MQTTSUBSCRIBE | MQTT_QOS_GET_HDR(MQTT_QOS1), _buffer, length - MQTT_MAX_HEADER_SIZE);
+        return writeControlPacket(MQTTSUBSCRIBE | MQTT_QOS_GET_HDR(MQTT_QOS1), length - MQTT_MAX_HEADER_SIZE);
     }
     return false;
 }
@@ -815,9 +812,9 @@ bool PubSubClient::unsubscribe(const char* topic) {
     }
     if (connected()) {
         uint16_t length = MQTT_MAX_HEADER_SIZE;
-        length = writeNextMsgId(_buffer, length, _bufferSize);  // _buffer size is checked before
-        length = writeString(topic, _buffer, length, _bufferSize);
-        return write(MQTTUNSUBSCRIBE | MQTT_QOS_GET_HDR(MQTT_QOS1), _buffer, length - MQTT_MAX_HEADER_SIZE);
+        length = writeNextMsgId(length);  // _buffer size is checked before
+        length = writeString(topic, length);
+        return writeControlPacket(MQTTUNSUBSCRIBE | MQTT_QOS_GET_HDR(MQTT_QOS1), length - MQTT_MAX_HEADER_SIZE);
     }
     return false;
 }
