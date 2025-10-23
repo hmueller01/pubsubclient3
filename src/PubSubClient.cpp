@@ -660,11 +660,12 @@ size_t PubSubClient::write_P(const uint8_t* buf, size_t size) {
 }
 
 /**
- * @brief  Write a MQTT Control Packet (header and the prepared data) to the client / MQTT broker.
+ * @brief  Write a MQTT Control Packet (header and the prepared data) to the client / MQTT broker. The prepared data of size length must already be in the
+ * internal _buffer starting at MQTT_MAX_HEADER_SIZE (space is needed for header generation).
  *
  * @param  header Header byte, e.g. MQTTCONNECT, MQTTPUBLISH, MQTTSUBSCRIBE, MQTTUNSUBSCRIBE.
  * @param  length Length of _buffer to write.
- * @return True if successfully sent, otherwise false if buildHeader() failed or buf could not be written.
+ * @return True if successfully sent, otherwise false if buildHeader() failed or buffer could not be written.
  */
 bool PubSubClient::writeControlPacket(uint8_t header, size_t length) {
     uint8_t hdrLen = buildHeader(header, length);
