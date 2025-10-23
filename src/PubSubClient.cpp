@@ -129,6 +129,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
 
 bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
                            const char* willMessage, bool cleanSession) {
+    if (!_client) return false;  // do not crash if client not set
     if (!connected()) {
         int result = 0;
 
@@ -246,13 +247,15 @@ bool PubSubClient::connected() {
 
 void PubSubClient::disconnect() {
     DEBUG_PSC_PRINTF("disconnect called\n");
-    _buffer[0] = MQTTDISCONNECT;
-    _buffer[1] = 0;
-    _client->write(_buffer, 2);
     _state = MQTT_DISCONNECTED;
-    _client->flush();
-    _client->stop();
-    _lastInActivity = _lastOutActivity = millis();
+    if (_client) {
+        _buffer[0] = MQTTDISCONNECT;
+        _buffer[1] = 0;
+        _client->write(_buffer, 2);
+        _client->flush();
+        _client->stop();
+        _lastInActivity = _lastOutActivity = millis();
+    }
     _pingOutstanding = false;
 }
 
@@ -260,9 +263,11 @@ void PubSubClient::disconnect() {
  * @brief  Reads a byte into result.
  *
  * @param  result Pointer to result buffer.
- * @return true if byte was read, false if socketTimeout occurred.
+ * @return true if byte was read, false if socketTimeout occurred or _client was not set.
  */
 bool PubSubClient::readByte(uint8_t* result) {
+    if (!_client) return false;  // do not crash if client not set
+
     unsigned long previousMillis = millis();
     while (!_client->available()) {
         yield();
@@ -298,7 +303,7 @@ bool PubSubClient::readByte(uint8_t* result, size_t* pos) {
  * @brief  Reads a complete packet (header, topic, payload) into _buffer.
  *
  * @param  *hdrLen Returns the variable header length send by MQTT broker (1 .. MQTT_MAX_HEADER_SIZE - 1)
- * @return Number of read bytes, 0 in case of an error (socketTimeout, buffer overflow)
+ * @return Number of read bytes, 0 in case of an error (socketTimeout, buffer overflow, _client not set).
  */
 size_t PubSubClient::readPacket(uint8_t* hdrLen) {
     size_t len = 0;
@@ -683,11 +688,12 @@ size_t PubSubClient::write_P(const uint8_t* buf, size_t size) {
 }
 
 /**
- * @brief  Write a MQTT Control Packet (header and the prepared data) to the client / MQTT broker.
+ * @brief  Write a MQTT Control Packet (header and the prepared data) to the client / MQTT broker. The prepared data of size length must already be in the
+ * internal _buffer starting at MQTT_MAX_HEADER_SIZE (space is needed for header generation).
  *
  * @param  header Header byte, e.g. MQTTCONNECT, MQTTPUBLISH, MQTTSUBSCRIBE, MQTTUNSUBSCRIBE.
  * @param  length Length of _buffer to write.
- * @return True if successfully sent, otherwise false if buildHeader() failed or buf could not be written.
+ * @return True if successfully sent, otherwise false if buildHeader() failed or buffer could not be written.
  */
 bool PubSubClient::writeControlPacket(uint8_t header, size_t length) {
     uint8_t hdrLen = buildHeader(header, length);
@@ -705,7 +711,7 @@ bool PubSubClient::writeControlPacket(uint8_t header, size_t length) {
  */
 size_t PubSubClient::writeBuffer(size_t pos, size_t size) {
     size_t rc = 0;
-    if ((size > 0) && (pos + size <= _bufferSize)) {
+    if (_client && (size > 0) && (pos + size <= _bufferSize)) {
 #ifdef MQTT_MAX_TRANSFER_SIZE
         uint8_t* writeBuf = _buffer + pos;
         size_t bytesRemaining = size;
