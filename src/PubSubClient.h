@@ -200,9 +200,11 @@ class PubSubClient : public Print {
     bool writeControlPacket(uint8_t header, size_t length);
     size_t writeBuffer(size_t pos, size_t size);
     size_t writeString(const char* string, size_t pos);
-    size_t writeString(const __FlashStringHelper* fstring, uint8_t* buf, size_t pos, size_t size);
-    size_t writeString_P(PGM_P string, uint8_t* buf, size_t pos, size_t size);
+    size_t writeString_P(PGM_P string, size_t pos);
     size_t writeNextMsgId(size_t pos);
+
+    template <bool PROGMEM_TOPIC, typename TopicT>
+    bool beginPublishImpl(TopicT topic, size_t plength, uint8_t qos, bool retained);
 
     // Add to buffer and flush if full (only to be used with beginPublish/endPublish)
     size_t appendBuffer(uint8_t data);
@@ -635,6 +637,25 @@ class PubSubClient : public Print {
      * false If the publish failed, either connection lost or message too large.
      */
     bool beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained);
+
+    bool beginPublish(const __FlashStringHelper* topic, size_t plength, uint8_t qos, bool retained);
+
+    /**
+     * @brief Start to publish a message using a topic in PROGMEM.
+     * This API:
+     *   beginPublish_P(...)
+     *   one or more calls to write(...)
+     *   endPublish()
+     * Allows for arbitrarily large payloads to be sent without them having to be copied into
+     * a new buffer and held in memory at one time.
+     * @param topic The topic in PROGMEM to publish to.
+     * @param plength The length of the payload.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool beginPublish_P(PGM_P topic, size_t plength, uint8_t qos, bool retained);
 
     /**
      * @brief Finish sending a message that was started with a call to beginPublish.

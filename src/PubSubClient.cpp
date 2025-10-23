@@ -564,23 +564,38 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained
     return beginPublish(topic, plength, MQTT_QOS0, retained);
 }
 
-bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained) {
+template <bool PROGMEM_TOPIC, typename TopicT>
+bool PubSubClient::beginPublishImpl(TopicT topic, size_t plength, uint8_t qos, bool retained) {
     if (!topic) return false;
-    if (strlen(topic) == 0) return false;  // empty topic is not allowed
-    if (qos > MQTT_QOS2) {                 // only valid QoS supported
+
+    // get topic length depending on storage (RAM vs PROGMEM)
+    size_t topicLen;
+    if (PROGMEM_TOPIC) {
+        topicLen = strlen_P(topic);
+    } else {
+        topicLen = strlen(topic);
+    }
+    if (topicLen == 0) return false;  // empty topic is not allowed
+
+    if (qos > MQTT_QOS2) {  // only valid QoS supported
         ERROR_PSC_PRINTF_P("beginPublish() called with invalid QoS %u\n", qos);
         return false;
     }
+
     const size_t nextMsgLen = (qos > MQTT_QOS0) ? 2 : 0;  // add 2 bytes for nextMsgId if QoS > 0
     // check if the header, the topic (including 2 length bytes) and nextMsgId fit into the _buffer
-    if (connected() && (MQTT_MAX_HEADER_SIZE + strlen(topic) + 2 + nextMsgLen <= _bufferSize)) {
+    if (connected() && (MQTT_MAX_HEADER_SIZE + topicLen + 2 + nextMsgLen <= _bufferSize)) {
         // first write the topic at the end of the maximal variable header (MQTT_MAX_HEADER_SIZE) to the _buffer
-        size_t topicLen = writeString(topic, MQTT_MAX_HEADER_SIZE) - MQTT_MAX_HEADER_SIZE;
+        if (PROGMEM_TOPIC) {
+            topicLen = writeString_P(topic, MQTT_MAX_HEADER_SIZE) - MQTT_MAX_HEADER_SIZE;
+        } else {
+            topicLen = writeString(topic, MQTT_MAX_HEADER_SIZE) - MQTT_MAX_HEADER_SIZE;
+        }
         if (qos > MQTT_QOS0) {
             // if QoS 1 or 2, we need to send the nextMsgId (packet identifier) after topic
             writeNextMsgId(MQTT_MAX_HEADER_SIZE + topicLen);
         }
-        // we now know the length of the topic string (lenght + 2 bytes signalling the length) and can build the variable header information
+        // we now know the length of the topic string (length + 2 bytes signalling the length) and can build the variable header information
         const uint8_t header = MQTTPUBLISH | MQTT_QOS_GET_HDR(qos) | (retained ? MQTTRETAINED : 0);
         uint8_t hdrLen = buildHeader(header, topicLen + nextMsgLen + plength);
         if (hdrLen == 0) return false;  // exit here in case of header generation failure
@@ -590,6 +605,19 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, 
         return (rc == (hdrLen + topicLen + nextMsgLen));
     }
     return false;
+}
+
+bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained) {
+    return beginPublishImpl<false, const char*>(topic, plength, qos, retained);
+}
+
+bool PubSubClient::beginPublish(const __FlashStringHelper* topic, size_t plength, uint8_t qos, bool retained) {
+    // convert FlashStringHelper in PROGMEM-pointer
+    return beginPublishImpl<true, PGM_P>(reinterpret_cast<const char*>(topic), plength, qos, retained);
+}
+
+bool PubSubClient::beginPublish_P(PGM_P topic, size_t plength, uint8_t qos, bool retained) {
+    return beginPublishImpl<true, PGM_P>(topic, plength, qos, retained);
 }
 
 bool PubSubClient::endPublish() {
@@ -731,24 +759,18 @@ size_t PubSubClient::writeString(const char* string, size_t pos) {
     return pos;
 }
 
-size_t PubSubClient::writeString(const __FlashStringHelper* fstring, uint8_t* buf, size_t pos, size_t size) {
-    // convert FlashStringHelper in PROGMEM-pointer
-    return writeString_P(reinterpret_cast<const char*>(fstring), buf, pos, size);
-}
-
-size_t PubSubClient::writeString_P(PGM_P string, uint8_t* buf, size_t pos, size_t size) {
+size_t PubSubClient::writeString_P(PGM_P string, size_t pos) {
     if (!string) return pos;
 
     size_t sLen = strlen_P(string);
-    if ((pos + 2 + sLen) <= size && sLen <= 0xFFFF) {
-        buf[pos++] = (uint8_t)(sLen >> 8);
-        buf[pos++] = (uint8_t)(sLen & 0xFF);
-        memcpy_P(buf + pos, string, sLen);
+    if ((pos + 2 + sLen) <= _bufferSize && sLen <= 0xFFFF) {
+        _buffer[pos++] = (uint8_t)(sLen >> 8);
+        _buffer[pos++] = (uint8_t)(sLen & 0xFF);
+        memcpy_P(_buffer + pos, string, sLen);
         pos += sLen;
     } else {
-        ERROR_PSC_PRINTF_P("writeString_P(): string (%zu) does not fit into buf (%zu)\n", pos + 2 + sLen, size);
+        ERROR_PSC_PRINTF_P("writeString_P(): string (%zu) does not fit into buf (%zu)\n", pos + 2 + sLen, _bufferSize);
     }
-
     return pos;
 }
 
