@@ -525,6 +525,10 @@ bool PubSubClient::publish(const char* topic, const char* payload, bool retained
     return publish(topic, payload, MQTT_QOS0, retained);
 }
 
+bool PubSubClient::publish(const __FlashStringHelper* topic, const char* payload, uint8_t qos, bool retained) {
+    return publish(topic, (const uint8_t*)payload, payload ? strnlen(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
+}
+
 bool PubSubClient::publish(const char* topic, const char* payload, uint8_t qos, bool retained) {
     return publish(topic, (const uint8_t*)payload, payload ? strnlen(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
 }
@@ -545,8 +549,20 @@ bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t ple
     return false;
 }
 
+bool PubSubClient::publish(const __FlashStringHelper* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained) {
+    if (beginPublish(topic, plength, qos, retained)) {
+        size_t rc = write(payload, plength);
+        return endPublish() && (rc == plength);
+    }
+    return false;
+}
+
 bool PubSubClient::publish_P(const char* topic, PGM_P payload, bool retained) {
     return publish_P(topic, payload, MQTT_QOS0, retained);
+}
+
+bool PubSubClient::publish_P(const __FlashStringHelper* topic, PGM_P payload, uint8_t qos, bool retained) {
+    return publish_P(topic, (const uint8_t*)payload, payload ? strnlen_P(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
 }
 
 bool PubSubClient::publish_P(const char* topic, PGM_P payload, uint8_t qos, bool retained) {
@@ -558,6 +574,14 @@ bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t p
 }
 
 bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained) {
+    if (beginPublish(topic, plength, qos, retained)) {
+        size_t rc = write_P(payload, plength);
+        return endPublish() && (rc == plength);
+    }
+    return false;
+}
+
+bool PubSubClient::publish_P(const __FlashStringHelper* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained) {
     if (beginPublish(topic, plength, qos, retained)) {
         size_t rc = write_P(payload, plength);
         return endPublish() && (rc == plength);
@@ -740,6 +764,31 @@ size_t PubSubClient::writeBuffer(size_t pos, size_t size) {
     return rc;
 }
 
+template <bool PROGMEM_STRING, typename StringT>
+bool PubSubClient::writeStringImpl(StringT string, size_t pos) {
+    if (!string) return pos;
+
+    size_t sLen;
+    if (PROGMEM_STRING) {
+        sLen = strlen_P(string);
+    } else {
+        sLen = strlen(string);
+    }
+    if ((pos + 2 + sLen <= _bufferSize) && (sLen <= 0xFFFF)) {
+        _buffer[pos++] = (uint8_t)(sLen >> 8);
+        _buffer[pos++] = (uint8_t)(sLen & 0xFF);
+        if (PROGMEM_STRING) {
+            memcpy_P(_buffer + pos, string, sLen);
+        } else {
+            memcpy(_buffer + pos, string, sLen);
+        }
+        pos += sLen;
+    } else {
+        ERROR_PSC_PRINTF_P("writeStringImpl(): string (%zu) does not fit into buf (%zu)\n", pos + 2 + sLen, _bufferSize);
+    }
+    return pos;
+}
+
 /**
  * @brief  Write an UTF-8 encoded string to the internal buffer at a given position. The string can have a length of 0 to 65535 bytes (depending on size of
  * internal buffer). The buffer is prefixed with two bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol specification.
@@ -751,33 +800,22 @@ size_t PubSubClient::writeBuffer(size_t pos, size_t size) {
  * @return New position in the internal buffer (pos + 2 + string length), or pos if a buffer overrun would occur or the string is a nullptr.
  */
 size_t PubSubClient::writeString(const char* string, size_t pos) {
-    if (!string) return pos;
-
-    size_t sLen = strlen(string);
-    if ((pos + 2 + sLen <= _bufferSize) && (sLen <= 0xFFFF)) {
-        _buffer[pos++] = (uint8_t)(sLen >> 8);
-        _buffer[pos++] = (uint8_t)(sLen & 0xFF);
-        memcpy(_buffer + pos, string, sLen);
-        pos += sLen;
-    } else {
-        ERROR_PSC_PRINTF_P("writeString(): string (%zu) does not fit into buf (%zu)\n", pos + 2 + sLen, _bufferSize);
-    }
-    return pos;
+    return writeStringImpl<false, const char*>(string, pos);
 }
 
+/**
+ * @brief  Write an UTF-8 encoded PROGMEM string to the internal buffer at a given position. The string can have a length of 0 to 65535 bytes (depending on
+ * size of internal buffer). The buffer is prefixed with two bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol
+ * specification.
+ * @note   If the string does not fit in the buffer or is longer than 65535 bytes nothing is written to the buffer and the returned position is
+ * unchanged.
+ *
+ * @param  string PROGMEM 'C' string of the data that shall be written in the buffer.
+ * @param  pos Position in the internal buffer to write the string.
+ * @return New position in the internal buffer (pos + 2 + string length), or pos if a buffer overrun would occur or the string is a nullptr.
+ */
 size_t PubSubClient::writeString_P(PGM_P string, size_t pos) {
-    if (!string) return pos;
-
-    size_t sLen = strlen_P(string);
-    if ((pos + 2 + sLen) <= _bufferSize && sLen <= 0xFFFF) {
-        _buffer[pos++] = (uint8_t)(sLen >> 8);
-        _buffer[pos++] = (uint8_t)(sLen & 0xFF);
-        memcpy_P(_buffer + pos, string, sLen);
-        pos += sLen;
-    } else {
-        ERROR_PSC_PRINTF_P("writeString_P(): string (%zu) does not fit into buf (%zu)\n", pos + 2 + sLen, _bufferSize);
-    }
-    return pos;
+    return writeStringImpl<true, PGM_P>(string, pos);
 }
 
 /**

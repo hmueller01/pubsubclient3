@@ -199,6 +199,8 @@ class PubSubClient : public Print {
     uint8_t buildHeader(uint8_t header, size_t length);
     bool writeControlPacket(uint8_t header, size_t length);
     size_t writeBuffer(size_t pos, size_t size);
+    template <bool PROGMEM_STRING, typename StringT>
+    bool writeStringImpl(StringT string, size_t pos);
     size_t writeString(const char* string, size_t pos);
     size_t writeString_P(PGM_P string, size_t pos);
     size_t writeNextMsgId(size_t pos);
@@ -529,6 +531,17 @@ class PubSubClient : public Print {
     bool publish(const char* topic, const char* payload, uint8_t qos, bool retained);
 
     /**
+     * @brief Publishes a message to the specified topic.
+     * @param topic The topic from __FlashStringHelper to publish to.
+     * @param payload The message to publish.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool publish(const __FlashStringHelper* topic, const char* payload, uint8_t qos, bool retained);
+
+    /**
      * @brief Publishes a non retained message to the specified topic using QoS 0.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
@@ -562,6 +575,18 @@ class PubSubClient : public Print {
     bool publish(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained);
 
     /**
+     * @brief Publishes a message to the specified topic.
+     * @param topic The topic from __FlashStringHelper to publish to.
+     * @param payload The message to publish.
+     * @param plength The length of the payload.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool publish(const __FlashStringHelper* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained);
+
+    /**
      * @brief Publishes a message stored in PROGMEM to the specified topic using QoS 0.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
@@ -581,6 +606,17 @@ class PubSubClient : public Print {
      * false If the publish failed, either connection lost or message too large.
      */
     bool publish_P(const char* topic, PGM_P payload, uint8_t qos, bool retained);
+
+    /**
+     * @brief Publishes a message stored in PROGMEM to the specified topic.
+     * @param topic The topic from __FlashStringHelper to publish to.
+     * @param payload The message to publish.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool publish_P(const __FlashStringHelper* topic, PGM_P payload, uint8_t qos, bool retained);
 
     /**
      * @brief Publishes a message stored in PROGMEM to the specified topic using QoS 0.
@@ -604,6 +640,18 @@ class PubSubClient : public Print {
      * false If the publish failed, either connection lost or message too large.
      */
     bool publish_P(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained);
+
+    /**
+     * @brief Publishes a message stored in PROGMEM to the specified topic.
+     * @param topic The topic from __FlashStringHelper to publish to.
+     * @param payload The message from PROGMEM to publish.
+     * @param plength The length of the payload.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool publish_P(const __FlashStringHelper* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained);
 
     /**
      * @brief Start to publish a message using QoS 0.
@@ -638,6 +686,21 @@ class PubSubClient : public Print {
      */
     bool beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained);
 
+    /**
+     * @brief Start to publish a message using a topic from __FlashStringHelper F().
+     * This API:
+     *   beginPublish(...)
+     *   one or more calls to write(...)
+     *   endPublish()
+     * Allows for arbitrarily large payloads to be sent without them having to be copied into
+     * a new buffer and held in memory at one time.
+     * @param topic The topic from __FlashStringHelper to publish to.
+     * @param plength The length of the payload.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
     bool beginPublish(const __FlashStringHelper* topic, size_t plength, uint8_t qos, bool retained);
 
     /**
