@@ -598,12 +598,7 @@ bool PubSubClient::beginPublishImpl(TopicT topic, size_t plength, uint8_t qos, b
     if (!topic) return false;
 
     // get topic length depending on storage (RAM vs PROGMEM)
-    size_t topicLen;
-    if (PROGMEM_TOPIC) {
-        topicLen = strlen_P(topic);
-    } else {
-        topicLen = strlen(topic);
-    }
+    size_t topicLen = PROGMEM_TOPIC ? strlen_P(topic) : strlen(topic);
     if (topicLen == 0) return false;  // empty topic is not allowed
 
     if (qos > MQTT_QOS2) {  // only valid QoS supported
@@ -768,12 +763,7 @@ template <bool PROGMEM_STRING, typename StringT>
 size_t PubSubClient::writeStringImpl(StringT string, size_t pos) {
     if (!string) return pos;
 
-    size_t sLen;
-    if (PROGMEM_STRING) {
-        sLen = strlen_P(string);
-    } else {
-        sLen = strlen(string);
-    }
+    size_t sLen = PROGMEM_STRING ? strlen_P(string) : strlen(string);
     if ((pos + 2 + sLen <= _bufferSize) && (sLen <= 0xFFFF)) {
         _buffer[pos++] = (uint8_t)(sLen >> 8);
         _buffer[pos++] = (uint8_t)(sLen & 0xFF);
