@@ -200,7 +200,7 @@ class PubSubClient : public Print {
     bool writeControlPacket(uint8_t header, size_t length);
     size_t writeBuffer(size_t pos, size_t size);
     template <bool PROGMEM_STRING, typename StringT>
-    bool writeStringImpl(StringT string, size_t pos);
+    size_t writeStringImpl(StringT string, size_t pos);
     size_t writeString(const char* string, size_t pos);
     size_t writeString_P(PGM_P string, size_t pos);
     size_t writeNextMsgId(size_t pos);

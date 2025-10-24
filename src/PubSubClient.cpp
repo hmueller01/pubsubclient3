@@ -684,7 +684,7 @@ uint8_t PubSubClient::buildHeader(uint8_t header, size_t length) {
     } while ((len > 0) && (hdrLen < MQTT_MAX_HEADER_SIZE - 1));
 
     if (len > 0) {
-        ERROR_PSC_PRINTF_P("buildHeader() length too big %zu, left %zu\n", length, len);
+        ERROR_PSC_PRINTF_P("buildHeader: header=0x%02X, length too big %zu, left %zu\n", header, length, len);
         return 0;
     }
 
@@ -717,7 +717,7 @@ size_t PubSubClient::write_P(const uint8_t* buf, size_t size) {
  *
  * @param  header Header byte, e.g. MQTTCONNECT, MQTTPUBLISH, MQTTSUBSCRIBE, MQTTUNSUBSCRIBE.
  * @param  length Length of _buffer to write.
- * @return True if successfully sent, otherwise false if buildHeader() failed or buffer could not be written.
+ * @return True if successfully sent, otherwise false if build header failed or buffer could not be written.
  */
 bool PubSubClient::writeControlPacket(uint8_t header, size_t length) {
     uint8_t hdrLen = buildHeader(header, length);
@@ -765,7 +765,7 @@ size_t PubSubClient::writeBuffer(size_t pos, size_t size) {
 }
 
 template <bool PROGMEM_STRING, typename StringT>
-bool PubSubClient::writeStringImpl(StringT string, size_t pos) {
+size_t PubSubClient::writeStringImpl(StringT string, size_t pos) {
     if (!string) return pos;
 
     size_t sLen;
