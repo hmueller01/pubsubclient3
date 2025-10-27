@@ -29,7 +29,7 @@ Full API documentation is available here: https://hmueller01.github.io/pubsubcli
 ## Limitations
 
  - The client is based on the [MQTT Version 3.1.1 specification](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html) with some limitations.
- - It can publish at QoS 0, 1 or 2.
+ - It can publish at QoS 0 and since [v3.2.0](https://github.com/hmueller01/pubsubclient3/releases/tag/v3.2.0) also at QoS 1 or 2.
 
    **WARNING:** No retransmission is supported to keep the library as much memory friendly as possible.
 
