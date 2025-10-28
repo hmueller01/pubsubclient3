@@ -34,7 +34,7 @@
  * @brief Maximum packet size defined by MQTT protocol.
  */
 #ifndef MQTT_MAX_POSSIBLE_PACKET_SIZE
-#define MQTT_MAX_POSSIBLE_PACKET_SIZE 268435455
+#define MQTT_MAX_POSSIBLE_PACKET_SIZE ((size_t)268435455)  // might be limited to 65535 if size_t is 16-bit (unsigned int)
 #endif
 
 /**
