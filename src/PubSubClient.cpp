@@ -593,12 +593,22 @@ bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained
     return beginPublish(topic, plength, MQTT_QOS0, retained);
 }
 
-template <bool PROGMEM_TOPIC, typename TopicT>
-bool PubSubClient::beginPublishImpl(TopicT topic, size_t plength, uint8_t qos, bool retained) {
+/**
+ * @brief Internal beginPublish implementation using topic stored in RAM or PROGMEM.
+ *
+ * @param progmem true if the topic is stored in PROGMEM/Flash, false if in RAM.
+ * @param topic The topic to publish to.
+ * @param plength The length of the payload.
+ * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+ * @param retained Publish the message with the retain flag.
+ * @return true If the publish succeeded.
+ * false If the publish failed, either connection lost or message too large.
+ */
+bool PubSubClient::beginPublishImpl(bool progmem, const char* topic, size_t plength, uint8_t qos, bool retained) {
     if (!topic) return false;
 
     // get topic length depending on storage (RAM vs PROGMEM)
-    size_t topicLen = PROGMEM_TOPIC ? strlen_P(topic) : strlen(topic);
+    size_t topicLen = progmem ? strlen_P(topic) : strlen(topic);
     if (topicLen == 0) return false;  // empty topic is not allowed
 
     if (qos > MQTT_QOS2) {  // only valid QoS supported
@@ -610,11 +620,7 @@ bool PubSubClient::beginPublishImpl(TopicT topic, size_t plength, uint8_t qos, b
     // check if the header, the topic (including 2 length bytes) and nextMsgId fit into the _buffer
     if (connected() && (MQTT_MAX_HEADER_SIZE + topicLen + 2 + nextMsgLen <= _bufferSize)) {
         // first write the topic at the end of the maximal variable header (MQTT_MAX_HEADER_SIZE) to the _buffer
-        if (PROGMEM_TOPIC) {
-            topicLen = writeString_P(topic, MQTT_MAX_HEADER_SIZE) - MQTT_MAX_HEADER_SIZE;
-        } else {
-            topicLen = writeString(topic, MQTT_MAX_HEADER_SIZE) - MQTT_MAX_HEADER_SIZE;
-        }
+        topicLen = writeStringImpl(progmem, topic, MQTT_MAX_HEADER_SIZE) - MQTT_MAX_HEADER_SIZE;
         if (qos > MQTT_QOS0) {
             // if QoS 1 or 2, we need to send the nextMsgId (packet identifier) after topic
             writeNextMsgId(MQTT_MAX_HEADER_SIZE + topicLen);
@@ -632,16 +638,16 @@ bool PubSubClient::beginPublishImpl(TopicT topic, size_t plength, uint8_t qos, b
 }
 
 bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained) {
-    return beginPublishImpl<false, const char*>(topic, plength, qos, retained);
+    return beginPublishImpl(false, topic, plength, qos, retained);
 }
 
 bool PubSubClient::beginPublish(const __FlashStringHelper* topic, size_t plength, uint8_t qos, bool retained) {
     // convert FlashStringHelper in PROGMEM-pointer
-    return beginPublishImpl<true, PGM_P>(reinterpret_cast<const char*>(topic), plength, qos, retained);
+    return beginPublishImpl(true, reinterpret_cast<const char*>(topic), plength, qos, retained);
 }
 
 bool PubSubClient::beginPublish_P(PGM_P topic, size_t plength, uint8_t qos, bool retained) {
-    return beginPublishImpl<true, PGM_P>(topic, plength, qos, retained);
+    return beginPublishImpl(true, reinterpret_cast<const char*>(topic), plength, qos, retained);
 }
 
 bool PubSubClient::endPublish() {
@@ -759,15 +765,26 @@ size_t PubSubClient::writeBuffer(size_t pos, size_t size) {
     return rc;
 }
 
-template <bool PROGMEM_STRING, typename StringT>
-size_t PubSubClient::writeStringImpl(StringT string, size_t pos) {
+/**
+ * @brief  Internal implementation of writeString using RAM or PROGMEM string.
+ * Write an UTF-8 encoded string to the internal buffer at a given position. The string can have a length of 0 to 65535 bytes (depending on size of
+ * internal buffer). The buffer is prefixed with two bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol specification.
+ * @note   If the string does not fit in the buffer or is longer than 65535 bytes nothing is written to the buffer and the returned position is
+ * unchanged.
+ *
+ * @param  progmem true if the string is stored in PROGMEM, false if in RAM.
+ * @param  string 'C' string of the data that shall be written in the buffer.
+ * @param  pos Position in the internal buffer to write the string.
+ * @return New position in the internal buffer (pos + 2 + string length), or pos if a buffer overrun would occur or the string is a nullptr.
+ */
+size_t PubSubClient::writeStringImpl(bool progmem, const char* string, size_t pos) {
     if (!string) return pos;
 
-    size_t sLen = PROGMEM_STRING ? strlen_P(string) : strlen(string);
+    size_t sLen = progmem ? strlen_P(string) : strlen(string);
     if ((pos + 2 + sLen <= _bufferSize) && (sLen <= 0xFFFF)) {
         _buffer[pos++] = (uint8_t)(sLen >> 8);
         _buffer[pos++] = (uint8_t)(sLen & 0xFF);
-        if (PROGMEM_STRING) {
+        if (progmem) {
             memcpy_P(_buffer + pos, string, sLen);
         } else {
             memcpy(_buffer + pos, string, sLen);
@@ -790,22 +807,7 @@ size_t PubSubClient::writeStringImpl(StringT string, size_t pos) {
  * @return New position in the internal buffer (pos + 2 + string length), or pos if a buffer overrun would occur or the string is a nullptr.
  */
 size_t PubSubClient::writeString(const char* string, size_t pos) {
-    return writeStringImpl<false, const char*>(string, pos);
-}
-
-/**
- * @brief  Write an UTF-8 encoded PROGMEM string to the internal buffer at a given position. The string can have a length of 0 to 65535 bytes (depending on
- * size of internal buffer). The buffer is prefixed with two bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol
- * specification.
- * @note   If the string does not fit in the buffer or is longer than 65535 bytes nothing is written to the buffer and the returned position is
- * unchanged.
- *
- * @param  string PROGMEM 'C' string of the data that shall be written in the buffer.
- * @param  pos Position in the internal buffer to write the string.
- * @return New position in the internal buffer (pos + 2 + string length), or pos if a buffer overrun would occur or the string is a nullptr.
- */
-size_t PubSubClient::writeString_P(PGM_P string, size_t pos) {
-    return writeStringImpl<true, PGM_P>(string, pos);
+    return writeStringImpl(false, string, pos);
 }
 
 /**

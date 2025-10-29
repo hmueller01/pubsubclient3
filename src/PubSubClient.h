@@ -199,14 +199,11 @@ class PubSubClient : public Print {
     uint8_t buildHeader(uint8_t header, size_t length);
     bool writeControlPacket(uint8_t header, size_t length);
     size_t writeBuffer(size_t pos, size_t size);
-    template <bool PROGMEM_STRING, typename StringT>
-    size_t writeStringImpl(StringT string, size_t pos);
+    size_t writeStringImpl(bool progmem, const char* string, size_t pos);
     size_t writeString(const char* string, size_t pos);
-    size_t writeString_P(PGM_P string, size_t pos);
     size_t writeNextMsgId(size_t pos);
 
-    template <bool PROGMEM_TOPIC, typename TopicT>
-    bool beginPublishImpl(TopicT topic, size_t plength, uint8_t qos, bool retained);
+    bool beginPublishImpl(bool progmem, const char* topic, size_t plength, uint8_t qos, bool retained);
 
     // Add to buffer and flush if full (only to be used with beginPublish/endPublish)
     size_t appendBuffer(uint8_t data);
