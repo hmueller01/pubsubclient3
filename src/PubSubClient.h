@@ -539,6 +539,17 @@ class PubSubClient : public Print {
     bool publish(const __FlashStringHelper* topic, const char* payload, uint8_t qos, bool retained);
 
     /**
+     * @brief Publishes a message from __FlashStringHelper to the specified topic from __FlashStringHelper.
+     * @param topic The topic to publish to.
+     * @param payload The message to publish.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool publish(const __FlashStringHelper* topic, const __FlashStringHelper* payload, uint8_t qos, bool retained);
+
+    /**
      * @brief Publishes a non retained message to the specified topic using QoS 0.
      * @param topic The topic to publish to.
      * @param payload The message to publish.

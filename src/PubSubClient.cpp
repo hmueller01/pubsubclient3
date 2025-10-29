@@ -529,6 +529,11 @@ bool PubSubClient::publish(const __FlashStringHelper* topic, const char* payload
     return publish(topic, (const uint8_t*)payload, payload ? strnlen(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
 }
 
+bool PubSubClient::publish(const __FlashStringHelper* topic, const __FlashStringHelper* payload, uint8_t qos, bool retained) {
+    return publish_P(topic, (const uint8_t*)payload, payload ? strnlen_P(reinterpret_cast<const char*>(payload), MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos,
+                     retained);
+}
+
 bool PubSubClient::publish(const char* topic, const char* payload, uint8_t qos, bool retained) {
     return publish(topic, (const uint8_t*)payload, payload ? strnlen(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
 }
