@@ -134,7 +134,7 @@ $(function(){initNavTree('PubSubClient_8h_source.html',''); initResizable(true);
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span></div>
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">#ifndef MQTT_MAX_POSSIBLE_PACKET_SIZE</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="PubSubClient_8h.html#a94da4eb7c328254242ce3690bcb2a880">   37</a></span><span class="preprocessor">#define MQTT_MAX_POSSIBLE_PACKET_SIZE 268435455</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="PubSubClient_8h.html#a94da4eb7c328254242ce3690bcb2a880">   37</a></span><span class="preprocessor">#define MQTT_MAX_POSSIBLE_PACKET_SIZE ((size_t)268435455)  </span><span class="comment">// might be limited to 65535 if size_t is 16-bit (unsigned int)</span></div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span></div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="preprocessor">#ifndef MQTT_MAX_PACKET_SIZE</span></div>
