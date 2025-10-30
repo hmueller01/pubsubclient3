@@ -594,10 +594,6 @@ bool PubSubClient::publish_P(const __FlashStringHelper* topic, const uint8_t* pa
     return false;
 }
 
-bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained) {
-    return beginPublish(topic, plength, MQTT_QOS0, retained);
-}
-
 /**
  * @brief Internal beginPublish implementation using topic stored in RAM or PROGMEM.
  *
@@ -642,16 +638,20 @@ bool PubSubClient::beginPublishImpl(bool progmem, const char* topic, size_t plen
     return false;
 }
 
-bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained) {
+inline bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained) {
+    return beginPublishImpl(false, topic, plength, MQTT_QOS0, retained);
+}
+
+inline bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained) {
     return beginPublishImpl(false, topic, plength, qos, retained);
 }
 
-bool PubSubClient::beginPublish(const __FlashStringHelper* topic, size_t plength, uint8_t qos, bool retained) {
+inline bool PubSubClient::beginPublish(const __FlashStringHelper* topic, size_t plength, uint8_t qos, bool retained) {
     // convert FlashStringHelper in PROGMEM-pointer
     return beginPublishImpl(true, reinterpret_cast<const char*>(topic), plength, qos, retained);
 }
 
-bool PubSubClient::beginPublish_P(PGM_P topic, size_t plength, uint8_t qos, bool retained) {
+inline bool PubSubClient::beginPublish_P(PGM_P topic, size_t plength, uint8_t qos, bool retained) {
     return beginPublishImpl(true, reinterpret_cast<const char*>(topic), plength, qos, retained);
 }
 
@@ -811,7 +811,7 @@ size_t PubSubClient::writeStringImpl(bool progmem, const char* string, size_t po
  * @param  pos Position in the internal buffer to write the string.
  * @return New position in the internal buffer (pos + 2 + string length), or pos if a buffer overrun would occur or the string is a nullptr.
  */
-size_t PubSubClient::writeString(const char* string, size_t pos) {
+inline size_t PubSubClient::writeString(const char* string, size_t pos) {
     return writeStringImpl(false, string, pos);
 }
 
