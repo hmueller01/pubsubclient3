@@ -638,23 +638,6 @@ bool PubSubClient::beginPublishImpl(bool progmem, const char* topic, size_t plen
     return false;
 }
 
-inline bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained) {
-    return beginPublishImpl(false, topic, plength, MQTT_QOS0, retained);
-}
-
-inline bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained) {
-    return beginPublishImpl(false, topic, plength, qos, retained);
-}
-
-inline bool PubSubClient::beginPublish(const __FlashStringHelper* topic, size_t plength, uint8_t qos, bool retained) {
-    // convert FlashStringHelper in PROGMEM-pointer
-    return beginPublishImpl(true, reinterpret_cast<const char*>(topic), plength, qos, retained);
-}
-
-inline bool PubSubClient::beginPublish_P(PGM_P topic, size_t plength, uint8_t qos, bool retained) {
-    return beginPublishImpl(true, reinterpret_cast<const char*>(topic), plength, qos, retained);
-}
-
 bool PubSubClient::endPublish() {
     if (connected()) {
         if (_bufferWritePos > 0) {
