@@ -764,6 +764,17 @@ class PubSubClient : public Print {
     virtual size_t write(const uint8_t* buf, size_t size);
 
     /**
+     * @brief Writes a string in PROGMEM as a component of a publish started with a call to beginPublish.
+     *        For performance reasons, this will be appended to the internal buffer,
+     *        which will be flushed when full or on a call to endPublish().
+     * @param string The message to write.
+     * @return The number of bytes written. If return value is != string length a write error occurred.
+     */
+    inline size_t write_P(PGM_P string) {
+        return write_P(reinterpret_cast<const uint8_t*>(string), strlen_P(string));
+    }
+
+    /**
      * @brief Writes an array of progmem bytes as a component of a publish started with a call to beginPublish.
      *        For performance reasons, this will be appended to the internal buffer,
      *        which will be flushed when full or on a call to endPublish().
