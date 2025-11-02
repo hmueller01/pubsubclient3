@@ -675,7 +675,7 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    inline bool PubSubClient::beginPublish(const char* topic, size_t plength, bool retained) {
+    inline bool beginPublish(const char* topic, size_t plength, bool retained) {
         return beginPublishImpl(false, topic, plength, MQTT_QOS0, retained);
     }
 
@@ -694,7 +694,7 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    inline bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained) {
+    inline bool beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained) {
         return beginPublishImpl(false, topic, plength, qos, retained);
     }
 
@@ -713,7 +713,7 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    inline bool PubSubClient::beginPublish(const __FlashStringHelper* topic, size_t plength, uint8_t qos, bool retained) {
+    inline bool beginPublish(const __FlashStringHelper* topic, size_t plength, uint8_t qos, bool retained) {
         // convert FlashStringHelper in PROGMEM-pointer
         return beginPublishImpl(true, reinterpret_cast<const char*>(topic), plength, qos, retained);
     }
@@ -733,7 +733,7 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    inline bool PubSubClient::beginPublish_P(PGM_P topic, size_t plength, uint8_t qos, bool retained) {
+    inline bool beginPublish_P(PGM_P topic, size_t plength, uint8_t qos, bool retained) {
         return beginPublishImpl(true, reinterpret_cast<const char*>(topic), plength, qos, retained);
     }
 
