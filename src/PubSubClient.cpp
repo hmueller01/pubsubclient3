@@ -845,15 +845,20 @@ size_t PubSubClient::flushBuffer() {
     return rc;
 }
 
-bool PubSubClient::subscribe(const char* topic) {
-    return subscribe(topic, MQTT_QOS0);
-}
-
-bool PubSubClient::subscribe(const char* topic, uint8_t qos) {
+/**
+ * @brief Internal subscribes to messages published to the specified topic. The topic can be stored in RAM or PROGMEM.
+ * @param progmem true if the topic is stored in PROGMEM/Flash, false if in RAM.
+ * @param topic The topic to subscribe to.
+ * @param qos The qos to subscribe at. [0, 1].
+ * @return true If sending the subscribe succeeded.
+ * false If sending the subscribe failed, either connection lost or message too large.
+ */
+bool PubSubClient::subscribeImpl(bool progmem, const char* topic, uint8_t qos) {
     if (!topic) return false;
     if (qos > MQTT_QOS1) return false;  // only QoS 0 and 1 supported
 
-    size_t topicLen = strnlen(topic, _bufferSize);
+    // get topic length depending on storage (RAM vs PROGMEM)
+    size_t topicLen = progmem ? strnlen_P(topic, _bufferSize) : strnlen(topic, _bufferSize);
     if (_bufferSize < MQTT_MAX_HEADER_SIZE + 2 + 2 + topicLen + 1) {
         // Too long: header + nextMsgId (2) + topic length bytes (2) + topicLen + QoS (1)
         return false;
@@ -862,17 +867,25 @@ bool PubSubClient::subscribe(const char* topic, uint8_t qos) {
         // Leave room in the _buffer for header and variable length field
         uint16_t length = MQTT_MAX_HEADER_SIZE;
         length = writeNextMsgId(length);  // _buffer size is checked before
-        length = writeString(topic, length);
+        length = writeStringImpl(progmem, topic, length);
         _buffer[length++] = qos;
         return writeControlPacket(MQTTSUBSCRIBE | MQTT_QOS_GET_HDR(MQTT_QOS1), length - MQTT_MAX_HEADER_SIZE);
     }
     return false;
 }
 
-bool PubSubClient::unsubscribe(const char* topic) {
+/**
+ * @brief Internal unsubscribes from messages published to the specified topic. The topic can be stored in RAM or PROGMEM.
+ * @param progmem true if the topic is stored in PROGMEM/Flash, false if in RAM.
+ * @param topic The topic to unsubscribe from.
+ * @return true If sending the unsubscribe succeeded.
+ * false If sending the unsubscribe failed, either connection lost or message too large.
+ */
+bool PubSubClient::unsubscribeImpl(bool progmem, const char* topic) {
     if (!topic) return false;
 
-    size_t topicLen = strnlen(topic, _bufferSize);
+    // get topic length depending on storage (RAM vs PROGMEM)
+    size_t topicLen = progmem ? strnlen_P(topic, _bufferSize) : strnlen(topic, _bufferSize);
     if (_bufferSize < MQTT_MAX_HEADER_SIZE + 2 + 2 + topicLen) {
         // Too long: header + nextMsgId (2) + topic length bytes (2) + topicLen
         return false;
@@ -880,7 +893,7 @@ bool PubSubClient::unsubscribe(const char* topic) {
     if (connected()) {
         uint16_t length = MQTT_MAX_HEADER_SIZE;
         length = writeNextMsgId(length);  // _buffer size is checked before
-        length = writeString(topic, length);
+        length = writeStringImpl(progmem, topic, length);
         return writeControlPacket(MQTTUNSUBSCRIBE | MQTT_QOS_GET_HDR(MQTT_QOS1), length - MQTT_MAX_HEADER_SIZE);
     }
     return false;

@@ -204,6 +204,8 @@ class PubSubClient : public Print {
     size_t writeNextMsgId(size_t pos);
 
     bool beginPublishImpl(bool progmem, const char* topic, size_t plength, uint8_t qos, bool retained);
+    bool subscribeImpl(bool progmem, const char* topic, uint8_t qos);
+    bool unsubscribeImpl(bool progmem, const char* topic);
 
     // Add to buffer and flush if full (only to be used with beginPublish/endPublish)
     size_t appendBuffer(uint8_t data);
@@ -790,7 +792,30 @@ class PubSubClient : public Print {
      * @return true If sending the subscribe succeeded.
      * false If sending the subscribe failed, either connection lost or message too large.
      */
-    bool subscribe(const char* topic);
+    inline bool subscribe(const char* topic) {
+        return subscribeImpl(false, topic, MQTT_QOS0);
+    }
+
+    /**
+     * @brief Subscribes to messages published to the specified topic from __FlashStringHelper using QoS 0.
+     * @param topic The topic from __FlashStringHelper to subscribe to.
+     * @return true If sending the subscribe succeeded.
+     * false If sending the subscribe failed, either connection lost or message too large.
+     */
+    inline bool subscribe(const __FlashStringHelper* topic) {
+        // convert FlashStringHelper in PROGMEM-pointer
+        return subscribeImpl(true, reinterpret_cast<const char*>(topic), MQTT_QOS0);
+    }
+
+    /**
+     * @brief Subscribes to messages published to the specified topic in PROGMEM using QoS 0.
+     * @param topic The topic in PROGMEM to subscribe to.
+     * @return true If sending the subscribe succeeded.
+     * false If sending the subscribe failed, either connection lost or message too large.
+     */
+    inline bool subscribe_P(PGM_P topic) {
+        return subscribeImpl(true, reinterpret_cast<const char*>(topic), MQTT_QOS0);
+    }
 
     /**
      * @brief Subscribes to messages published to the specified topic.
@@ -799,7 +824,32 @@ class PubSubClient : public Print {
      * @return true If sending the subscribe succeeded.
      * false If sending the subscribe failed, either connection lost or message too large.
      */
-    bool subscribe(const char* topic, uint8_t qos);
+    inline bool subscribe(const char* topic, uint8_t qos) {
+        return subscribeImpl(false, topic, qos);
+    }
+
+    /**
+     * @brief Subscribes to messages published to the specified topic from __FlashStringHelper.
+     * @param topic The topic from __FlashStringHelper to subscribe to.
+     * @param qos The qos to subscribe at. [0, 1].
+     * @return true If sending the subscribe succeeded.
+     * false If sending the subscribe failed, either connection lost or message too large.
+     */
+    inline bool subscribe(const __FlashStringHelper* topic, uint8_t qos) {
+        // convert FlashStringHelper in PROGMEM-pointer
+        return subscribeImpl(true, reinterpret_cast<const char*>(topic), qos);
+    }
+
+    /**
+     * @brief Subscribes to messages published to the specified topic in PROGMEM.
+     * @param topic The topic in PROGMEM to subscribe to.
+     * @param qos The qos to subscribe at. [0, 1].
+     * @return true If sending the subscribe succeeded.
+     * false If sending the subscribe failed, either connection lost or message too large.
+     */
+    inline bool subscribe_P(PGM_P topic, uint8_t qos) {
+        return subscribeImpl(true, reinterpret_cast<const char*>(topic), qos);
+    }
 
     /**
      * @brief Unsubscribes from the specified topic.
@@ -807,7 +857,30 @@ class PubSubClient : public Print {
      * @return true If sending the unsubscribe succeeded.
      * false If sending the unsubscribe failed, either connection lost or message too large.
      */
-    bool unsubscribe(const char* topic);
+    inline bool unsubscribe(const char* topic) {
+        return unsubscribeImpl(false, topic);
+    }
+
+    /**
+     * @brief Unsubscribes from the specified topic from __FlashStringHelper.
+     * @param topic The topic from __FlashStringHelper to unsubscribe from.
+     * @return true If sending the unsubscribe succeeded.
+     * false If sending the unsubscribe failed, either connection lost or message too large.
+     */
+    inline bool unsubscribe(const __FlashStringHelper* topic) {
+        // convert FlashStringHelper in PROGMEM-pointer
+        return unsubscribeImpl(true, reinterpret_cast<const char*>(topic));
+    }
+
+    /**
+     * @brief Unsubscribes from the specified topic in PROGMEM.
+     * @param topic The topic in PROGMEM to unsubscribe from.
+     * @return true If sending the unsubscribe succeeded.
+     * false If sending the unsubscribe failed, either connection lost or message too large.
+     */
+    inline bool unsubscribe_P(PGM_P topic) {
+        return unsubscribeImpl(true, reinterpret_cast<const char*>(topic));
+    }
 
     /**
      * @brief This should be called regularly to allow the client to process incoming messages and maintain its connection to the server.
