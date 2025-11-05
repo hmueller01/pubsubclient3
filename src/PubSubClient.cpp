@@ -588,6 +588,10 @@ uint8_t PubSubClient::buildHeader(uint8_t header, size_t length) {
     return hdrLen + 1;  // Full header size is variable length bit plus the 1-byte fixed header
 }
 
+size_t PubSubClient::write(uint8_t data) {
+    return appendBuffer(data);
+}
+
 size_t PubSubClient::write(const uint8_t* buf, size_t size) {
     for (size_t i = 0; i < size; i++) {
         if (appendBuffer(buf[i]) == 0) return i;

@@ -675,9 +675,7 @@ class PubSubClient : public Print {
      * @param data A byte to write to the publish payload.
      * @return The number of bytes written (0 or 1). If 0 is returned a write error occurred.
      */
-    inline virtual size_t write(uint8_t data) {
-        return appendBuffer(data);
-    }
+    virtual size_t write(uint8_t data);
 
     /**
      * @brief Writes an array of bytes as a component of a publish started with a call to beginPublish.
