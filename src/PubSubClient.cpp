@@ -731,10 +731,6 @@ size_t PubSubClient::flushBuffer() {
     return rc;
 }
 
-bool PubSubClient::subscribe(const char* topic) {
-    return subscribe(topic, MQTT_QOS0);
-}
-
 bool PubSubClient::subscribe(const char* topic, uint8_t qos) {
     if (!topic) return false;
     if (qos > MQTT_QOS1) return false;  // only QoS 0 and 1 supported

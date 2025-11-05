@@ -703,7 +703,9 @@ class PubSubClient : public Print {
      * @return true If sending the subscribe succeeded.
      * false If sending the subscribe failed, either connection lost or message too large.
      */
-    bool subscribe(const char* topic);
+    inline bool subscribe(const char* topic) {
+        return subscribe(topic, MQTT_QOS0);
+    }
 
     /**
      * @brief Subscribes to messages published to the specified topic.
