@@ -900,6 +900,9 @@ Public Member Functions</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::beginPublish </td>
@@ -917,6 +920,11 @@ Public Member Functions</h2></td></tr>
           <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>retained</em></span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Start to publish a message using QoS 0. This API: beginPublish(...) one or more calls to write(...) <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a> Allows for arbitrarily large payloads to be sent without them having to be copied into a new buffer and held in memory at one time. </p>
@@ -930,7 +938,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00568">568</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00643">643</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -975,7 +983,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00572">572</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00519">519</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -984,6 +992,9 @@ Public Member Functions</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::connect </td>
@@ -992,6 +1003,11 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Connects the client using a clean session without username and password. </p>
@@ -1003,7 +1019,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If client succeeded in establishing a connection to the broker. false If client failed to establish a connection to the broker. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00113">113</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00429">429</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1012,6 +1028,9 @@ Public Member Functions</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::connect </td>
@@ -1029,6 +1048,11 @@ Public Member Functions</h2></td></tr>
           <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>pass</em></span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Connects the client using a clean session with username and password. </p>
@@ -1045,7 +1069,7 @@ Public Member Functions</h2></td></tr>
 If <b>pass</b> is NULL, no password is used. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>true If client succeeded in establishing a connection to the broker. false If client failed to establish a connection to the broker. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00117">117</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00443">443</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1054,6 +1078,9 @@ If <b>pass</b> is NULL, no password is used. </dd></dl>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::connect </td>
@@ -1091,6 +1118,11 @@ If <b>pass</b> is NULL, no password is used. </dd></dl>
           <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>willMessage</em></span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Connects the client using a clean session with username, password and will. </p>
@@ -1113,7 +1145,7 @@ If <b>pass</b> is NULL, no password is used. </dd>
 If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>true If client succeeded in establishing a connection to the broker. false If client failed to establish a connection to the broker. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00125">125</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00477">477</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1187,7 +1219,7 @@ If <b>pass</b> is NULL, no password is used. </dd>
 If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>true If client succeeded in establishing a connection to the broker. false If client failed to establish a connection to the broker. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00130">130</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00113">113</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1196,6 +1228,9 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::connect </td>
@@ -1223,6 +1258,11 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
           <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>willMessage</em></span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Connects the client using a clean session and will. </p>
@@ -1239,7 +1279,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>true If client succeeded in establishing a connection to the broker. false If client failed to establish a connection to the broker. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00121">121</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00458">458</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1261,7 +1301,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <p>Checks whether the client is connected to the server. </p>
 <dl class="section return"><dt>Returns</dt><dd>true If the client is connected. false If the client is not connected. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00234">234</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00217">217</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1282,7 +1322,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 
 <p>Disconnects the client. </p>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00248">248</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00231">231</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1304,7 +1344,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <p>Finish sending a message that was started with a call to beginPublish. </p>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00600">600</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00547">547</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1326,7 +1366,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <p>Gets the current size of the internal buffer. </p>
 <dl class="section return"><dt>Returns</dt><dd>The size of the internal buffer. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00892">892</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00835">835</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1348,7 +1388,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <p>This should be called regularly to allow the client to process incoming messages and maintain its connection to the server. </p>
 <dl class="section return"><dt>Returns</dt><dd>true If the client is still connected. false If the client is no longer connected. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00472">472</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00455">455</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1357,6 +1397,9 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::publish </td>
@@ -1369,6 +1412,11 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
           <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>payload</em></span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Publishes a non retained message to the specified topic using QoS 0. </p>
@@ -1381,7 +1429,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00520">520</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00513">513</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1390,6 +1438,9 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::publish </td>
@@ -1407,6 +1458,11 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
           <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>retained</em></span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Publishes a message to the specified topic using QoS 0. </p>
@@ -1420,7 +1476,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00524">524</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00525">525</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1429,6 +1485,9 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::publish </td>
@@ -1451,6 +1510,11 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
           <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>retained</em></span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Publishes a message to the specified topic. </p>
@@ -1465,7 +1529,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00528">528</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00538">538</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1474,6 +1538,9 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::publish </td>
@@ -1491,6 +1558,11 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
           <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>plength</em></span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Publishes a non retained message to the specified topic using QoS 0. </p>
@@ -1504,7 +1576,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00532">532</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00550">550</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1513,6 +1585,9 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::publish </td>
@@ -1535,6 +1610,11 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
           <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>retained</em></span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Publishes a message to the specified topic using QoS 0. </p>
@@ -1549,7 +1629,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00536">536</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00563">563</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1600,7 +1680,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00540">540</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00503">503</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1609,6 +1689,9 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::publish_P </td>
@@ -1626,6 +1709,11 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
           <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>retained</em></span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Publishes a message stored in PROGMEM to the specified topic using QoS 0. </p>
@@ -1639,7 +1727,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00548">548</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00587">587</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1648,6 +1736,9 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::publish_P </td>
@@ -1670,6 +1761,11 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
           <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>retained</em></span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Publishes a message stored in PROGMEM to the specified topic. </p>
@@ -1684,7 +1780,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00552">552</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00600">600</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1693,6 +1789,9 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::publish_P </td>
@@ -1715,6 +1814,11 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
           <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>retained</em></span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Publishes a message stored in PROGMEM to the specified topic using QoS 0. </p>
@@ -1729,7 +1833,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00556">556</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00613">613</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1780,7 +1884,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00560">560</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00511">511</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1808,7 +1912,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the buffer was resized. false If the buffer could not be resized. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00873">873</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00816">816</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1836,7 +1940,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00858">858</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00801">801</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1864,7 +1968,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00863">863</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00806">806</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1892,7 +1996,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00896">896</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00839">839</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1925,7 +2029,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00841">841</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00784">784</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1958,7 +2062,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00833">833</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00776">776</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1991,7 +2095,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00828">828</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00771">771</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2019,7 +2123,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00901">901</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00844">844</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2047,7 +2151,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00868">868</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00811">811</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2070,7 +2174,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>All of the values have corresponding constants defined in <a class="el" href="PubSubClient_8h.html" title="A simple client for MQTT.">PubSubClient.h</a>. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>See <a class="el" href="group__group__state.html">state() result</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00906">906</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00849">849</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2079,6 +2183,9 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::subscribe </td>
@@ -2087,6 +2194,11 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Subscribes to messages published to the specified topic using QoS 0. </p>
@@ -2098,7 +2210,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If sending the subscribe succeeded. false If sending the subscribe failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00787">787</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00706">706</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -2131,7 +2243,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If sending the subscribe succeeded. false If sending the subscribe failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00791">791</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00734">734</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2159,7 +2271,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If sending the unsubscribe succeeded. false If sending the unsubscribe failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00811">811</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00754">754</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2200,7 +2312,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The number of bytes written. If return value is != size a write error occurred. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00648">648</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00595">595</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2236,7 +2348,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The number of bytes written (0 or 1). If 0 is returned a write error occurred. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00644">644</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00591">591</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2269,7 +2381,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The number of bytes written. If return value is != size a write error occurred. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00655">655</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00602">602</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
