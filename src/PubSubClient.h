@@ -431,7 +431,9 @@ class PubSubClient : public Print {
      * @return true If client succeeded in establishing a connection to the broker.
      * false If client failed to establish a connection to the broker.
      */
-    bool connect(const char* id);
+    inline bool connect(const char* id) {
+        return connect(id, nullptr, nullptr, nullptr, MQTT_QOS0, false, nullptr, true);
+    }
 
     /**
      * @brief Connects the client using a clean session with username and password.
@@ -443,7 +445,9 @@ class PubSubClient : public Print {
      * @return true If client succeeded in establishing a connection to the broker.
      * false If client failed to establish a connection to the broker.
      */
-    bool connect(const char* id, const char* user, const char* pass);
+    inline bool connect(const char* id, const char* user, const char* pass) {
+        return connect(id, user, pass, nullptr, MQTT_QOS0, false, nullptr, true);
+    }
 
     /**
      * @brief Connects the client using a clean session and will.
@@ -456,7 +460,9 @@ class PubSubClient : public Print {
      * @return true If client succeeded in establishing a connection to the broker.
      * false If client failed to establish a connection to the broker.
      */
-    bool connect(const char* id, const char* willTopic, uint8_t willQos, bool willRetain, const char* willMessage);
+    inline bool connect(const char* id, const char* willTopic, uint8_t willQos, bool willRetain, const char* willMessage) {
+        return connect(id, nullptr, nullptr, willTopic, willQos, willRetain, willMessage, true);
+    }
 
     /**
      * @brief Connects the client using a clean session with username, password and will.
@@ -473,7 +479,10 @@ class PubSubClient : public Print {
      * @return true If client succeeded in establishing a connection to the broker.
      * false If client failed to establish a connection to the broker.
      */
-    bool connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain, const char* willMessage);
+    inline bool connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
+                        const char* willMessage) {
+        return connect(id, user, pass, willTopic, willQos, willRetain, willMessage, true);
+    }
 
     /**
      * @brief Connects the client with all possible parameters (user, password, will and session).
@@ -506,7 +515,9 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    bool publish(const char* topic, const char* payload);
+    inline bool publish(const char* topic, const char* payload) {
+        return publish(topic, payload, MQTT_QOS0, false);
+    }
 
     /**
      * @brief Publishes a message to the specified topic using QoS 0.
@@ -516,7 +527,9 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    bool publish(const char* topic, const char* payload, bool retained);
+    inline bool publish(const char* topic, const char* payload, bool retained) {
+        return publish(topic, payload, MQTT_QOS0, retained);
+    }
 
     /**
      * @brief Publishes a message to the specified topic.
@@ -527,7 +540,9 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    bool publish(const char* topic, const char* payload, uint8_t qos, bool retained);
+    inline bool publish(const char* topic, const char* payload, uint8_t qos, bool retained) {
+        return publish(topic, (const uint8_t*)payload, payload ? strnlen(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
+    }
 
     /**
      * @brief Publishes a message to the specified topic.
@@ -538,7 +553,9 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    bool publish(const __FlashStringHelper* topic, const char* payload, uint8_t qos, bool retained);
+    inline bool publish(const __FlashStringHelper* topic, const char* payload, uint8_t qos, bool retained) {
+        return publish(topic, (const uint8_t*)payload, payload ? strnlen(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
+    }
 
     /**
      * @brief Publishes a message from __FlashStringHelper to the specified topic from __FlashStringHelper.
@@ -549,7 +566,10 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    bool publish(const __FlashStringHelper* topic, const __FlashStringHelper* payload, uint8_t qos, bool retained);
+    inline bool publish(const __FlashStringHelper* topic, const __FlashStringHelper* payload, uint8_t qos, bool retained) {
+        return publish_P(topic, (const uint8_t*)payload, payload ? strnlen_P(reinterpret_cast<const char*>(payload), MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0,
+                         qos, retained);
+    }
 
     /**
      * @brief Publishes a non retained message to the specified topic using QoS 0.
@@ -559,7 +579,9 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    bool publish(const char* topic, const uint8_t* payload, size_t plength);
+    inline bool publish(const char* topic, const uint8_t* payload, size_t plength) {
+        return publish(topic, payload, plength, MQTT_QOS0, false);
+    }
 
     /**
      * @brief Publishes a message to the specified topic using QoS 0.
@@ -570,7 +592,9 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    bool publish(const char* topic, const uint8_t* payload, size_t plength, bool retained);
+    inline bool publish(const char* topic, const uint8_t* payload, size_t plength, bool retained) {
+        return publish(topic, payload, plength, MQTT_QOS0, retained);
+    }
 
     /**
      * @brief Publishes a message to the specified topic.
@@ -604,7 +628,9 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    bool publish_P(const char* topic, PGM_P payload, bool retained);
+    inline bool publish_P(const char* topic, PGM_P payload, bool retained) {
+        return publish_P(topic, payload, MQTT_QOS0, retained);
+    }
 
     /**
      * @brief Publishes a message stored in PROGMEM to the specified topic.
@@ -615,7 +641,9 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    bool publish_P(const char* topic, PGM_P payload, uint8_t qos, bool retained);
+    inline bool publish_P(const char* topic, PGM_P payload, uint8_t qos, bool retained) {
+        return publish_P(topic, (const uint8_t*)payload, payload ? strnlen_P(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
+    }
 
     /**
      * @brief Publishes a message stored in PROGMEM to the specified topic.
@@ -626,7 +654,9 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    bool publish_P(const __FlashStringHelper* topic, PGM_P payload, uint8_t qos, bool retained);
+    bool publish_P(const __FlashStringHelper* topic, PGM_P payload, uint8_t qos, bool retained) {
+        return publish_P(topic, (const uint8_t*)payload, payload ? strnlen_P(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
+    }
 
     /**
      * @brief Publishes a message stored in PROGMEM to the specified topic using QoS 0.
@@ -637,7 +667,9 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    bool publish_P(const char* topic, const uint8_t* payload, size_t plength, bool retained);
+    inline bool publish_P(const char* topic, const uint8_t* payload, size_t plength, bool retained) {
+        return publish_P(topic, payload, plength, MQTT_QOS0, retained);
+    }
 
     /**
      * @brief Publishes a message stored in PROGMEM to the specified topic.

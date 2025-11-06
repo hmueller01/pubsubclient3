@@ -110,23 +110,6 @@ PubSubClient::~PubSubClient() {
     free(_buffer);
 }
 
-bool PubSubClient::connect(const char* id) {
-    return connect(id, nullptr, nullptr, nullptr, MQTT_QOS0, false, nullptr, true);
-}
-
-bool PubSubClient::connect(const char* id, const char* user, const char* pass) {
-    return connect(id, user, pass, nullptr, MQTT_QOS0, false, nullptr, true);
-}
-
-bool PubSubClient::connect(const char* id, const char* willTopic, uint8_t willQos, bool willRetain, const char* willMessage) {
-    return connect(id, nullptr, nullptr, willTopic, willQos, willRetain, willMessage, true);
-}
-
-bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
-                           const char* willMessage) {
-    return connect(id, user, pass, willTopic, willQos, willRetain, willMessage, true);
-}
-
 bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
                            const char* willMessage, bool cleanSession) {
     if (!_client) return false;  // do not crash if client not set
@@ -517,35 +500,6 @@ bool PubSubClient::loop() {
     return ret;
 }
 
-bool PubSubClient::publish(const char* topic, const char* payload) {
-    return publish(topic, payload, MQTT_QOS0, false);
-}
-
-bool PubSubClient::publish(const char* topic, const char* payload, bool retained) {
-    return publish(topic, payload, MQTT_QOS0, retained);
-}
-
-bool PubSubClient::publish(const __FlashStringHelper* topic, const char* payload, uint8_t qos, bool retained) {
-    return publish(topic, (const uint8_t*)payload, payload ? strnlen(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
-}
-
-bool PubSubClient::publish(const __FlashStringHelper* topic, const __FlashStringHelper* payload, uint8_t qos, bool retained) {
-    return publish_P(topic, (const uint8_t*)payload, payload ? strnlen_P(reinterpret_cast<const char*>(payload), MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos,
-                     retained);
-}
-
-bool PubSubClient::publish(const char* topic, const char* payload, uint8_t qos, bool retained) {
-    return publish(topic, (const uint8_t*)payload, payload ? strnlen(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
-}
-
-bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t plength) {
-    return publish(topic, payload, plength, MQTT_QOS0, false);
-}
-
-bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t plength, bool retained) {
-    return publish(topic, payload, plength, MQTT_QOS0, retained);
-}
-
 bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained) {
     if (beginPublish(topic, plength, qos, retained)) {
         size_t rc = write(payload, plength);
@@ -560,22 +514,6 @@ bool PubSubClient::publish(const __FlashStringHelper* topic, const uint8_t* payl
         return endPublish() && (rc == plength);
     }
     return false;
-}
-
-bool PubSubClient::publish_P(const char* topic, PGM_P payload, bool retained) {
-    return publish_P(topic, payload, MQTT_QOS0, retained);
-}
-
-bool PubSubClient::publish_P(const __FlashStringHelper* topic, PGM_P payload, uint8_t qos, bool retained) {
-    return publish_P(topic, (const uint8_t*)payload, payload ? strnlen_P(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
-}
-
-bool PubSubClient::publish_P(const char* topic, PGM_P payload, uint8_t qos, bool retained) {
-    return publish_P(topic, (const uint8_t*)payload, payload ? strnlen_P(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
-}
-
-bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t plength, bool retained) {
-    return publish_P(topic, payload, plength, MQTT_QOS0, retained);
 }
 
 bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained) {
