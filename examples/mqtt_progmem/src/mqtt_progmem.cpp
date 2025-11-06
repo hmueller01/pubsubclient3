@@ -17,6 +17,7 @@ IPAddress ip(172, 16, 0, 100);
 IPAddress server(172, 16, 0, 2);
 const char HELLO_WORLD_3[] PROGMEM = "hello world 3";
 const char HELLO_WORLD_4[] PROGMEM = "hello world 4";
+const char SUBSCRIBE_TOPIC[] PROGMEM = "inTopic1";
 
 void callback(char* topic, uint8_t* payload, size_t plength) {
     // handle message arrived
@@ -36,10 +37,13 @@ void setup() {
         client.publish(F("outTopic"), "hello world 1", MQTT_QOS0, false);
         client.publish(F("outTopic"), F("hello world 2"), MQTT_QOS1, false);
         client.publish_P(F("outTopic"), HELLO_WORLD_3, MQTT_QOS2, false);
+
         client.beginPublish(F("outTopic"), strlen_P(HELLO_WORLD_4), MQTT_QOS1, false);
         client.write_P(HELLO_WORLD_4);
         client.endPublish();
-        client.subscribe("inTopic");
+
+        client.subscribe(F("inTopic"));
+        client.subscribe_P(SUBSCRIBE_TOPIC, MQTT_QOS1);
     }
 }
 
