@@ -111,6 +111,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
+      - name: Download SRAM library
+        run: |
+          mkdir -p ./arduino-libraries
+          git -C ./arduino-libraries clone https://github.com/ennui2342/arduino-sram.git
+
       - name: Compile examples
         uses: arduino/compile-sketches@v1
         with:
@@ -120,8 +125,9 @@ jobs:
           libraries: |
             # Install the library from the local path
             - source-path: ./
+            - source-path: ./arduino-libraries/arduino-sram
             # Install libraries from GitHub
-            - source-url: https://github.com/ennui2342/arduino-sram
+            #- source-url: https://github.com/ennui2342/arduino-sram
             - name: Ethernet
             ${{ matrix.board.libraries }}
           sketch-paths: |
