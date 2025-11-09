@@ -30,8 +30,6 @@ jobs:
             platforms: |
               - name: arduino:avr
             libraries: ""
-            exclude: |
-              - examples/mqtt_esp**
             artifact-name-suffix: arduino-avr-uno
           # - fqbn: arduino:megaavr:uno2018
           #   platforms: |
@@ -103,8 +101,6 @@ jobs:
               - name: esp32:esp32
                 source-url: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
             libraries: ""
-            exclude: |
-              - examples/mqtt_stream/*
             artifact-name-suffix: esp32-esp32-esp32
 
     steps:
@@ -116,6 +112,16 @@ jobs:
           mkdir -p ./arduino-libraries
           git -C ./arduino-libraries clone https://github.com/ennui2342/arduino-sram.git
 
+      - name: Filter examples
+        if: success()
+        run: |
+          if [[ "${{ matrix.board.fqbn }}" == "esp32:esp32:esp32" ]]; then
+            rm -rf examples/mqtt_stream
+          fi
+          if [[ "${{ matrix.board.fqbn }}" == "arduino:avr" ]]; then
+            rm -rf examples/mqtt_esp*
+          fi
+
       - name: Compile examples
         uses: arduino/compile-sketches@v1
         with:
@@ -125,7 +131,6 @@ jobs:
           libraries: |
             # Install the library from the local path
             - source-path: ./
-              exclude: ${{ matrix.board.fqbn == 'esp32:esp32:esp32' && 'examples/mqtt_stream' || '' }}
             - source-path: ./arduino-libraries/arduino-sram
             # Install libraries from GitHub
             #- source-url: https://github.com/ennui2342/arduino-sram
