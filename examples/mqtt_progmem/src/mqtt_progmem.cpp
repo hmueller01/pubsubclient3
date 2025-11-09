@@ -11,6 +11,8 @@
 #include <PubSubClient.h>
 #include <SPI.h>
 
+#define _UNUSED_ __attribute__((unused))
+
 // Update these with values suitable for your network.
 byte mac[] = {0xDE, 0xED, 0xBA, 0xFE, 0xFE, 0xED};
 IPAddress ip(172, 16, 0, 100);
@@ -19,7 +21,7 @@ const char HELLO_WORLD_3[] PROGMEM = "hello world 3";
 const char HELLO_WORLD_4[] PROGMEM = "hello world 4";
 const char SUBSCRIBE_TOPIC[] PROGMEM = "inTopic1";
 
-void callback(char* topic, uint8_t* payload, size_t plength) {
+void callback(_UNUSED_ char* topic, _UNUSED_ uint8_t* payload, _UNUSED_ size_t plength) {
     // handle message arrived
 }
 
