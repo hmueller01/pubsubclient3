@@ -31,7 +31,6 @@ jobs:
               - name: arduino:avr
             libraries: |
               - name: Ethernet
-              - url: https://github.com/ennui2342/arduino-sram
             exclude: |
               - examples/mqtt_esp**
             artifact-name-suffix: arduino-avr-uno
@@ -122,6 +121,8 @@ jobs:
           libraries: |
             # Install the library from the local path.
             - source-path: ./
+            # Install a library directly from a GitHub repo:
+            - url: https://github.com/ennui2342/arduino-sram
             ${{ matrix.board.libraries }}
           sketch-paths: |
             - examples
