@@ -29,7 +29,7 @@ EthernetClient ethClient;
 PubSubClient client(server, 1883, callback, ethClient);
 
 // Callback function
-void callback(char* topic, uint8_t* payload, size_t plength) {
+void callback(_UNUSED_ char* topic, uint8_t* payload, size_t plength) {
     // In order to republish this payload, a copy must be made
     // as the orignal payload buffer will be overwritten whilst
     // constructing the PUBLISH packet.
