@@ -63,9 +63,15 @@ body:
     attributes:
       label: Environment
       description: |
-        - Board: (e.g., ESP12E, NodeMCU, Arduino Uno)
+        Provide details about your hardware and software environment, including:
+        - Board: (e.g., Arduino Uno, ESP12E, ESP32, NodeMCU, etc.)
         - Framework Version: (e.g., Arduino AVR 5.2.0, ESP32 Arduino 3.3.2, ESP8266 Core 3.1.2 / 3.2.0-git)
         - Development Environment: (e.g., Arduino IDE 2.3.6, PlatformIO Core 6.1.8)
+        - Platform: (if Other was selected above)
+      placeholder: |
+        - Board:
+        - Framework Version:
+        - Development Environment:
       render: markdown
     validations:
       required: true
