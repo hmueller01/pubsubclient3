@@ -125,6 +125,7 @@ jobs:
           libraries: |
             # Install the library from the local path
             - source-path: ./
+              exclude: ${{ matrix.board.fqbn == 'esp32:esp32:esp32' && 'examples/mqtt_stream' || '' }}
             - source-path: ./arduino-libraries/arduino-sram
             # Install libraries from GitHub
             #- source-url: https://github.com/ennui2342/arduino-sram
