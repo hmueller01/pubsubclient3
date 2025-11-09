@@ -52,7 +52,6 @@ jobs:
           - fqbn: "esp32:esp32:esp32"
             platforms: |
               - name: esp32:esp32
-                #source-url: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
             libraries: ""
             artifact-name-suffix: esp32-esp32-esp32
 
@@ -69,9 +68,11 @@ jobs:
         if: success()
         run: |
           if [[ "${{ matrix.board.fqbn }}" == esp32:esp32:* ]]; then
+            echo "Removing non-ESP32 specific examples"
             rm -rf examples/mqtt_stream
           fi
-          if [[ "${{ matrix.board.fqbn }}" == arduino:*avr*:* ]]; then
+          if [[ ! "${{ matrix.board.fqbn }}" == *:esp*:* ]]; then
+            echo "Removing ESP specific examples"
             rm -rf examples/mqtt_esp*
           fi
 
