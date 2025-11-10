@@ -21,6 +21,7 @@ unsigned long millis(void);
 }
 
 #define PROGMEM
+#define strlen_P strlen
 #define strnlen_P strnlen
 #define pgm_read_byte_near(x) *(x)
 
