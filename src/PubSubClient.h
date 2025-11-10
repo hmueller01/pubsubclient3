@@ -536,7 +536,7 @@ class PubSubClient : public Print {
      * false If the publish failed, either connection lost or message too large.
      */
     inline bool publish(const char* topic, const char* payload, uint8_t qos, bool retained) {
-        return publish(topic, (const uint8_t*)payload, payload ? strnlen(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
+        return publish(topic, (const uint8_t*)payload, payload ? strlen(payload) : 0, qos, retained);
     }
 
     /**
@@ -598,7 +598,7 @@ class PubSubClient : public Print {
      * false If the publish failed, either connection lost or message too large.
      */
     inline bool publish_P(const char* topic, const char* payload, uint8_t qos, bool retained) {
-        return publish_P(topic, (const uint8_t*)payload, payload ? strnlen_P(payload, MQTT_MAX_POSSIBLE_PACKET_SIZE) : 0, qos, retained);
+        return publish_P(topic, (const uint8_t*)payload, payload ? strlen_P(payload) : 0, qos, retained);
     }
 
     /**
