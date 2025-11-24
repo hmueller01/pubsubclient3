@@ -508,6 +508,14 @@ bool PubSubClient::publish(const char* topic, const uint8_t* payload, size_t ple
     return false;
 }
 
+bool PubSubClient::publish(const __FlashStringHelper* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained) {
+    if (beginPublish(topic, plength, qos, retained)) {
+        size_t rc = write(payload, plength);
+        return endPublish() && (rc == plength);
+    }
+    return false;
+}
+
 bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained) {
     if (beginPublish(topic, plength, qos, retained)) {
         size_t rc = write_P(payload, plength);
@@ -516,23 +524,47 @@ bool PubSubClient::publish_P(const char* topic, const uint8_t* payload, size_t p
     return false;
 }
 
-bool PubSubClient::beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained) {
+bool PubSubClient::publish_P(const __FlashStringHelper* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained) {
+    if (beginPublish(topic, plength, qos, retained)) {
+        size_t rc = write_P(payload, plength);
+        return endPublish() && (rc == plength);
+    }
+    return false;
+}
+
+/**
+ * @brief Internal beginPublish implementation using topic stored in RAM or PROGMEM.
+ *
+ * @param progmem true if the topic is stored in PROGMEM/Flash, false if in RAM.
+ * @param topic The topic to publish to.
+ * @param plength The length of the payload.
+ * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+ * @param retained Publish the message with the retain flag.
+ * @return true If the publish succeeded.
+ * false If the publish failed, either connection lost or message too large.
+ */
+bool PubSubClient::beginPublishImpl(bool progmem, const char* topic, size_t plength, uint8_t qos, bool retained) {
     if (!topic) return false;
-    if (strlen(topic) == 0) return false;  // empty topic is not allowed
-    if (qos > MQTT_QOS2) {                 // only valid QoS supported
+
+    // get topic length depending on storage (RAM vs PROGMEM)
+    size_t topicLen = progmem ? strlen_P(topic) : strlen(topic);
+    if (topicLen == 0) return false;  // empty topic is not allowed
+
+    if (qos > MQTT_QOS2) {  // only valid QoS supported
         ERROR_PSC_PRINTF_P("beginPublish() called with invalid QoS %u\n", qos);
         return false;
     }
+
     const size_t nextMsgLen = (qos > MQTT_QOS0) ? 2 : 0;  // add 2 bytes for nextMsgId if QoS > 0
     // check if the header, the topic (including 2 length bytes) and nextMsgId fit into the _buffer
-    if (connected() && (MQTT_MAX_HEADER_SIZE + strlen(topic) + 2 + nextMsgLen <= _bufferSize)) {
+    if (connected() && (MQTT_MAX_HEADER_SIZE + topicLen + 2 + nextMsgLen <= _bufferSize)) {
         // first write the topic at the end of the maximal variable header (MQTT_MAX_HEADER_SIZE) to the _buffer
-        size_t topicLen = writeString(topic, MQTT_MAX_HEADER_SIZE) - MQTT_MAX_HEADER_SIZE;
+        topicLen = writeStringImpl(progmem, topic, MQTT_MAX_HEADER_SIZE) - MQTT_MAX_HEADER_SIZE;
         if (qos > MQTT_QOS0) {
             // if QoS 1 or 2, we need to send the nextMsgId (packet identifier) after topic
             writeNextMsgId(MQTT_MAX_HEADER_SIZE + topicLen);
         }
-        // we now know the length of the topic string (lenght + 2 bytes signalling the length) and can build the variable header information
+        // we now know the length of the topic string (length + 2 bytes signalling the length) and can build the variable header information
         const uint8_t header = MQTTPUBLISH | MQTT_QOS_GET_HDR(qos) | (retained ? MQTTRETAINED : 0);
         uint8_t hdrLen = buildHeader(header, topicLen + nextMsgLen + plength);
         if (hdrLen == 0) return false;  // exit here in case of header generation failure
@@ -579,7 +611,7 @@ uint8_t PubSubClient::buildHeader(uint8_t header, size_t length) {
     } while ((len > 0) && (hdrLen < MQTT_MAX_HEADER_SIZE - 1));
 
     if (len > 0) {
-        ERROR_PSC_PRINTF_P("buildHeader() length too big %zu, left %zu\n", length, len);
+        ERROR_PSC_PRINTF_P("buildHeader: header=0x%02X, length too big %zu, left %zu\n", header, length, len);
         return 0;
     }
 
@@ -612,7 +644,7 @@ size_t PubSubClient::write_P(const uint8_t* buf, size_t size) {
  *
  * @param  header Header byte, e.g. MQTTCONNECT, MQTTPUBLISH, MQTTSUBSCRIBE, MQTTUNSUBSCRIBE.
  * @param  length Length of _buffer to write.
- * @return True if successfully sent, otherwise false if buildHeader() failed or buffer could not be written.
+ * @return True if successfully sent, otherwise false if build header failed or buffer could not be written.
  */
 bool PubSubClient::writeControlPacket(uint8_t header, size_t length) {
     uint8_t hdrLen = buildHeader(header, length);
@@ -660,6 +692,37 @@ size_t PubSubClient::writeBuffer(size_t pos, size_t size) {
 }
 
 /**
+ * @brief  Internal implementation of writeString using RAM or PROGMEM string.
+ * Write an UTF-8 encoded string to the internal buffer at a given position. The string can have a length of 0 to 65535 bytes (depending on size of
+ * internal buffer). The buffer is prefixed with two bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol specification.
+ * @note   If the string does not fit in the buffer or is longer than 65535 bytes nothing is written to the buffer and the returned position is
+ * unchanged.
+ *
+ * @param  progmem true if the string is stored in PROGMEM, false if in RAM.
+ * @param  string 'C' string of the data that shall be written in the buffer.
+ * @param  pos Position in the internal buffer to write the string.
+ * @return New position in the internal buffer (pos + 2 + string length), or pos if a buffer overrun would occur or the string is a nullptr.
+ */
+size_t PubSubClient::writeStringImpl(bool progmem, const char* string, size_t pos) {
+    if (!string) return pos;
+
+    size_t sLen = progmem ? strlen_P(string) : strlen(string);
+    if ((pos + 2 + sLen <= _bufferSize) && (sLen <= 0xFFFF)) {
+        _buffer[pos++] = (uint8_t)(sLen >> 8);
+        _buffer[pos++] = (uint8_t)(sLen & 0xFF);
+        if (progmem) {
+            memcpy_P(_buffer + pos, string, sLen);
+        } else {
+            memcpy(_buffer + pos, string, sLen);
+        }
+        pos += sLen;
+    } else {
+        ERROR_PSC_PRINTF_P("writeStringImpl(): string (%zu) does not fit into buf (%zu)\n", pos + 2 + sLen, _bufferSize);
+    }
+    return pos;
+}
+
+/**
  * @brief  Write an UTF-8 encoded string to the internal buffer at a given position. The string can have a length of 0 to 65535 bytes (depending on size of
  * internal buffer). The buffer is prefixed with two bytes representing the length of the string. See section 1.5.3 of MQTT v3.1.1 protocol specification.
  * @note   If the string does not fit in the buffer or is longer than 65535 bytes nothing is written to the buffer and the returned position is
@@ -669,19 +732,8 @@ size_t PubSubClient::writeBuffer(size_t pos, size_t size) {
  * @param  pos Position in the internal buffer to write the string.
  * @return New position in the internal buffer (pos + 2 + string length), or pos if a buffer overrun would occur or the string is a nullptr.
  */
-size_t PubSubClient::writeString(const char* string, size_t pos) {
-    if (!string) return pos;
-
-    size_t sLen = strlen(string);
-    if ((pos + 2 + sLen <= _bufferSize) && (sLen <= 0xFFFF)) {
-        _buffer[pos++] = (uint8_t)(sLen >> 8);
-        _buffer[pos++] = (uint8_t)(sLen & 0xFF);
-        memcpy(_buffer + pos, string, sLen);
-        pos += sLen;
-    } else {
-        ERROR_PSC_PRINTF_P("writeString(): string (%zu) does not fit into buf (%zu)\n", pos + 2 + sLen, _bufferSize);
-    }
-    return pos;
+inline size_t PubSubClient::writeString(const char* string, size_t pos) {
+    return writeStringImpl(false, string, pos);
 }
 
 /**
@@ -731,11 +783,20 @@ size_t PubSubClient::flushBuffer() {
     return rc;
 }
 
-bool PubSubClient::subscribe(const char* topic, uint8_t qos) {
+/**
+ * @brief Internal subscribes to messages published to the specified topic. The topic can be stored in RAM or PROGMEM.
+ * @param progmem true if the topic is stored in PROGMEM/Flash, false if in RAM.
+ * @param topic The topic to subscribe to.
+ * @param qos The qos to subscribe at. [0, 1].
+ * @return true If sending the subscribe succeeded.
+ * false If sending the subscribe failed, either connection lost or message too large.
+ */
+bool PubSubClient::subscribeImpl(bool progmem, const char* topic, uint8_t qos) {
     if (!topic) return false;
     if (qos > MQTT_QOS1) return false;  // only QoS 0 and 1 supported
 
-    size_t topicLen = strnlen(topic, _bufferSize);
+    // get topic length depending on storage (RAM vs PROGMEM)
+    size_t topicLen = progmem ? strnlen_P(topic, _bufferSize) : strnlen(topic, _bufferSize);
     if (_bufferSize < MQTT_MAX_HEADER_SIZE + 2 + 2 + topicLen + 1) {
         // Too long: header + nextMsgId (2) + topic length bytes (2) + topicLen + QoS (1)
         return false;
@@ -744,17 +805,25 @@ bool PubSubClient::subscribe(const char* topic, uint8_t qos) {
         // Leave room in the _buffer for header and variable length field
         uint16_t length = MQTT_MAX_HEADER_SIZE;
         length = writeNextMsgId(length);  // _buffer size is checked before
-        length = writeString(topic, length);
+        length = writeStringImpl(progmem, topic, length);
         _buffer[length++] = qos;
         return writeControlPacket(MQTTSUBSCRIBE | MQTT_QOS_GET_HDR(MQTT_QOS1), length - MQTT_MAX_HEADER_SIZE);
     }
     return false;
 }
 
-bool PubSubClient::unsubscribe(const char* topic) {
+/**
+ * @brief Internal unsubscribes from messages published to the specified topic. The topic can be stored in RAM or PROGMEM.
+ * @param progmem true if the topic is stored in PROGMEM/Flash, false if in RAM.
+ * @param topic The topic to unsubscribe from.
+ * @return true If sending the unsubscribe succeeded.
+ * false If sending the unsubscribe failed, either connection lost or message too large.
+ */
+bool PubSubClient::unsubscribeImpl(bool progmem, const char* topic) {
     if (!topic) return false;
 
-    size_t topicLen = strnlen(topic, _bufferSize);
+    // get topic length depending on storage (RAM vs PROGMEM)
+    size_t topicLen = progmem ? strnlen_P(topic, _bufferSize) : strnlen(topic, _bufferSize);
     if (_bufferSize < MQTT_MAX_HEADER_SIZE + 2 + 2 + topicLen) {
         // Too long: header + nextMsgId (2) + topic length bytes (2) + topicLen
         return false;
@@ -762,7 +831,7 @@ bool PubSubClient::unsubscribe(const char* topic) {
     if (connected()) {
         uint16_t length = MQTT_MAX_HEADER_SIZE;
         length = writeNextMsgId(length);  // _buffer size is checked before
-        length = writeString(topic, length);
+        length = writeStringImpl(progmem, topic, length);
         return writeControlPacket(MQTTUNSUBSCRIBE | MQTT_QOS_GET_HDR(MQTT_QOS1), length - MQTT_MAX_HEADER_SIZE);
     }
     return false;

@@ -199,8 +199,13 @@ class PubSubClient : public Print {
     uint8_t buildHeader(uint8_t header, size_t length);
     bool writeControlPacket(uint8_t header, size_t length);
     size_t writeBuffer(size_t pos, size_t size);
+    size_t writeStringImpl(bool progmem, const char* string, size_t pos);
     size_t writeString(const char* string, size_t pos);
     size_t writeNextMsgId(size_t pos);
+
+    bool beginPublishImpl(bool progmem, const char* topic, size_t plength, uint8_t qos, bool retained);
+    bool subscribeImpl(bool progmem, const char* topic, uint8_t qos);
+    bool unsubscribeImpl(bool progmem, const char* topic);
 
     // Add to buffer and flush if full (only to be used with beginPublish/endPublish)
     size_t appendBuffer(uint8_t data);
@@ -536,7 +541,33 @@ class PubSubClient : public Print {
      * false If the publish failed, either connection lost or message too large.
      */
     inline bool publish(const char* topic, const char* payload, uint8_t qos, bool retained) {
-        return publish(topic, (const uint8_t*)payload, payload ? strlen(payload) : 0, qos, retained);
+        return publish(topic, reinterpret_cast<const uint8_t*>(payload), payload ? strlen(payload) : 0, qos, retained);
+    }
+
+    /**
+     * @brief Publishes a message to the specified topic.
+     * @param topic The topic from __FlashStringHelper to publish to.
+     * @param payload The message to publish.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    inline bool publish(const __FlashStringHelper* topic, const char* payload, uint8_t qos, bool retained) {
+        return publish(topic, reinterpret_cast<const uint8_t*>(payload), payload ? strlen(payload) : 0, qos, retained);
+    }
+
+    /**
+     * @brief Publishes a message from __FlashStringHelper to the specified topic from __FlashStringHelper.
+     * @param topic The topic to publish to.
+     * @param payload The message to publish.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    inline bool publish(const __FlashStringHelper* topic, const __FlashStringHelper* payload, uint8_t qos, bool retained) {
+        return publish_P(topic, reinterpret_cast<const uint8_t*>(payload), payload ? strlen_P(reinterpret_cast<const char*>(payload)) : 0, qos, retained);
     }
 
     /**
@@ -577,6 +608,18 @@ class PubSubClient : public Print {
     bool publish(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained);
 
     /**
+     * @brief Publishes a message to the specified topic.
+     * @param topic The topic from __FlashStringHelper to publish to.
+     * @param payload The message to publish.
+     * @param plength The length of the payload.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool publish(const __FlashStringHelper* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained);
+
+    /**
      * @brief Publishes a message stored in PROGMEM to the specified topic using QoS 0.
      * @param topic The topic to publish to.
      * @param payload The message to publish.
@@ -584,7 +627,7 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    inline bool publish_P(const char* topic, const char* payload, bool retained) {
+    inline bool publish_P(const char* topic, PGM_P payload, bool retained) {
         return publish_P(topic, payload, MQTT_QOS0, retained);
     }
 
@@ -597,8 +640,21 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    inline bool publish_P(const char* topic, const char* payload, uint8_t qos, bool retained) {
-        return publish_P(topic, (const uint8_t*)payload, payload ? strlen_P(payload) : 0, qos, retained);
+    inline bool publish_P(const char* topic, PGM_P payload, uint8_t qos, bool retained) {
+        return publish_P(topic, reinterpret_cast<const uint8_t*>(payload), payload ? strlen_P(payload) : 0, qos, retained);
+    }
+
+    /**
+     * @brief Publishes a message stored in PROGMEM to the specified topic.
+     * @param topic The topic from __FlashStringHelper to publish to.
+     * @param payload The message to publish.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool publish_P(const __FlashStringHelper* topic, PGM_P payload, uint8_t qos, bool retained) {
+        return publish_P(topic, reinterpret_cast<const uint8_t*>(payload), payload ? strlen_P(payload) : 0, qos, retained);
     }
 
     /**
@@ -627,6 +683,18 @@ class PubSubClient : public Print {
     bool publish_P(const char* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained);
 
     /**
+     * @brief Publishes a message stored in PROGMEM to the specified topic.
+     * @param topic The topic from __FlashStringHelper to publish to.
+     * @param payload The message from PROGMEM to publish.
+     * @param plength The length of the payload.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    bool publish_P(const __FlashStringHelper* topic, const uint8_t* payload, size_t plength, uint8_t qos, bool retained);
+
+    /**
      * @brief Start to publish a message using QoS 0.
      * This API:
      *   beginPublish(...)
@@ -641,7 +709,7 @@ class PubSubClient : public Print {
      * false If the publish failed, either connection lost or message too large.
      */
     inline bool beginPublish(const char* topic, size_t plength, bool retained) {
-        return beginPublish(topic, plength, MQTT_QOS0, retained);
+        return beginPublishImpl(false, topic, plength, MQTT_QOS0, retained);
     }
 
     /**
@@ -659,7 +727,48 @@ class PubSubClient : public Print {
      * @return true If the publish succeeded.
      * false If the publish failed, either connection lost or message too large.
      */
-    bool beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained);
+    inline bool beginPublish(const char* topic, size_t plength, uint8_t qos, bool retained) {
+        return beginPublishImpl(false, topic, plength, qos, retained);
+    }
+
+    /**
+     * @brief Start to publish a message using a topic from __FlashStringHelper F().
+     * This API:
+     *   beginPublish(...)
+     *   one or more calls to write(...)
+     *   endPublish()
+     * Allows for arbitrarily large payloads to be sent without them having to be copied into
+     * a new buffer and held in memory at one time.
+     * @param topic The topic from __FlashStringHelper to publish to.
+     * @param plength The length of the payload.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    inline bool beginPublish(const __FlashStringHelper* topic, size_t plength, uint8_t qos, bool retained) {
+        // convert FlashStringHelper in PROGMEM-pointer
+        return beginPublishImpl(true, reinterpret_cast<const char*>(topic), plength, qos, retained);
+    }
+
+    /**
+     * @brief Start to publish a message using a topic in PROGMEM.
+     * This API:
+     *   beginPublish_P(...)
+     *   one or more calls to write(...)
+     *   endPublish()
+     * Allows for arbitrarily large payloads to be sent without them having to be copied into
+     * a new buffer and held in memory at one time.
+     * @param topic The topic in PROGMEM to publish to.
+     * @param plength The length of the payload.
+     * @param qos The quality of service (\ref group_qos) to publish at. [0, 1, 2].
+     * @param retained Publish the message with the retain flag.
+     * @return true If the publish succeeded.
+     * false If the publish failed, either connection lost or message too large.
+     */
+    inline bool beginPublish_P(PGM_P topic, size_t plength, uint8_t qos, bool retained) {
+        return beginPublishImpl(true, reinterpret_cast<const char*>(topic), plength, qos, retained);
+    }
 
     /**
      * @brief Finish sending a message that was started with a call to beginPublish.
@@ -688,6 +797,17 @@ class PubSubClient : public Print {
     virtual size_t write(const uint8_t* buf, size_t size);
 
     /**
+     * @brief Writes a string in PROGMEM as a component of a publish started with a call to beginPublish.
+     *        For performance reasons, this will be appended to the internal buffer,
+     *        which will be flushed when full or on a call to endPublish().
+     * @param string The message to write.
+     * @return The number of bytes written. If return value is != string length a write error occurred.
+     */
+    inline size_t write_P(PGM_P string) {
+        return write_P(reinterpret_cast<const uint8_t*>(string), strlen_P(string));
+    }
+
+    /**
      * @brief Writes an array of progmem bytes as a component of a publish started with a call to beginPublish.
      *        For performance reasons, this will be appended to the internal buffer,
      *        which will be flushed when full or on a call to endPublish().
@@ -704,7 +824,28 @@ class PubSubClient : public Print {
      * false If sending the subscribe failed, either connection lost or message too large.
      */
     inline bool subscribe(const char* topic) {
-        return subscribe(topic, MQTT_QOS0);
+        return subscribeImpl(false, topic, MQTT_QOS0);
+    }
+
+    /**
+     * @brief Subscribes to messages published to the specified topic from __FlashStringHelper using QoS 0.
+     * @param topic The topic from __FlashStringHelper to subscribe to.
+     * @return true If sending the subscribe succeeded.
+     * false If sending the subscribe failed, either connection lost or message too large.
+     */
+    inline bool subscribe(const __FlashStringHelper* topic) {
+        // convert FlashStringHelper in PROGMEM-pointer
+        return subscribeImpl(true, reinterpret_cast<const char*>(topic), MQTT_QOS0);
+    }
+
+    /**
+     * @brief Subscribes to messages published to the specified topic in PROGMEM using QoS 0.
+     * @param topic The topic in PROGMEM to subscribe to.
+     * @return true If sending the subscribe succeeded.
+     * false If sending the subscribe failed, either connection lost or message too large.
+     */
+    inline bool subscribe_P(PGM_P topic) {
+        return subscribeImpl(true, reinterpret_cast<const char*>(topic), MQTT_QOS0);
     }
 
     /**
@@ -714,7 +855,32 @@ class PubSubClient : public Print {
      * @return true If sending the subscribe succeeded.
      * false If sending the subscribe failed, either connection lost or message too large.
      */
-    bool subscribe(const char* topic, uint8_t qos);
+    inline bool subscribe(const char* topic, uint8_t qos) {
+        return subscribeImpl(false, topic, qos);
+    }
+
+    /**
+     * @brief Subscribes to messages published to the specified topic from __FlashStringHelper.
+     * @param topic The topic from __FlashStringHelper to subscribe to.
+     * @param qos The qos to subscribe at. [0, 1].
+     * @return true If sending the subscribe succeeded.
+     * false If sending the subscribe failed, either connection lost or message too large.
+     */
+    inline bool subscribe(const __FlashStringHelper* topic, uint8_t qos) {
+        // convert FlashStringHelper in PROGMEM-pointer
+        return subscribeImpl(true, reinterpret_cast<const char*>(topic), qos);
+    }
+
+    /**
+     * @brief Subscribes to messages published to the specified topic in PROGMEM.
+     * @param topic The topic in PROGMEM to subscribe to.
+     * @param qos The qos to subscribe at. [0, 1].
+     * @return true If sending the subscribe succeeded.
+     * false If sending the subscribe failed, either connection lost or message too large.
+     */
+    inline bool subscribe_P(PGM_P topic, uint8_t qos) {
+        return subscribeImpl(true, reinterpret_cast<const char*>(topic), qos);
+    }
 
     /**
      * @brief Unsubscribes from the specified topic.
@@ -722,7 +888,30 @@ class PubSubClient : public Print {
      * @return true If sending the unsubscribe succeeded.
      * false If sending the unsubscribe failed, either connection lost or message too large.
      */
-    bool unsubscribe(const char* topic);
+    inline bool unsubscribe(const char* topic) {
+        return unsubscribeImpl(false, topic);
+    }
+
+    /**
+     * @brief Unsubscribes from the specified topic from __FlashStringHelper.
+     * @param topic The topic from __FlashStringHelper to unsubscribe from.
+     * @return true If sending the unsubscribe succeeded.
+     * false If sending the unsubscribe failed, either connection lost or message too large.
+     */
+    inline bool unsubscribe(const __FlashStringHelper* topic) {
+        // convert FlashStringHelper in PROGMEM-pointer
+        return unsubscribeImpl(true, reinterpret_cast<const char*>(topic));
+    }
+
+    /**
+     * @brief Unsubscribes from the specified topic in PROGMEM.
+     * @param topic The topic in PROGMEM to unsubscribe from.
+     * @return true If sending the unsubscribe succeeded.
+     * false If sending the unsubscribe failed, either connection lost or message too large.
+     */
+    inline bool unsubscribe_P(PGM_P topic) {
+        return unsubscribeImpl(true, reinterpret_cast<const char*>(topic));
+    }
 
     /**
      * @brief This should be called regularly to allow the client to process incoming messages and maintain its connection to the server.
