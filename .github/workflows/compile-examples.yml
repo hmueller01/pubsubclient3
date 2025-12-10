@@ -1,4 +1,4 @@
-name: Compile Examples
+name: Compile examples
 
 # See: https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows
 on:

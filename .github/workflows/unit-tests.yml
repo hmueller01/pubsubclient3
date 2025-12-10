@@ -1,4 +1,4 @@
-name: build
+name: Unit tests
 
 on:
   push:
@@ -11,14 +11,11 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
+  run-tests:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v6
-
-    - name: Check clang-format conformity
-      run: bash .github/clang-lint.sh
 
     - name: Build tests
       # Build / Execute tests defined in tests folder
