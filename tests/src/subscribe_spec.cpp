@@ -126,7 +126,7 @@ int test_subscribe_P_qos_1() {
     END_IT
 }
 
-int test_subscribe_FlashStringHelper(){
+int test_subscribe_FlashStringHelper() {
     IT("subscribe using FlashStringHelper");
     ShimClient shimClient;
     shimClient.setAllowConnect(true);
