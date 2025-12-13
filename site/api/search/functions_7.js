@@ -8,5 +8,6 @@ var searchData=
   ['setsockettimeout_5',['setSocketTimeout',['../classPubSubClient.html#a6337d6b919fb5fd79bc4a00019bbd70c',1,'PubSubClient']]],
   ['setstream_6',['setStream',['../classPubSubClient.html#af3983031103b719a0997424a3e44fcef',1,'PubSubClient']]],
   ['state_7',['state',['../classPubSubClient.html#a8a7025562e55ee15fd4469b75d535b1d',1,'PubSubClient']]],
-  ['subscribe_8',['subscribe',['../classPubSubClient.html#a0c4f24c7e9f704c29ebd79482c97b071',1,'PubSubClient::subscribe(const char *topic)'],['../classPubSubClient.html#ad413967506d42f2119f4bcef4669db97',1,'PubSubClient::subscribe(const char *topic, uint8_t qos)']]]
+  ['subscribe_8',['subscribe',['../classPubSubClient.html#a0c4f24c7e9f704c29ebd79482c97b071',1,'PubSubClient::subscribe(const char *topic)'],['../classPubSubClient.html#ace8d5ee87c05ee2fd642ad317c08ce39',1,'PubSubClient::subscribe(const __FlashStringHelper *topic)'],['../classPubSubClient.html#ad413967506d42f2119f4bcef4669db97',1,'PubSubClient::subscribe(const char *topic, uint8_t qos)'],['../classPubSubClient.html#ae2b6c05e506b4dddaf1f45f14dbba551',1,'PubSubClient::subscribe(const __FlashStringHelper *topic, uint8_t qos)']]],
+  ['subscribe_5fp_9',['subscribe_P',['../classPubSubClient.html#a7b04647f843a5a2748a49c42d3c000e6',1,'PubSubClient::subscribe_P(PGM_P topic)'],['../classPubSubClient.html#adc883ec6142c43f4f05ba9cc717d7040',1,'PubSubClient::subscribe_P(PGM_P topic, uint8_t qos)']]]
 ];

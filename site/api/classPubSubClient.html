@@ -232,6 +232,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5e8f40d8c22ecd4de612d9ba1f1ec7bd" id="r_a5e8f40d8c22ecd4de612d9ba1f1ec7bd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e8f40d8c22ecd4de612d9ba1f1ec7bd">publish</a> (const char *topic, const char *payload, uint8_t qos, bool retained)</td></tr>
 <tr class="memdesc:a5e8f40d8c22ecd4de612d9ba1f1ec7bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes a message to the specified topic.  <br /></td></tr>
 <tr class="separator:a5e8f40d8c22ecd4de612d9ba1f1ec7bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae82e552c580c941a299959a83388b71f" id="r_ae82e552c580c941a299959a83388b71f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae82e552c580c941a299959a83388b71f">publish</a> (const __FlashStringHelper *topic, const char *payload, uint8_t qos, bool retained)</td></tr>
+<tr class="memdesc:ae82e552c580c941a299959a83388b71f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes a message to the specified topic.  <br /></td></tr>
+<tr class="separator:ae82e552c580c941a299959a83388b71f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fa5b37a74c0148358aa4facecb7d58b" id="r_a5fa5b37a74c0148358aa4facecb7d58b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5fa5b37a74c0148358aa4facecb7d58b">publish</a> (const __FlashStringHelper *topic, const __FlashStringHelper *payload, uint8_t qos, bool retained)</td></tr>
+<tr class="memdesc:a5fa5b37a74c0148358aa4facecb7d58b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes a message from __FlashStringHelper to the specified topic from __FlashStringHelper.  <br /></td></tr>
+<tr class="separator:a5fa5b37a74c0148358aa4facecb7d58b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78f2ad424db740bab8038f31c743f3e3" id="r_a78f2ad424db740bab8038f31c743f3e3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78f2ad424db740bab8038f31c743f3e3">publish</a> (const char *topic, const uint8_t *payload, size_t plength)</td></tr>
 <tr class="memdesc:a78f2ad424db740bab8038f31c743f3e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes a non retained message to the specified topic using QoS 0.  <br /></td></tr>
 <tr class="separator:a78f2ad424db740bab8038f31c743f3e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -241,24 +247,39 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5254aec64bf2f3149fe0ee8d5fae78ea" id="r_a5254aec64bf2f3149fe0ee8d5fae78ea"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5254aec64bf2f3149fe0ee8d5fae78ea">publish</a> (const char *topic, const uint8_t *payload, size_t plength, uint8_t qos, bool retained)</td></tr>
 <tr class="memdesc:a5254aec64bf2f3149fe0ee8d5fae78ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes a message to the specified topic.  <br /></td></tr>
 <tr class="separator:a5254aec64bf2f3149fe0ee8d5fae78ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a501d46ac5e4296634aad8aa2452ac986" id="r_a501d46ac5e4296634aad8aa2452ac986"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a501d46ac5e4296634aad8aa2452ac986">publish_P</a> (const char *topic, const char *payload, bool retained)</td></tr>
-<tr class="memdesc:a501d46ac5e4296634aad8aa2452ac986"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes a message stored in PROGMEM to the specified topic using QoS 0.  <br /></td></tr>
-<tr class="separator:a501d46ac5e4296634aad8aa2452ac986"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a280671944f2e232216ba4018284c8933" id="r_a280671944f2e232216ba4018284c8933"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a280671944f2e232216ba4018284c8933">publish_P</a> (const char *topic, const char *payload, uint8_t qos, bool retained)</td></tr>
-<tr class="memdesc:a280671944f2e232216ba4018284c8933"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes a message stored in PROGMEM to the specified topic.  <br /></td></tr>
-<tr class="separator:a280671944f2e232216ba4018284c8933"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d988cd5386da38624d7ebdffa98bd42" id="r_a5d988cd5386da38624d7ebdffa98bd42"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d988cd5386da38624d7ebdffa98bd42">publish</a> (const __FlashStringHelper *topic, const uint8_t *payload, size_t plength, uint8_t qos, bool retained)</td></tr>
+<tr class="memdesc:a5d988cd5386da38624d7ebdffa98bd42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes a message to the specified topic.  <br /></td></tr>
+<tr class="separator:a5d988cd5386da38624d7ebdffa98bd42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a274f9091c0e8f747221ea57a316bde21" id="r_a274f9091c0e8f747221ea57a316bde21"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a274f9091c0e8f747221ea57a316bde21">publish_P</a> (const char *topic, PGM_P payload, bool retained)</td></tr>
+<tr class="memdesc:a274f9091c0e8f747221ea57a316bde21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes a message stored in PROGMEM to the specified topic using QoS 0.  <br /></td></tr>
+<tr class="separator:a274f9091c0e8f747221ea57a316bde21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a0254fbbc25c2e7579dccbb254fbea7" id="r_a1a0254fbbc25c2e7579dccbb254fbea7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a0254fbbc25c2e7579dccbb254fbea7">publish_P</a> (const char *topic, PGM_P payload, uint8_t qos, bool retained)</td></tr>
+<tr class="memdesc:a1a0254fbbc25c2e7579dccbb254fbea7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes a message stored in PROGMEM to the specified topic.  <br /></td></tr>
+<tr class="separator:a1a0254fbbc25c2e7579dccbb254fbea7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fab5828d7b99079c8932d6b8a3fb8f3" id="r_a1fab5828d7b99079c8932d6b8a3fb8f3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1fab5828d7b99079c8932d6b8a3fb8f3">publish_P</a> (const __FlashStringHelper *topic, PGM_P payload, uint8_t qos, bool retained)</td></tr>
+<tr class="memdesc:a1fab5828d7b99079c8932d6b8a3fb8f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes a message stored in PROGMEM to the specified topic.  <br /></td></tr>
+<tr class="separator:a1fab5828d7b99079c8932d6b8a3fb8f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6a223381bc70e206f126ea2330f40a6" id="r_ae6a223381bc70e206f126ea2330f40a6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae6a223381bc70e206f126ea2330f40a6">publish_P</a> (const char *topic, const uint8_t *payload, size_t plength, bool retained)</td></tr>
 <tr class="memdesc:ae6a223381bc70e206f126ea2330f40a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes a message stored in PROGMEM to the specified topic using QoS 0.  <br /></td></tr>
 <tr class="separator:ae6a223381bc70e206f126ea2330f40a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a639806e8b8900b88fc0395f6870c63cb" id="r_a639806e8b8900b88fc0395f6870c63cb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a639806e8b8900b88fc0395f6870c63cb">publish_P</a> (const char *topic, const uint8_t *payload, size_t plength, uint8_t qos, bool retained)</td></tr>
 <tr class="memdesc:a639806e8b8900b88fc0395f6870c63cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes a message stored in PROGMEM to the specified topic.  <br /></td></tr>
 <tr class="separator:a639806e8b8900b88fc0395f6870c63cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9333fffea1ccee710a9e408cc2c4ee9c" id="r_a9333fffea1ccee710a9e408cc2c4ee9c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9333fffea1ccee710a9e408cc2c4ee9c">publish_P</a> (const __FlashStringHelper *topic, const uint8_t *payload, size_t plength, uint8_t qos, bool retained)</td></tr>
+<tr class="memdesc:a9333fffea1ccee710a9e408cc2c4ee9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes a message stored in PROGMEM to the specified topic.  <br /></td></tr>
+<tr class="separator:a9333fffea1ccee710a9e408cc2c4ee9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a366090418dd09369df33d583b39c45db" id="r_a366090418dd09369df33d583b39c45db"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a366090418dd09369df33d583b39c45db">beginPublish</a> (const char *topic, size_t plength, bool retained)</td></tr>
 <tr class="memdesc:a366090418dd09369df33d583b39c45db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start to publish a message using QoS 0. This API: beginPublish(...) one or more calls to write(...) <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a> Allows for arbitrarily large payloads to be sent without them having to be copied into a new buffer and held in memory at one time.  <br /></td></tr>
 <tr class="separator:a366090418dd09369df33d583b39c45db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca0e58a9f61b927bb1d77bdaf009007e" id="r_aca0e58a9f61b927bb1d77bdaf009007e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aca0e58a9f61b927bb1d77bdaf009007e">beginPublish</a> (const char *topic, size_t plength, uint8_t qos, bool retained)</td></tr>
 <tr class="memdesc:aca0e58a9f61b927bb1d77bdaf009007e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start to publish a message. This API: beginPublish(...) one or more calls to write(...) <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a> Allows for arbitrarily large payloads to be sent without them having to be copied into a new buffer and held in memory at one time.  <br /></td></tr>
 <tr class="separator:aca0e58a9f61b927bb1d77bdaf009007e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2730e14d7c356776f76af7763d7077e9" id="r_a2730e14d7c356776f76af7763d7077e9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2730e14d7c356776f76af7763d7077e9">beginPublish</a> (const __FlashStringHelper *topic, size_t plength, uint8_t qos, bool retained)</td></tr>
+<tr class="memdesc:a2730e14d7c356776f76af7763d7077e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start to publish a message using a topic from __FlashStringHelper F(). This API: beginPublish(...) one or more calls to write(...) <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a> Allows for arbitrarily large payloads to be sent without them having to be copied into a new buffer and held in memory at one time.  <br /></td></tr>
+<tr class="separator:a2730e14d7c356776f76af7763d7077e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b94a23571fa4a43048ccd5aac518a2e" id="r_a5b94a23571fa4a43048ccd5aac518a2e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b94a23571fa4a43048ccd5aac518a2e">beginPublish_P</a> (PGM_P topic, size_t plength, uint8_t qos, bool retained)</td></tr>
+<tr class="memdesc:a5b94a23571fa4a43048ccd5aac518a2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start to publish a message using a topic in PROGMEM. This API: beginPublish_P(...) one or more calls to write(...) <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a> Allows for arbitrarily large payloads to be sent without them having to be copied into a new buffer and held in memory at one time.  <br /></td></tr>
+<tr class="separator:a5b94a23571fa4a43048ccd5aac518a2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c658db7eb23241aa0c1bc16f703cdb2" id="r_a8c658db7eb23241aa0c1bc16f703cdb2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2">endPublish</a> ()</td></tr>
 <tr class="memdesc:a8c658db7eb23241aa0c1bc16f703cdb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finish sending a message that was started with a call to beginPublish.  <br /></td></tr>
 <tr class="separator:a8c658db7eb23241aa0c1bc16f703cdb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -268,18 +289,39 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ace9fe94ce4462809675d165c58256b4c" id="r_ace9fe94ce4462809675d165c58256b4c"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace9fe94ce4462809675d165c58256b4c">write</a> (const uint8_t *buf, size_t size)</td></tr>
 <tr class="memdesc:ace9fe94ce4462809675d165c58256b4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes an array of bytes as a component of a publish started with a call to beginPublish. For performance reasons, this will be appended to the internal buffer, which will be flushed when full or on a call to <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a>.  <br /></td></tr>
 <tr class="separator:ace9fe94ce4462809675d165c58256b4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae46c6559907d7ae407177343d14f512" id="r_aae46c6559907d7ae407177343d14f512"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aae46c6559907d7ae407177343d14f512">write_P</a> (PGM_P string)</td></tr>
+<tr class="memdesc:aae46c6559907d7ae407177343d14f512"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a string in PROGMEM as a component of a publish started with a call to beginPublish. For performance reasons, this will be appended to the internal buffer, which will be flushed when full or on a call to <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a>.  <br /></td></tr>
+<tr class="separator:aae46c6559907d7ae407177343d14f512"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc11b726f557542c0b68c3f1a77052a3" id="r_adc11b726f557542c0b68c3f1a77052a3"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc11b726f557542c0b68c3f1a77052a3">write_P</a> (const uint8_t *buf, size_t size)</td></tr>
 <tr class="memdesc:adc11b726f557542c0b68c3f1a77052a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes an array of progmem bytes as a component of a publish started with a call to beginPublish. For performance reasons, this will be appended to the internal buffer, which will be flushed when full or on a call to <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a>.  <br /></td></tr>
 <tr class="separator:adc11b726f557542c0b68c3f1a77052a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c4f24c7e9f704c29ebd79482c97b071" id="r_a0c4f24c7e9f704c29ebd79482c97b071"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0c4f24c7e9f704c29ebd79482c97b071">subscribe</a> (const char *topic)</td></tr>
 <tr class="memdesc:a0c4f24c7e9f704c29ebd79482c97b071"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscribes to messages published to the specified topic using QoS 0.  <br /></td></tr>
 <tr class="separator:a0c4f24c7e9f704c29ebd79482c97b071"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace8d5ee87c05ee2fd642ad317c08ce39" id="r_ace8d5ee87c05ee2fd642ad317c08ce39"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace8d5ee87c05ee2fd642ad317c08ce39">subscribe</a> (const __FlashStringHelper *topic)</td></tr>
+<tr class="memdesc:ace8d5ee87c05ee2fd642ad317c08ce39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscribes to messages published to the specified topic from __FlashStringHelper using QoS 0.  <br /></td></tr>
+<tr class="separator:ace8d5ee87c05ee2fd642ad317c08ce39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b04647f843a5a2748a49c42d3c000e6" id="r_a7b04647f843a5a2748a49c42d3c000e6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b04647f843a5a2748a49c42d3c000e6">subscribe_P</a> (PGM_P topic)</td></tr>
+<tr class="memdesc:a7b04647f843a5a2748a49c42d3c000e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscribes to messages published to the specified topic in PROGMEM using QoS 0.  <br /></td></tr>
+<tr class="separator:a7b04647f843a5a2748a49c42d3c000e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad413967506d42f2119f4bcef4669db97" id="r_ad413967506d42f2119f4bcef4669db97"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad413967506d42f2119f4bcef4669db97">subscribe</a> (const char *topic, uint8_t qos)</td></tr>
 <tr class="memdesc:ad413967506d42f2119f4bcef4669db97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscribes to messages published to the specified topic.  <br /></td></tr>
 <tr class="separator:ad413967506d42f2119f4bcef4669db97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2b6c05e506b4dddaf1f45f14dbba551" id="r_ae2b6c05e506b4dddaf1f45f14dbba551"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae2b6c05e506b4dddaf1f45f14dbba551">subscribe</a> (const __FlashStringHelper *topic, uint8_t qos)</td></tr>
+<tr class="memdesc:ae2b6c05e506b4dddaf1f45f14dbba551"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscribes to messages published to the specified topic from __FlashStringHelper.  <br /></td></tr>
+<tr class="separator:ae2b6c05e506b4dddaf1f45f14dbba551"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc883ec6142c43f4f05ba9cc717d7040" id="r_adc883ec6142c43f4f05ba9cc717d7040"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc883ec6142c43f4f05ba9cc717d7040">subscribe_P</a> (PGM_P topic, uint8_t qos)</td></tr>
+<tr class="memdesc:adc883ec6142c43f4f05ba9cc717d7040"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscribes to messages published to the specified topic in PROGMEM.  <br /></td></tr>
+<tr class="separator:adc883ec6142c43f4f05ba9cc717d7040"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38a147c2013ea040a822334c1464ef9c" id="r_a38a147c2013ea040a822334c1464ef9c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a38a147c2013ea040a822334c1464ef9c">unsubscribe</a> (const char *topic)</td></tr>
 <tr class="memdesc:a38a147c2013ea040a822334c1464ef9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unsubscribes from the specified topic.  <br /></td></tr>
 <tr class="separator:a38a147c2013ea040a822334c1464ef9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14cb4ed5bfb3a6b9aafbd2b63f004ea8" id="r_a14cb4ed5bfb3a6b9aafbd2b63f004ea8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a14cb4ed5bfb3a6b9aafbd2b63f004ea8">unsubscribe</a> (const __FlashStringHelper *topic)</td></tr>
+<tr class="memdesc:a14cb4ed5bfb3a6b9aafbd2b63f004ea8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unsubscribes from the specified topic from __FlashStringHelper.  <br /></td></tr>
+<tr class="separator:a14cb4ed5bfb3a6b9aafbd2b63f004ea8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cb5f47972ff645ebd6fc9f08e5374b1" id="r_a1cb5f47972ff645ebd6fc9f08e5374b1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1cb5f47972ff645ebd6fc9f08e5374b1">unsubscribe_P</a> (PGM_P topic)</td></tr>
+<tr class="memdesc:a1cb5f47972ff645ebd6fc9f08e5374b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unsubscribes from the specified topic in PROGMEM.  <br /></td></tr>
+<tr class="separator:a1cb5f47972ff645ebd6fc9f08e5374b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08f4240c1f1fc10b9c6f5f063b13d240" id="r_a08f4240c1f1fc10b9c6f5f063b13d240"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a08f4240c1f1fc10b9c6f5f063b13d240">loop</a> ()</td></tr>
 <tr class="memdesc:a08f4240c1f1fc10b9c6f5f063b13d240"><td class="mdescLeft">&#160;</td><td class="mdescRight">This should be called regularly to allow the client to process incoming messages and maintain its connection to the server.  <br /></td></tr>
 <tr class="separator:a08f4240c1f1fc10b9c6f5f063b13d240"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -895,8 +937,61 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a2730e14d7c356776f76af7763d7077e9" name="a2730e14d7c356776f76af7763d7077e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2730e14d7c356776f76af7763d7077e9">&#9670;&#160;</a></span>beginPublish() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PubSubClient::beginPublish </td>
+          <td>(</td>
+          <td class="paramtype">const __FlashStringHelper *</td>          <td class="paramname"><span class="paramname"><em>topic</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>plength</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>qos</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>retained</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start to publish a message using a topic from __FlashStringHelper F(). This API: beginPublish(...) one or more calls to write(...) <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a> Allows for arbitrarily large payloads to be sent without them having to be copied into a new buffer and held in memory at one time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topic</td><td>The topic from __FlashStringHelper to publish to. </td></tr>
+    <tr><td class="paramname">plength</td><td>The length of the payload. </td></tr>
+    <tr><td class="paramname">qos</td><td>The quality of service (<a class="el" href="group__group__qos.html">QoS levels</a>) to publish at. [0, 1, 2]. </td></tr>
+    <tr><td class="paramname">retained</td><td>Publish the message with the retain flag. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00749">749</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+
+</div>
+</div>
 <a id="a366090418dd09369df33d583b39c45db" name="a366090418dd09369df33d583b39c45db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a366090418dd09369df33d583b39c45db">&#9670;&#160;</a></span>beginPublish() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a366090418dd09369df33d583b39c45db">&#9670;&#160;</a></span>beginPublish() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -938,15 +1033,18 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00643">643</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00711">711</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
 <a id="aca0e58a9f61b927bb1d77bdaf009007e" name="aca0e58a9f61b927bb1d77bdaf009007e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aca0e58a9f61b927bb1d77bdaf009007e">&#9670;&#160;</a></span>beginPublish() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aca0e58a9f61b927bb1d77bdaf009007e">&#9670;&#160;</a></span>beginPublish() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::beginPublish </td>
@@ -969,6 +1067,11 @@ Public Member Functions</h2></td></tr>
           <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>retained</em></span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Start to publish a message. This API: beginPublish(...) one or more calls to write(...) <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a> Allows for arbitrarily large payloads to be sent without them having to be copied into a new buffer and held in memory at one time. </p>
@@ -983,7 +1086,60 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00519">519</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00730">730</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+
+</div>
+</div>
+<a id="a5b94a23571fa4a43048ccd5aac518a2e" name="a5b94a23571fa4a43048ccd5aac518a2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b94a23571fa4a43048ccd5aac518a2e">&#9670;&#160;</a></span>beginPublish_P()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PubSubClient::beginPublish_P </td>
+          <td>(</td>
+          <td class="paramtype">PGM_P</td>          <td class="paramname"><span class="paramname"><em>topic</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>plength</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>qos</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>retained</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start to publish a message using a topic in PROGMEM. This API: beginPublish_P(...) one or more calls to write(...) <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a> Allows for arbitrarily large payloads to be sent without them having to be copied into a new buffer and held in memory at one time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topic</td><td>The topic in PROGMEM to publish to. </td></tr>
+    <tr><td class="paramname">plength</td><td>The length of the payload. </td></tr>
+    <tr><td class="paramname">qos</td><td>The quality of service (<a class="el" href="group__group__qos.html">QoS levels</a>) to publish at. [0, 1, 2]. </td></tr>
+    <tr><td class="paramname">retained</td><td>Publish the message with the retain flag. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00769">769</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1019,7 +1175,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If client succeeded in establishing a connection to the broker. false If client failed to establish a connection to the broker. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00429">429</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00434">434</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1069,7 +1225,7 @@ Public Member Functions</h2></td></tr>
 If <b>pass</b> is NULL, no password is used. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>true If client succeeded in establishing a connection to the broker. false If client failed to establish a connection to the broker. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00443">443</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00448">448</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1145,7 +1301,7 @@ If <b>pass</b> is NULL, no password is used. </dd>
 If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>true If client succeeded in establishing a connection to the broker. false If client failed to establish a connection to the broker. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00477">477</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00482">482</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1279,7 +1435,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>true If client succeeded in establishing a connection to the broker. false If client failed to establish a connection to the broker. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00458">458</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00463">463</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1344,7 +1500,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <p>Finish sending a message that was started with a call to beginPublish. </p>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00547">547</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00579">579</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1366,7 +1522,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <p>Gets the current size of the internal buffer. </p>
 <dl class="section return"><dt>Returns</dt><dd>The size of the internal buffer. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00835">835</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00904">904</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1392,8 +1548,165 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 
 </div>
 </div>
+<a id="a5fa5b37a74c0148358aa4facecb7d58b" name="a5fa5b37a74c0148358aa4facecb7d58b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fa5b37a74c0148358aa4facecb7d58b">&#9670;&#160;</a></span>publish() <span class="overload">[1/9]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PubSubClient::publish </td>
+          <td>(</td>
+          <td class="paramtype">const __FlashStringHelper *</td>          <td class="paramname"><span class="paramname"><em>topic</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const __FlashStringHelper *</td>          <td class="paramname"><span class="paramname"><em>payload</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>qos</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>retained</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Publishes a message from __FlashStringHelper to the specified topic from __FlashStringHelper. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topic</td><td>The topic to publish to. </td></tr>
+    <tr><td class="paramname">payload</td><td>The message to publish. </td></tr>
+    <tr><td class="paramname">qos</td><td>The quality of service (<a class="el" href="group__group__qos.html">QoS levels</a>) to publish at. [0, 1, 2]. </td></tr>
+    <tr><td class="paramname">retained</td><td>Publish the message with the retain flag. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00569">569</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+
+</div>
+</div>
+<a id="ae82e552c580c941a299959a83388b71f" name="ae82e552c580c941a299959a83388b71f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae82e552c580c941a299959a83388b71f">&#9670;&#160;</a></span>publish() <span class="overload">[2/9]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PubSubClient::publish </td>
+          <td>(</td>
+          <td class="paramtype">const __FlashStringHelper *</td>          <td class="paramname"><span class="paramname"><em>topic</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>payload</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>qos</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>retained</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Publishes a message to the specified topic. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topic</td><td>The topic from __FlashStringHelper to publish to. </td></tr>
+    <tr><td class="paramname">payload</td><td>The message to publish. </td></tr>
+    <tr><td class="paramname">qos</td><td>The quality of service (<a class="el" href="group__group__qos.html">QoS levels</a>) to publish at. [0, 1, 2]. </td></tr>
+    <tr><td class="paramname">retained</td><td>Publish the message with the retain flag. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00556">556</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+
+</div>
+</div>
+<a id="a5d988cd5386da38624d7ebdffa98bd42" name="a5d988cd5386da38624d7ebdffa98bd42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d988cd5386da38624d7ebdffa98bd42">&#9670;&#160;</a></span>publish() <span class="overload">[3/9]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PubSubClient::publish </td>
+          <td>(</td>
+          <td class="paramtype">const __FlashStringHelper *</td>          <td class="paramname"><span class="paramname"><em>topic</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t *</td>          <td class="paramname"><span class="paramname"><em>payload</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>plength</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>qos</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>retained</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Publishes a message to the specified topic. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topic</td><td>The topic from __FlashStringHelper to publish to. </td></tr>
+    <tr><td class="paramname">payload</td><td>The message to publish. </td></tr>
+    <tr><td class="paramname">plength</td><td>The length of the payload. </td></tr>
+    <tr><td class="paramname">qos</td><td>The quality of service (<a class="el" href="group__group__qos.html">QoS levels</a>) to publish at. [0, 1, 2]. </td></tr>
+    <tr><td class="paramname">retained</td><td>Publish the message with the retain flag. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00511">511</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a59500b307e27b6ec9007ef1f3a0c24db" name="a59500b307e27b6ec9007ef1f3a0c24db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a59500b307e27b6ec9007ef1f3a0c24db">&#9670;&#160;</a></span>publish() <span class="overload">[1/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a59500b307e27b6ec9007ef1f3a0c24db">&#9670;&#160;</a></span>publish() <span class="overload">[4/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1429,12 +1742,12 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00513">513</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00518">518</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
 <a id="a7daa0a786e0bcb8447cc2e9c5acaae7b" name="a7daa0a786e0bcb8447cc2e9c5acaae7b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7daa0a786e0bcb8447cc2e9c5acaae7b">&#9670;&#160;</a></span>publish() <span class="overload">[2/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7daa0a786e0bcb8447cc2e9c5acaae7b">&#9670;&#160;</a></span>publish() <span class="overload">[5/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1476,12 +1789,12 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00525">525</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00530">530</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
 <a id="a5e8f40d8c22ecd4de612d9ba1f1ec7bd" name="a5e8f40d8c22ecd4de612d9ba1f1ec7bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5e8f40d8c22ecd4de612d9ba1f1ec7bd">&#9670;&#160;</a></span>publish() <span class="overload">[3/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e8f40d8c22ecd4de612d9ba1f1ec7bd">&#9670;&#160;</a></span>publish() <span class="overload">[6/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1529,12 +1842,12 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00538">538</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00543">543</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
 <a id="a78f2ad424db740bab8038f31c743f3e3" name="a78f2ad424db740bab8038f31c743f3e3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a78f2ad424db740bab8038f31c743f3e3">&#9670;&#160;</a></span>publish() <span class="overload">[4/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a78f2ad424db740bab8038f31c743f3e3">&#9670;&#160;</a></span>publish() <span class="overload">[7/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1576,12 +1889,12 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00550">550</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00581">581</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
 <a id="a7d7e69a4ae83116a6a394200d68d756b" name="a7d7e69a4ae83116a6a394200d68d756b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7d7e69a4ae83116a6a394200d68d756b">&#9670;&#160;</a></span>publish() <span class="overload">[5/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d7e69a4ae83116a6a394200d68d756b">&#9670;&#160;</a></span>publish() <span class="overload">[8/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1629,12 +1942,12 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00563">563</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00594">594</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
 <a id="a5254aec64bf2f3149fe0ee8d5fae78ea" name="a5254aec64bf2f3149fe0ee8d5fae78ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5254aec64bf2f3149fe0ee8d5fae78ea">&#9670;&#160;</a></span>publish() <span class="overload">[6/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5254aec64bf2f3149fe0ee8d5fae78ea">&#9670;&#160;</a></span>publish() <span class="overload">[9/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1684,24 +1997,31 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 
 </div>
 </div>
-<a id="a501d46ac5e4296634aad8aa2452ac986" name="a501d46ac5e4296634aad8aa2452ac986"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a501d46ac5e4296634aad8aa2452ac986">&#9670;&#160;</a></span>publish_P() <span class="overload">[1/4]</span></h2>
+<a id="a9333fffea1ccee710a9e408cc2c4ee9c" name="a9333fffea1ccee710a9e408cc2c4ee9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9333fffea1ccee710a9e408cc2c4ee9c">&#9670;&#160;</a></span>publish_P() <span class="overload">[1/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::publish_P </td>
           <td>(</td>
-          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>topic</em></span>, </td>
+          <td class="paramtype">const __FlashStringHelper *</td>          <td class="paramname"><span class="paramname"><em>topic</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>payload</em></span>, </td>
+          <td class="paramtype">const uint8_t *</td>          <td class="paramname"><span class="paramname"><em>payload</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>plength</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>qos</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -1709,30 +2029,27 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
           <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>retained</em></span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Publishes a message stored in PROGMEM to the specified topic using QoS 0. </p>
+<p>Publishes a message stored in PROGMEM to the specified topic. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">topic</td><td>The topic to publish to. </td></tr>
-    <tr><td class="paramname">payload</td><td>The message to publish. </td></tr>
+    <tr><td class="paramname">topic</td><td>The topic from __FlashStringHelper to publish to. </td></tr>
+    <tr><td class="paramname">payload</td><td>The message from PROGMEM to publish. </td></tr>
+    <tr><td class="paramname">plength</td><td>The length of the payload. </td></tr>
+    <tr><td class="paramname">qos</td><td>The quality of service (<a class="el" href="group__group__qos.html">QoS levels</a>) to publish at. [0, 1, 2]. </td></tr>
     <tr><td class="paramname">retained</td><td>Publish the message with the retain flag. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00587">587</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00527">527</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a280671944f2e232216ba4018284c8933" name="a280671944f2e232216ba4018284c8933"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a280671944f2e232216ba4018284c8933">&#9670;&#160;</a></span>publish_P() <span class="overload">[2/4]</span></h2>
+<a id="a1fab5828d7b99079c8932d6b8a3fb8f3" name="a1fab5828d7b99079c8932d6b8a3fb8f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fab5828d7b99079c8932d6b8a3fb8f3">&#9670;&#160;</a></span>publish_P() <span class="overload">[2/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1743,12 +2060,12 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
         <tr>
           <td class="memname">bool PubSubClient::publish_P </td>
           <td>(</td>
-          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>topic</em></span>, </td>
+          <td class="paramtype">const __FlashStringHelper *</td>          <td class="paramname"><span class="paramname"><em>topic</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>payload</em></span>, </td>
+          <td class="paramtype">PGM_P</td>          <td class="paramname"><span class="paramname"><em>payload</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -1771,7 +2088,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <p>Publishes a message stored in PROGMEM to the specified topic. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">topic</td><td>The topic to publish to. </td></tr>
+    <tr><td class="paramname">topic</td><td>The topic from __FlashStringHelper to publish to. </td></tr>
     <tr><td class="paramname">payload</td><td>The message to publish. </td></tr>
     <tr><td class="paramname">qos</td><td>The quality of service (<a class="el" href="group__group__qos.html">QoS levels</a>) to publish at. [0, 1, 2]. </td></tr>
     <tr><td class="paramname">retained</td><td>Publish the message with the retain flag. </td></tr>
@@ -1780,12 +2097,12 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00600">600</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00656">656</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
 <a id="ae6a223381bc70e206f126ea2330f40a6" name="ae6a223381bc70e206f126ea2330f40a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae6a223381bc70e206f126ea2330f40a6">&#9670;&#160;</a></span>publish_P() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6a223381bc70e206f126ea2330f40a6">&#9670;&#160;</a></span>publish_P() <span class="overload">[3/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1833,12 +2150,12 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00613">613</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00669">669</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
 <a id="a639806e8b8900b88fc0395f6870c63cb" name="a639806e8b8900b88fc0395f6870c63cb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a639806e8b8900b88fc0395f6870c63cb">&#9670;&#160;</a></span>publish_P() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a639806e8b8900b88fc0395f6870c63cb">&#9670;&#160;</a></span>publish_P() <span class="overload">[4/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1884,7 +2201,107 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00511">511</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00519">519</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a274f9091c0e8f747221ea57a316bde21" name="a274f9091c0e8f747221ea57a316bde21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a274f9091c0e8f747221ea57a316bde21">&#9670;&#160;</a></span>publish_P() <span class="overload">[5/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PubSubClient::publish_P </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>topic</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">PGM_P</td>          <td class="paramname"><span class="paramname"><em>payload</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>retained</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Publishes a message stored in PROGMEM to the specified topic using QoS 0. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topic</td><td>The topic to publish to. </td></tr>
+    <tr><td class="paramname">payload</td><td>The message to publish. </td></tr>
+    <tr><td class="paramname">retained</td><td>Publish the message with the retain flag. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00630">630</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+
+</div>
+</div>
+<a id="a1a0254fbbc25c2e7579dccbb254fbea7" name="a1a0254fbbc25c2e7579dccbb254fbea7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a0254fbbc25c2e7579dccbb254fbea7">&#9670;&#160;</a></span>publish_P() <span class="overload">[6/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PubSubClient::publish_P </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>topic</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">PGM_P</td>          <td class="paramname"><span class="paramname"><em>payload</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>qos</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>retained</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Publishes a message stored in PROGMEM to the specified topic. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topic</td><td>The topic to publish to. </td></tr>
+    <tr><td class="paramname">payload</td><td>The message to publish. </td></tr>
+    <tr><td class="paramname">qos</td><td>The quality of service (<a class="el" href="group__group__qos.html">QoS levels</a>) to publish at. [0, 1, 2]. </td></tr>
+    <tr><td class="paramname">retained</td><td>Publish the message with the retain flag. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true If the publish succeeded. false If the publish failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00643">643</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -1912,7 +2329,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If the buffer was resized. false If the buffer could not be resized. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00816">816</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00885">885</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1940,7 +2357,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00801">801</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00870">870</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1968,7 +2385,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00806">806</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00875">875</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -1996,7 +2413,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00839">839</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00908">908</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2029,7 +2446,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00784">784</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00853">853</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2062,7 +2479,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00776">776</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00845">845</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2095,7 +2512,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00771">771</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00840">840</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2123,7 +2540,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00844">844</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00913">913</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2151,7 +2568,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The client instance, allowing the function to be chained. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00811">811</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00880">880</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2174,12 +2591,89 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>All of the values have corresponding constants defined in <a class="el" href="PubSubClient_8h.html" title="A simple client for MQTT.">PubSubClient.h</a>. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>See <a class="el" href="group__group__state.html">state() result</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00849">849</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00918">918</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ace8d5ee87c05ee2fd642ad317c08ce39" name="ace8d5ee87c05ee2fd642ad317c08ce39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace8d5ee87c05ee2fd642ad317c08ce39">&#9670;&#160;</a></span>subscribe() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PubSubClient::subscribe </td>
+          <td>(</td>
+          <td class="paramtype">const __FlashStringHelper *</td>          <td class="paramname"><span class="paramname"><em>topic</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Subscribes to messages published to the specified topic from __FlashStringHelper using QoS 0. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topic</td><td>The topic from __FlashStringHelper to subscribe to. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true If sending the subscribe succeeded. false If sending the subscribe failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00836">836</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+
+</div>
+</div>
+<a id="ae2b6c05e506b4dddaf1f45f14dbba551" name="ae2b6c05e506b4dddaf1f45f14dbba551"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2b6c05e506b4dddaf1f45f14dbba551">&#9670;&#160;</a></span>subscribe() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PubSubClient::subscribe </td>
+          <td>(</td>
+          <td class="paramtype">const __FlashStringHelper *</td>          <td class="paramname"><span class="paramname"><em>topic</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>qos</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Subscribes to messages published to the specified topic from __FlashStringHelper. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topic</td><td>The topic from __FlashStringHelper to subscribe to. </td></tr>
+    <tr><td class="paramname">qos</td><td>The qos to subscribe at. [0, 1]. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true If sending the subscribe succeeded. false If sending the subscribe failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00869">869</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
 <a id="a0c4f24c7e9f704c29ebd79482c97b071" name="a0c4f24c7e9f704c29ebd79482c97b071"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0c4f24c7e9f704c29ebd79482c97b071">&#9670;&#160;</a></span>subscribe() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c4f24c7e9f704c29ebd79482c97b071">&#9670;&#160;</a></span>subscribe() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2210,15 +2704,18 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If sending the subscribe succeeded. false If sending the subscribe failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00706">706</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00826">826</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
 <a id="ad413967506d42f2119f4bcef4669db97" name="ad413967506d42f2119f4bcef4669db97"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad413967506d42f2119f4bcef4669db97">&#9670;&#160;</a></span>subscribe() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad413967506d42f2119f4bcef4669db97">&#9670;&#160;</a></span>subscribe() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::subscribe </td>
@@ -2231,6 +2728,11 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
           <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>qos</em></span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Subscribes to messages published to the specified topic. </p>
@@ -2243,15 +2745,131 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If sending the subscribe succeeded. false If sending the subscribe failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00734">734</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00858">858</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+
+</div>
+</div>
+<a id="a7b04647f843a5a2748a49c42d3c000e6" name="a7b04647f843a5a2748a49c42d3c000e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b04647f843a5a2748a49c42d3c000e6">&#9670;&#160;</a></span>subscribe_P() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PubSubClient::subscribe_P </td>
+          <td>(</td>
+          <td class="paramtype">PGM_P</td>          <td class="paramname"><span class="paramname"><em>topic</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Subscribes to messages published to the specified topic in PROGMEM using QoS 0. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topic</td><td>The topic in PROGMEM to subscribe to. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true If sending the subscribe succeeded. false If sending the subscribe failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00847">847</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+
+</div>
+</div>
+<a id="adc883ec6142c43f4f05ba9cc717d7040" name="adc883ec6142c43f4f05ba9cc717d7040"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc883ec6142c43f4f05ba9cc717d7040">&#9670;&#160;</a></span>subscribe_P() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PubSubClient::subscribe_P </td>
+          <td>(</td>
+          <td class="paramtype">PGM_P</td>          <td class="paramname"><span class="paramname"><em>topic</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>qos</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Subscribes to messages published to the specified topic in PROGMEM. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topic</td><td>The topic in PROGMEM to subscribe to. </td></tr>
+    <tr><td class="paramname">qos</td><td>The qos to subscribe at. [0, 1]. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true If sending the subscribe succeeded. false If sending the subscribe failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00881">881</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+
+</div>
+</div>
+<a id="a14cb4ed5bfb3a6b9aafbd2b63f004ea8" name="a14cb4ed5bfb3a6b9aafbd2b63f004ea8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14cb4ed5bfb3a6b9aafbd2b63f004ea8">&#9670;&#160;</a></span>unsubscribe() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PubSubClient::unsubscribe </td>
+          <td>(</td>
+          <td class="paramtype">const __FlashStringHelper *</td>          <td class="paramname"><span class="paramname"><em>topic</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Unsubscribes from the specified topic from __FlashStringHelper. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topic</td><td>The topic from __FlashStringHelper to unsubscribe from. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true If sending the unsubscribe succeeded. false If sending the unsubscribe failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00901">901</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
 <a id="a38a147c2013ea040a822334c1464ef9c" name="a38a147c2013ea040a822334c1464ef9c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a38a147c2013ea040a822334c1464ef9c">&#9670;&#160;</a></span>unsubscribe()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a38a147c2013ea040a822334c1464ef9c">&#9670;&#160;</a></span>unsubscribe() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool PubSubClient::unsubscribe </td>
@@ -2260,6 +2878,11 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Unsubscribes from the specified topic. </p>
@@ -2271,7 +2894,43 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true If sending the unsubscribe succeeded. false If sending the unsubscribe failed, either connection lost or message too large. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00754">754</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00891">891</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
+
+</div>
+</div>
+<a id="a1cb5f47972ff645ebd6fc9f08e5374b1" name="a1cb5f47972ff645ebd6fc9f08e5374b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cb5f47972ff645ebd6fc9f08e5374b1">&#9670;&#160;</a></span>unsubscribe_P()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PubSubClient::unsubscribe_P </td>
+          <td>(</td>
+          <td class="paramtype">PGM_P</td>          <td class="paramname"><span class="paramname"><em>topic</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Unsubscribes from the specified topic in PROGMEM. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topic</td><td>The topic in PROGMEM to unsubscribe from. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true If sending the unsubscribe succeeded. false If sending the unsubscribe failed, either connection lost or message too large. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00912">912</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
@@ -2312,7 +2971,7 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The number of bytes written. If return value is != size a write error occurred. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00595">595</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00627">627</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
@@ -2348,12 +3007,12 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The number of bytes written (0 or 1). If 0 is returned a write error occurred. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00591">591</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00623">623</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
 
 </div>
 </div>
 <a id="adc11b726f557542c0b68c3f1a77052a3" name="adc11b726f557542c0b68c3f1a77052a3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adc11b726f557542c0b68c3f1a77052a3">&#9670;&#160;</a></span>write_P()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#adc11b726f557542c0b68c3f1a77052a3">&#9670;&#160;</a></span>write_P() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2381,7 +3040,43 @@ If <b>willTopic</b> is NULL, no will message is sent. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The number of bytes written. If return value is != size a write error occurred. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00602">602</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8cpp_source.html#l00634">634</a> of file <a class="el" href="PubSubClient_8cpp_source.html">PubSubClient.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aae46c6559907d7ae407177343d14f512" name="aae46c6559907d7ae407177343d14f512"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae46c6559907d7ae407177343d14f512">&#9670;&#160;</a></span>write_P() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t PubSubClient::write_P </td>
+          <td>(</td>
+          <td class="paramtype">PGM_P</td>          <td class="paramname"><span class="paramname"><em>string</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Writes a string in PROGMEM as a component of a publish started with a call to beginPublish. For performance reasons, this will be appended to the internal buffer, which will be flushed when full or on a call to <a class="el" href="#a8c658db7eb23241aa0c1bc16f703cdb2" title="Finish sending a message that was started with a call to beginPublish.">endPublish()</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td>The message to write. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of bytes written. If return value is != string length a write error occurred. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="PubSubClient_8h_source.html#l00806">806</a> of file <a class="el" href="PubSubClient_8h_source.html">PubSubClient.h</a>.</p>
 
 </div>
 </div>
