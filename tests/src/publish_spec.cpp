@@ -23,6 +23,10 @@ int test_publish_qos1();
 int test_publish_qos2();
 int test_publish_P_qos1();
 int test_publish_P_qos2();
+int test_publish_FlashStringHelper();
+int test_publish_FlashStringHelper2();
+int test_publish_P_FlashStringHelper();
+int test_publish_P_P();
 
 void callback(_UNUSED_ char* topic, _UNUSED_ uint8_t* payload, _UNUSED_ size_t plength) {
     // handle message arrived
@@ -211,7 +215,7 @@ int test_publish_too_long() {
 }
 
 int test_publish_P() {
-    IT("publishes using PROGMEM");
+    IT("publishes using PROGMEM payload");
     ShimClient shimClient;
     shimClient.setAllowConnect(true);
 
@@ -237,7 +241,7 @@ int test_publish_P() {
 }
 
 int test_publish_P_too_long() {
-    IT("publish using PROGMEM fails when topic is too long");
+    IT("publish using PROGMEM payload fails when topic is too long");
     ShimClient shimClient;
     shimClient.setAllowConnect(true);
 
@@ -257,6 +261,112 @@ int test_publish_P_too_long() {
 
     rc = client.publish_P(topic, payload, false);
     IS_FALSE(rc);
+
+    IS_FALSE(shimClient.error());
+
+    END_IT
+}
+
+int test_publish_FlashStringHelper() {
+    IT("publishes using FlashStringHelper topic");
+    ShimClient shimClient;
+    shimClient.setAllowConnect(true);
+
+    char payload[] = "12345";
+
+    byte connack[] = {0x20, 0x02, 0x00, 0x00};
+    shimClient.respond(connack, sizeof(connack));
+
+    PubSubClient client(server, 1883, callback, shimClient);
+    bool rc = client.connect("client_test1");
+    IS_TRUE(rc);
+
+    byte publish[] = {0x31, 0x0c, 0x00, 0x05, 't', 'o', 'p', 'i', 'c', '1', '2', '3', '4', '5'};
+    shimClient.expect(publish, sizeof(publish));
+
+    rc = client.publish(F("topic"), payload, MQTT_QOS0, true);
+    IS_TRUE(rc);
+
+    IS_FALSE(shimClient.error());
+
+    END_IT
+}
+
+int test_publish_FlashStringHelper2() {
+    IT("publishes using FlashStringHelper topic and payload");
+    ShimClient shimClient;
+    shimClient.setAllowConnect(true);
+
+    char payload[] = "12345";
+
+    byte connack[] = {0x20, 0x02, 0x00, 0x00};
+    shimClient.respond(connack, sizeof(connack));
+
+    PubSubClient client(server, 1883, callback, shimClient);
+    bool rc = client.connect("client_test1");
+    IS_TRUE(rc);
+
+    byte publish[] = {0x31, 0x0c, 0x00, 0x05, 't', 'o', 'p', 'i', 'c', '1', '2', '3', '4', '5'};
+    shimClient.expect(publish, sizeof(publish));
+
+    rc = client.publish(F("topic"), F(payload), MQTT_QOS0, true);
+    IS_TRUE(rc);
+
+    IS_FALSE(shimClient.error());
+
+    END_IT
+}
+
+int test_publish_P_FlashStringHelper() {
+    IT("publishes using FlashStringHelper topic and PROGMEM payload");
+    ShimClient shimClient;
+    shimClient.setAllowConnect(true);
+
+    char payload[] PROGMEM = "12345";
+
+    byte connack[] = {0x20, 0x02, 0x00, 0x00};
+    shimClient.respond(connack, sizeof(connack));
+
+    PubSubClient client(server, 1883, callback, shimClient);
+    bool rc = client.connect("client_test1");
+    IS_TRUE(rc);
+
+    byte publish[] = {0x31, 0x0c, 0x00, 0x05, 't', 'o', 'p', 'i', 'c', '1', '2', '3', '4', '5'};
+    shimClient.expect(publish, sizeof(publish));
+
+    rc = client.publish_P(F("topic"), payload, MQTT_QOS0, true);
+    IS_TRUE(rc);
+
+    IS_FALSE(shimClient.error());
+
+    END_IT
+}
+
+int test_publish_P_P() {
+    IT("publishes using PROGMEM topic and PROGMEM payload");
+    ShimClient shimClient;
+    shimClient.setAllowConnect(true);
+
+    char topic[] PROGMEM = "topic";
+    char payload[] PROGMEM = "12345";
+    size_t length = strlen_P(payload);
+
+    byte connack[] = {0x20, 0x02, 0x00, 0x00};
+    shimClient.respond(connack, sizeof(connack));
+
+    PubSubClient client(server, 1883, callback, shimClient);
+    bool rc = client.connect("client_test1");
+    IS_TRUE(rc);
+
+    byte publish[] = {0x31, 0x0c, 0x00, 0x05, 't', 'o', 'p', 'i', 'c', '1', '2', '3', '4', '5'};
+    shimClient.expect(publish, sizeof(publish));
+
+    rc = client.beginPublish_P(topic, length, MQTT_QOS0, true);
+    IS_TRUE(rc);
+    length = client.write_P(payload);
+    IS_EQUAL(length, strlen_P(payload));
+    rc = client.endPublish();
+    IS_TRUE(rc);
 
     IS_FALSE(shimClient.error());
 
@@ -355,7 +465,7 @@ int test_publish_qos2() {
 }
 
 int test_publish_P_qos1() {
-    IT("publishes using PROGMEM with QoS 1 retained");
+    IT("publishes using PROGMEM payload with QoS 1 retained");
     ShimClient shimClient;
     shimClient.setAllowConnect(true);
 
@@ -381,7 +491,7 @@ int test_publish_P_qos1() {
 }
 
 int test_publish_P_qos2() {
-    IT("publishes using PROGMEM with QoS 2 retained");
+    IT("publishes using PROGMEM payload with QoS 2 retained");
     ShimClient shimClient;
     shimClient.setAllowConnect(true);
 
@@ -423,6 +533,10 @@ int main() {
     test_publish_P_qos1();
     test_publish_P_qos2();
     test_publish_P_too_long();
+    test_publish_FlashStringHelper();
+    test_publish_FlashStringHelper2();
+    test_publish_P_FlashStringHelper();
+    test_publish_P_P();
 
     FINISH
 }

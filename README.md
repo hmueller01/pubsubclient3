@@ -45,6 +45,17 @@ Full API documentation is available here: https://hmueller01.github.io/pubsubcli
    `PubSubClient::setKeepAlive(keepAlive)`.
  - The client uses MQTT 3.1.1 by default. It can be changed to use MQTT 3.1 by
    changing value of `MQTT_VERSION` in `PubSubClient.h`.
+ - It can publish and subscribe to `PROGMEM` or `__FlashStringHelper` topics since [v3.3.0](https://github.com/hmueller01/pubsubclient3/releases/tag/v3.3.0).
+   Details see [mqtt_progmem](https://github.com/hmueller01/pubsubclient3/blob/63c77d764a6ba7c83868985eaeab6f07cc062874/examples/mqtt_progmem/src/mqtt_progmem.cpp#L39-L48) example.
+   But if you like to publish `PROGMEM` topics you have to use
+   ```c
+   const char TOPIC[] PROGMEM = "test";
+   const char HELLO_WORLD[] PROGMEM = "hello world";
+   client.beginPublish_P(TOPIC, strlen_P(HELLO_WORLD), MQTT_QOS0, false);
+   client.write_P(HELLO_WORLD);
+   client.endPublish();
+   ```
+   as `client.publish_P(...)` is already used for `PROGMEM` payloads.
 
 
 ## Compatible Hardware
