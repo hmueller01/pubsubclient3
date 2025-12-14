@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [3.3.0] - 2025-12-14
+
+### Added
+
+* Speedup publish large messages by using a buffer by @TD-er in [#59](https://github.com/hmueller01/pubsubclient3/pull/59)
+* Support `PROGMEM` and `__FlashStringHelper` topics by @hmueller01 in [#72](https://github.com/hmueller01/pubsubclient3/pull/72)
+* Added issue template by @hmueller01 in [#76](https://github.com/hmueller01/pubsubclient3/pull/76)
+* Report delta sizes in pull requests by @hmueller01 in [#77](https://github.com/hmueller01/pubsubclient3/pull/77)
+
+### Changed
+
+* Refactored private members by @hmueller01 in [#68](https://github.com/hmueller01/pubsubclient3/pull/68)
+* Refactored private functions by @hmueller01 in [#70](https://github.com/hmueller01/pubsubclient3/pull/70)
+* Do not crash if `_client` not set by @hmueller01 in [#69](https://github.com/hmueller01/pubsubclient3/pull/69)
+* Minor updates that come across by @hmueller01 in [#73](https://github.com/hmueller01/pubsubclient3/pull/73)
+* Inline optimisation by @hmueller01 in [#75](https://github.com/hmueller01/pubsubclient3/pull/75)
+* Bump actions/upload-pages-artifact from 3 to 4 by @dependabot[bot] in [#78](https://github.com/hmueller01/pubsubclient3/pull/78)
+* Bump actions/checkout from 2 to 5 by @dependabot[bot] in [#79](https://github.com/hmueller01/pubsubclient3/pull/79)
+* Tag unused parameter to avoid warnings by @hmueller01 in [#82](https://github.com/hmueller01/pubsubclient3/pull/82)
+* Fix compile warning at strnlen bound by @hmueller01 in [#83](https://github.com/hmueller01/pubsubclient3/pull/83)
+* Fix deprecated `BUILTIN_LED` by @hmueller01 in [#84](https://github.com/hmueller01/pubsubclient3/pull/84)
+* Bump actions/checkout from 5 to 6 by @dependabot[bot] in [#85](https://github.com/hmueller01/pubsubclient3/pull/85)
+* Update workflows by @hmueller01 in [#86](https://github.com/hmueller01/pubsubclient3/pull/86)
+
 ## [3.2.1] - 2025-09-11
 
 ### Fixed
