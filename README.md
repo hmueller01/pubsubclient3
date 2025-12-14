@@ -57,7 +57,6 @@ Full API documentation is available here: https://hmueller01.github.io/pubsubcli
    ```
    as `client.publish_P(...)` is already used for `PROGMEM` payloads.
 
-
 ## Compatible Hardware
 
 The library uses the Arduino Ethernet Client api for interacting with the
@@ -80,6 +79,10 @@ The library cannot currently be used with hardware based on the ENC28J60 chip â€
 such as the Nanode or the Nuelectronics Ethernet Shield. For those, there is an
 [alternative library](https://github.com/njh/NanodeMQTT) available.
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md)
+
 ## License
 
-This code is released under the MIT License.
+This code is released under the [MIT License](LICENSE.txt).
