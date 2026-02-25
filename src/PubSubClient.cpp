@@ -112,7 +112,8 @@ PubSubClient::~PubSubClient() {
 
 bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
                            const char* willMessage, bool cleanSession) {
-    if (!_client) return false;  // do not crash if client not set
+    if (!_client) return false;   // do not crash if client not set
+    if (!_buffer) return false;   // do not crash if buffer allocation failed at construction
     if (!connected()) {
         int result = 0;
 
@@ -231,7 +232,7 @@ bool PubSubClient::connected() {
 void PubSubClient::disconnect() {
     DEBUG_PSC_PRINTF("disconnect called\n");
     _state = MQTT_DISCONNECTED;
-    if (_client) {
+    if (_client && _buffer) {  // guard against null buffer if allocation failed at construction
         _buffer[0] = MQTTDISCONNECT;
         _buffer[1] = 0;
         _client->write(_buffer, 2);
@@ -373,14 +374,15 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 // To get a null reminated 'C' topic string we move the topic 1 byte to the front (overwriting the LSB of the topic lenght)
                 uint16_t topicLen = (_buffer[hdrLen + 1] << 8) + _buffer[hdrLen + 2];  // topic length in bytes
                 char* topic = (char*)(_buffer + hdrLen + 3 - 1);                       // set the topic in the LSB of the topic lenght, as we move it there
-                uint16_t payloadOffset = hdrLen + 3 + topicLen;  // payload starts after header and topic (if there is no packet identifier)
-                size_t payloadLen = length - payloadOffset;      // this might change by 2 if we have a QoS 1 or 2 message
-                uint8_t* payload = _buffer + payloadOffset;
+                size_t payloadOffset = (size_t)hdrLen + 3u + topicLen;  // use size_t to avoid uint16_t overflow on large topics
 
-                if (length < payloadOffset) {  // do not move outside the max bufferSize
+                // Guard BEFORE computing payloadLen to prevent size_t underflow (payloadOffset > length)
+                if (length < payloadOffset) {
                     ERROR_PSC_PRINTF_P("handlePacket(): Suspicious topicLen (%u) points outside of received buffer length (%zu)\n", topicLen, length);
                     return false;
                 }
+                size_t payloadLen = length - payloadOffset;  // safe: payloadOffset <= length guaranteed above
+                uint8_t* payload = _buffer + payloadOffset;
                 memmove(topic, topic + 1, topicLen);  // move topic inside buffer 1 byte to front
                 topic[topicLen] = '\0';               // end the topic as a 'C' string with \x00
 
@@ -823,7 +825,7 @@ bool PubSubClient::subscribeImpl(bool progmem, const char* topic, uint8_t qos) {
     }
     if (connected()) {
         // Leave room in the _buffer for header and variable length field
-        uint16_t length = MQTT_MAX_HEADER_SIZE;
+        size_t length = MQTT_MAX_HEADER_SIZE;  // size_t to avoid uint16_t narrowing from writeStringImpl/writeNextMsgId
         length = writeNextMsgId(length);  // _buffer size is checked before
         length = writeStringImpl(progmem, topic, length);
         _buffer[length++] = qos;
@@ -849,7 +851,7 @@ bool PubSubClient::unsubscribeImpl(bool progmem, const char* topic) {
         return false;
     }
     if (connected()) {
-        uint16_t length = MQTT_MAX_HEADER_SIZE;
+        size_t length = MQTT_MAX_HEADER_SIZE;  // size_t to avoid uint16_t narrowing from writeStringImpl/writeNextMsgId
         length = writeNextMsgId(length);  // _buffer size is checked before
         length = writeStringImpl(progmem, topic, length);
         return writeControlPacket(MQTTUNSUBSCRIBE | MQTT_QOS_GET_HDR(MQTT_QOS1), length - MQTT_MAX_HEADER_SIZE);
@@ -907,18 +909,19 @@ bool PubSubClient::setBufferSize(size_t size) {
         // Cannot set it back to 0
         return false;
     }
+    uint8_t* newBuffer;
     if (_bufferSize == 0) {
-        _buffer = (uint8_t*)malloc(size);
+        newBuffer = (uint8_t*)malloc(size);
     } else {
-        uint8_t* newBuffer = (uint8_t*)realloc(_buffer, size);
-        if (newBuffer) {
-            _buffer = newBuffer;
-        } else {
-            return false;
-        }
+        newBuffer = (uint8_t*)realloc(_buffer, size);
     }
+    if (newBuffer == nullptr) {
+        // Allocation failed: _buffer and _bufferSize are left unchanged to keep a consistent state
+        return false;
+    }
+    _buffer = newBuffer;
     _bufferSize = size;
-    return (_buffer != nullptr);
+    return true;
 }
 
 size_t PubSubClient::getBufferSize() {
