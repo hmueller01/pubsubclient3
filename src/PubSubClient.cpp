@@ -403,11 +403,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                         ERROR_PSC_PRINTF_P("handlePacket(): Missing or out-of-bounds msgId in QoS 1/2 message (payloadLen=%zu, bufferSize=%zu)\n", payloadLen, _bufferSize);
                         return false;
                     }
-                    // Guard 4: we need at least 4 bytes in _buffer to write the PUBACK/PUBREC response
-                    if (_bufferSize < 4u) {
-                        ERROR_PSC_PRINTF_P("handlePacket(): Buffer too small (%zu) to write PUBACK/PUBREC response\n", _bufferSize);
-                        return false;
-                    }
+                    // Note: _bufferSize >= 4 is guaranteed by loop() guard (_bufferSize >= MQTT_MAX_HEADER_SIZE = 5)
                     uint16_t msgId = (uint16_t)((_buffer[payloadOffset] << 8) + _buffer[payloadOffset + 1u]);
                     callback(topic, payload + 2, payloadLen - 2);  // strip the msgId before calling callback
 
@@ -469,6 +465,13 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
 
 bool PubSubClient::loop() {
     if (!connected()) {
+        return false;
+    }
+    // Guard: buffer must exist and be large enough to hold any minimal MQTT packet
+    // (e.g. PINGREQ is 2 bytes, PUBACK/PUBREC responses are 4 bytes).
+    // This prevents readPacket() and handlePacket() from ever running with a null or
+    // undersized buffer. Note: MQTT_MAX_HEADER_SIZE (5) covers the worst-case fixed header.
+    if (!_buffer || _bufferSize < MQTT_MAX_HEADER_SIZE) {
         return false;
     }
     bool ret = true;
