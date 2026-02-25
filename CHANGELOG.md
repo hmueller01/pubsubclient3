@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+### Added
+
+* Document `NOFUNCTIONAL` macro: saves ~12-16 bytes of RAM by replacing `std::function` with a raw function pointer; trade-off is that lambdas with captures are no longer accepted as callback
+
+### Changed
+
+* `write()` and `write_P()`: replaced byte-by-byte `appendBuffer()` loop with `memcpy`/`memcpy_P` block copy, reducing virtual function call overhead from O(N) to O(N / bufferSize) for large payloads
+* `writeBuffer()` with `MQTT_MAX_TRANSFER_SIZE`: moved `_lastOutActivity = millis()` outside the chunk loop so it is called once per complete send instead of once per chunk
+* `subscribeImpl()` / `unsubscribeImpl()`: changed internal `length` variable from `uint16_t` to `size_t` to prevent implicit narrowing from `writeStringImpl()` and `writeNextMsgId()` return values
+* `handlePacket()` MQTTPUBLISH: changed `payloadOffset` from `uint16_t` to `size_t` to prevent integer overflow when `topicLen` is large
+
+### Fixed
+
+* `setBufferSize()`: on `malloc`/`realloc` failure, `_buffer` and `_bufferSize` are now left unchanged, keeping a consistent state (previously `_bufferSize` could be updated even when the initial allocation failed)
+* `connect()`: added null-buffer guard (`if (!_buffer) return false`) to avoid a crash when buffer allocation failed at construction time
+* `disconnect()`: added null-buffer guard to the write block for the same reason
+* `loop()`: added upfront guard `if (!_buffer || _bufferSize < MQTT_MAX_HEADER_SIZE) return false` so that `readPacket()` and `handlePacket()` are never reached with a null or undersized buffer
+* `handlePacket()` MQTTPUBLISH: added three ordered boundary checks against broker-supplied lengths: (1) ensures the 2-byte topic-length field is readable before access; (2) ensures the full topic fits within both the received data and the buffer, preventing a `size_t` underflow when computing `payloadLen`; (3) ensures both msgId bytes are addressable for QoS 1/2 messages
+
+
 ## [3.3.0] - 2025-12-14
 
 ### Added
