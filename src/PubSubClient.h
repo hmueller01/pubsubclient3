@@ -138,6 +138,8 @@
  * @param topic The topic of the message.
  * @param payload The payload of the message.
  * @param plength The length of the payload.
+ * @note The callback function must be of the form `void callback(char* topic, uint8_t* payload, size_t plength)`.
+ * @note Defining NOFUNCTIONAL saves ~12-16 bytes of RAM by replacing std::function with a raw function pointer (4 bytes). Drawback: lambdas with captures will no longer be accepted as callback.
  */
 #if defined(__has_include) && __has_include(<functional>) && !defined(NOFUNCTIONAL)
 #include <functional>
@@ -178,7 +180,7 @@ class PubSubClient : public Print {
     Client* _client{};
     uint8_t* _buffer{};
     size_t _bufferSize{};
-    size_t _bufferWritePos{};
+    uint16_t _bufferWritePos{};  // max 65535: more than enough for a microcontroller
     unsigned long _keepAliveMillis{};
     unsigned long _socketTimeoutMillis{};
     uint16_t _nextMsgId{};

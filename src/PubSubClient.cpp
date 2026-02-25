@@ -625,17 +625,37 @@ size_t PubSubClient::write(uint8_t data) {
 }
 
 size_t PubSubClient::write(const uint8_t* buf, size_t size) {
-    for (size_t i = 0; i < size; i++) {
-        if (appendBuffer(buf[i]) == 0) return i;
+    size_t written = 0;
+    while (written < size) {
+        // Calculate remaining space in the buffer and the size of the next block
+        size_t space = _bufferSize - _bufferWritePos;
+        size_t chunk = (size - written < space) ? (size - written) : space;
+        memcpy(_buffer + _bufferWritePos, buf + written, chunk);
+        _bufferWritePos += chunk;
+        written += chunk;
+        // If the buffer is full, send it to the network
+        if (_bufferWritePos >= _bufferSize) {
+            if (flushBuffer() == 0) return written - chunk;  // network error
+        }
     }
-    return size;
+    return written;
 }
 
 size_t PubSubClient::write_P(const uint8_t* buf, size_t size) {
-    for (size_t i = 0; i < size; i++) {
-        if (appendBuffer((uint8_t)pgm_read_byte_near(buf + i)) == 0) return i;
+    size_t written = 0;
+    while (written < size) {
+        // Calculate remaining space in the buffer and the size of the next block
+        size_t space = _bufferSize - _bufferWritePos;
+        size_t chunk = (size - written < space) ? (size - written) : space;
+        memcpy_P(_buffer + _bufferWritePos, buf + written, chunk);  // read from PROGMEM
+        _bufferWritePos += chunk;
+        written += chunk;
+        // If the buffer is full, send it to the network
+        if (_bufferWritePos >= _bufferSize) {
+            if (flushBuffer() == 0) return written - chunk;  // network error
+        }
     }
-    return size;
+    return written;
 }
 
 /**
@@ -673,10 +693,10 @@ size_t PubSubClient::writeBuffer(size_t pos, size_t size) {
             result = (bytesWritten == bytesToWrite);
             bytesRemaining -= bytesWritten;
             writeBuf += bytesWritten;
-            if (result) {
-                _lastOutActivity = millis();
-            }
             yield();
+        }
+        if (result) {
+            _lastOutActivity = millis();  // updated only once after the full send
         }
         rc = result ? size : 0;  // if result is false indicate a write error
 #else
