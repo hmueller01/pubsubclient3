@@ -180,7 +180,7 @@ class PubSubClient : public Print {
     Client* _client{};
     uint8_t* _buffer{};
     size_t _bufferSize{};
-    uint16_t _bufferWritePos{};  // max 65535: more than enough for a microcontroller
+    size_t _bufferWritePos{};
     unsigned long _keepAliveMillis{};
     unsigned long _socketTimeoutMillis{};
     uint16_t _nextMsgId{};
