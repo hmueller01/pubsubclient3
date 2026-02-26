@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+### Changed
+
+* Improved test coverage for all QoS levels (0, 1, 2)
+* Increased robustness and correctness in client-side handling of QoS 1 and QoS 2 messages (proper handling of PUBACK, PUBREC, PUBREL, PUBCOMP sequences)
+* Merged and cleaned up tests to ensure MQTT protocol compliance for all QoS scenarios
+
 ## [3.3.0] - 2025-12-14
 
 ### Added
