@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
+* Improved test coverage for all QoS levels (0, 1, 2)
+* Increased robustness and correctness in client-side handling of QoS 1 and QoS 2 messages (proper handling of PUBACK, PUBREC, PUBREL, PUBCOMP sequences)
+* Merged and cleaned up tests to ensure MQTT protocol compliance for all QoS scenarios
 * Document `NOFUNCTIONAL` macro: saves ~12-16 bytes of RAM by replacing `std::function` with a raw function pointer; trade-off is that lambdas with captures are no longer accepted as callback
 
 ### Changed

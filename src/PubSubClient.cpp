@@ -403,11 +403,14 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                         ERROR_PSC_PRINTF_P("handlePacket(): Missing or out-of-bounds msgId in QoS 1/2 message (payloadLen=%zu, bufferSize=%zu)\n", payloadLen, _bufferSize);
                         return false;
                     }
+                    uint8_t publishQos = MQTT_HDR_GET_QOS(_buffer[0]);  // save QoS before _buffer[0] is overwritten
                     // Note: _bufferSize >= 4 is guaranteed by loop() guard (_bufferSize >= MQTT_MAX_HEADER_SIZE = 5)
                     uint16_t msgId = (uint16_t)((_buffer[payloadOffset] << 8) + _buffer[payloadOffset + 1u]);
                     callback(topic, payload + 2, payloadLen - 2);  // strip the msgId before calling callback
 
-                    _buffer[0] = MQTTPUBACK;
+                    // QoS 1: respond with PUBACK
+                    // QoS 2: respond with PUBREC (first step of the QoS 2 subscriber handshake)
+                    _buffer[0] = (publishQos == MQTT_QOS1) ? MQTTPUBACK : MQTTPUBREC;
                     _buffer[1] = 2;
                     _buffer[2] = (uint8_t)(msgId >> 8);
                     _buffer[3] = (uint8_t)(msgId & 0xFF);
@@ -426,20 +429,36 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
             // No futher action here, as resending is not supported.
             break;
         case MQTTPUBREC:
-            // MQTT Publish Received (QoS 2 publish received, part 1): See section 3.5 MQTT v3.1.1 protocol specification
+            // MQTT Publish Received (QoS 2 publisher handshake, part 1): broker acknowledges our QoS 2 PUBLISH.
+            // See section 3.5 MQTT v3.1.1 protocol specification.
             if (length < 4) {
                 ERROR_PSC_PRINTF_P("handlePacket(): Received PUBREC packet with length %zu, expected at least 4 bytes\n", length);
                 return false;
             }
-            // MQTT Publish Release (QoS 2 publish received, part 2): See section 3.6 MQTT v3.1.1 protocol specification
-            _buffer[0] = MQTTPUBREL | 2;  // PUBREL with bit 1 set
-            // bytes 1-3 of PUBREL are the same as of PUBREC
+            // MQTT Publish Release (QoS 2 publisher handshake, part 2): See section 3.6 MQTT v3.1.1 protocol specification
+            _buffer[0] = MQTTPUBREL | 2;  // PUBREL fixed header: bit 1 must be set per spec
+            // bytes 1-3 of PUBREL are the same as of PUBREC (remaining length + msgId)
+            if (_client->write(_buffer, 4) == 4) {
+                _lastOutActivity = millis();
+            }
+            break;
+        case MQTTPUBREL:
+            // MQTT Publish Release (QoS 2 subscriber handshake, part 2): broker releases the message to us.
+            // See section 3.6 MQTT v3.1.1 protocol specification.
+            if (length < 4) {
+                ERROR_PSC_PRINTF_P("handlePacket(): Received PUBREL packet with length %zu, expected at least 4 bytes\n", length);
+                return false;
+            }
+            // MQTT Publish Complete (QoS 2 subscriber handshake, part 3): See section 3.7 MQTT v3.1.1 protocol specification
+            _buffer[0] = MQTTPUBCOMP;
+            // bytes 1-3 of PUBCOMP are the same as of PUBREL (remaining length + msgId)
             if (_client->write(_buffer, 4) == 4) {
                 _lastOutActivity = millis();
             }
             break;
         case MQTTPUBCOMP:
-            // MQTT Publish Complete (QoS 2 publish received, part 3): See section 3.7 MQTT v3.1.1 protocol specification
+            // MQTT Publish Complete (QoS 2 publisher handshake, part 3): broker confirms delivery of our QoS 2 PUBLISH.
+            // See section 3.7 MQTT v3.1.1 protocol specification.
             if (length < 4) {
                 ERROR_PSC_PRINTF_P("handlePacket(): Received PUBCOMP packet with length %zu, expected at least 4 bytes\n", length);
                 return false;
