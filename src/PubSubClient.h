@@ -139,7 +139,8 @@
  * @param payload The payload of the message.
  * @param plength The length of the payload.
  * @note The callback function must be of the form `void callback(char* topic, uint8_t* payload, size_t plength)`.
- * @note Defining NOFUNCTIONAL saves ~12-16 bytes of RAM by replacing std::function with a raw function pointer (4 bytes). Drawback: lambdas with captures will no longer be accepted as callback.
+ * @note Defining NOFUNCTIONAL saves ~12-16 bytes of RAM by replacing std::function with a raw function pointer (4 bytes). Drawback: lambdas with captures
+ * will no longer be accepted as callback.
  */
 #if defined(__has_include) && __has_include(<functional>) && !defined(NOFUNCTIONAL)
 #include <functional>

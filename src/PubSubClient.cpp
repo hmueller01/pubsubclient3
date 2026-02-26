@@ -112,8 +112,8 @@ PubSubClient::~PubSubClient() {
 
 bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
                            const char* willMessage, bool cleanSession) {
-    if (!_client) return false;   // do not crash if client not set
-    if (!_buffer) return false;   // do not crash if buffer allocation failed at construction
+    if (!_client) return false;  // do not crash if client not set
+    if (!_buffer) return false;  // do not crash if buffer allocation failed at construction
     if (!connected()) {
         int result = 0;
 
@@ -375,17 +375,19 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 // Guard 1: ensure _buffer[hdrLen+1] and _buffer[hdrLen+2] (topic length bytes) are both readable
                 const size_t topicLenOffset = (size_t)hdrLen + 1u;
                 if (topicLenOffset + 1u >= length || topicLenOffset + 1u >= _bufferSize) {
-                    ERROR_PSC_PRINTF_P("handlePacket(): Packet too short to contain topic length field (length=%zu, bufferSize=%zu)\n", length, _bufferSize);
+                    ERROR_PSC_PRINTF_P("handlePacket(): Packet too short to contain topic length field (length=%zu, bufferSize=%zu)\n", length,
+                                       _bufferSize);
                     return false;
                 }
                 uint16_t topicLen = (uint16_t)((_buffer[topicLenOffset] << 8) + _buffer[topicLenOffset + 1u]);
-                char* topic = (char*)(_buffer + hdrLen + 3 - 1);  // topic will be moved 1 byte earlier (overwrites LSB of topic length field)
+                char* topic = (char*)(_buffer + hdrLen + 3 - 1);        // topic will be moved 1 byte earlier (overwrites LSB of topic length field)
                 size_t payloadOffset = (size_t)hdrLen + 3u + topicLen;  // payload starts after header and topic (if there is no packet identifier)
 
                 // Guard 2: ensure the full topic fits inside the received data AND inside the buffer
                 // (payloadOffset is also the null-terminator slot for the topic string)
                 if (payloadOffset >= _bufferSize || payloadOffset > length) {
-                    ERROR_PSC_PRINTF_P("handlePacket(): topicLen (%u) places payloadOffset (%zu) outside buffer/data (bufferSize=%zu, length=%zu)\n", topicLen, payloadOffset, _bufferSize, length);
+                    ERROR_PSC_PRINTF_P("handlePacket(): topicLen (%u) places payloadOffset (%zu) outside buffer/data (bufferSize=%zu, length=%zu)\n",
+                                       topicLen, payloadOffset, _bufferSize, length);
                     return false;
                 }
                 size_t payloadLen = length - payloadOffset;  // safe: payloadOffset <= length guaranteed by Guard 2
@@ -400,7 +402,8 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                     // QoS 1 and 2: a 2-byte Packet Identifier (msgId) precedes the actual payload
                     // Guard 3: msgId bytes must be present in the received data AND addressable in the buffer
                     if (payloadLen < 2u || payloadOffset + 1u >= _bufferSize) {
-                        ERROR_PSC_PRINTF_P("handlePacket(): Missing or out-of-bounds msgId in QoS 1/2 message (payloadLen=%zu, bufferSize=%zu)\n", payloadLen, _bufferSize);
+                        ERROR_PSC_PRINTF_P("handlePacket(): Missing or out-of-bounds msgId in QoS 1/2 message (payloadLen=%zu, bufferSize=%zu)\n",
+                                           payloadLen, _bufferSize);
                         return false;
                     }
                     uint8_t publishQos = MQTT_HDR_GET_QOS(_buffer[0]);  // save QoS before _buffer[0] is overwritten
