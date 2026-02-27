@@ -10,6 +10,8 @@
 
 #include "PubSubClient.h"
 
+#include <algorithm>
+
 /**
  * @brief Macro to check if a string 's' can be safely added to the MQTT _buffer.
  *
@@ -666,35 +668,67 @@ size_t PubSubClient::write(uint8_t data) {
 
 size_t PubSubClient::write(const uint8_t* buf, size_t size) {
     size_t written = 0;
+
     while (written < size) {
-        // Calculate remaining space in the buffer and the size of the next block
+        size_t chunk;
         size_t space = _bufferSize - _bufferWritePos;
-        size_t chunk = (size - written < space) ? (size - written) : space;
+
+        if (space == 0) {
+            size_t flushed = flushBuffer();
+            if (flushed == 0) {
+                return written;  // network error
+            }
+
+            if (flushed < _bufferWritePos) {
+                // Move remaining data to beginning of buffer
+                memmove(_buffer, _buffer + flushed, _bufferWritePos - flushed);
+            }
+
+            _bufferWritePos -= flushed;
+            space = _bufferSize - _bufferWritePos;
+        }
+
+        chunk = std::min(size - written, space);
         memcpy(_buffer + _bufferWritePos, buf + written, chunk);
         _bufferWritePos += chunk;
         written += chunk;
-        // If the buffer is full, send it to the network
-        if (_bufferWritePos >= _bufferSize) {
-            if (flushBuffer() == 0) return written - chunk;  // network error
-        }
     }
+
     return written;
 }
 
 size_t PubSubClient::write_P(const uint8_t* buf, size_t size) {
     size_t written = 0;
+
     while (written < size) {
-        // Calculate remaining space in the buffer and the size of the next block
+        size_t chunk;
         size_t space = _bufferSize - _bufferWritePos;
-        size_t chunk = (size - written < space) ? (size - written) : space;
-        memcpy_P(_buffer + _bufferWritePos, buf + written, chunk);  // read from PROGMEM
+
+        // If no space left, flush existing buffer
+        if (space == 0) {
+            size_t flushed = flushBuffer();
+            if (flushed == 0) {
+                return written;  // network error
+            }
+
+            if (flushed < _bufferWritePos) {
+                // Move remaining unsent data to beginning of buffer
+                memmove(_buffer, _buffer + flushed, _bufferWritePos - flushed);
+            }
+
+            _bufferWritePos -= flushed;
+            space = _bufferSize - _bufferWritePos;
+        }
+
+        chunk = (size - written < space) ? (size - written) : space;
+
+        // Read from PROGMEM
+        memcpy_P(_buffer + _bufferWritePos, buf + written, chunk);
+
         _bufferWritePos += chunk;
         written += chunk;
-        // If the buffer is full, send it to the network
-        if (_bufferWritePos >= _bufferSize) {
-            if (flushBuffer() == 0) return written - chunk;  // network error
-        }
     }
+
     return written;
 }
 
