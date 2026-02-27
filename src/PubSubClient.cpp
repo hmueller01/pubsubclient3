@@ -374,7 +374,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 // To get a null reminated 'C' topic string we move the topic 1 byte to the front (overwriting the LSB of the topic lenght)
                 // Guard 1: ensure _buffer[hdrLen+1] and _buffer[hdrLen+2] (topic length bytes) are both readable
                 const size_t topicLenOffset = (size_t)hdrLen + 1u;
-                if (topicLenOffset + 1u >= length || topicLenOffset + 1u >= _bufferSize) {
+                if (((topicLenOffset + 1u) >= length) || ((topicLenOffset + 1u) >= _bufferSize)) {
                     ERROR_PSC_PRINTF_P("handlePacket(): Packet too short to contain topic length field (length=%zu, bufferSize=%zu)\n", length,
                                        _bufferSize);
                     return false;
@@ -385,7 +385,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
 
                 // Guard 2: ensure the full topic fits inside the received data AND inside the buffer
                 // (payloadOffset is also the null-terminator slot for the topic string)
-                if (payloadOffset >= _bufferSize || payloadOffset > length) {
+                if ((payloadOffset >= _bufferSize) || (payloadOffset > length)) {
                     ERROR_PSC_PRINTF_P("handlePacket(): topicLen (%u) places payloadOffset (%zu) outside buffer/data (bufferSize=%zu, length=%zu)\n",
                                        topicLen, payloadOffset, _bufferSize, length);
                     return false;
@@ -401,7 +401,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 } else {
                     // QoS 1 and 2: a 2-byte Packet Identifier (msgId) precedes the actual payload
                     // Guard 3: msgId bytes must be present in the received data AND addressable in the buffer
-                    if (payloadLen < 2u || payloadOffset + 1u >= _bufferSize) {
+                    if ((payloadLen < 2u) || ((payloadOffset + 1u) >= _bufferSize)) {
                         ERROR_PSC_PRINTF_P("handlePacket(): Missing or out-of-bounds msgId in QoS 1/2 message (payloadLen=%zu, bufferSize=%zu)\n",
                                            payloadLen, _bufferSize);
                         return false;
@@ -493,7 +493,7 @@ bool PubSubClient::loop() {
     // (e.g. PINGREQ is 2 bytes, PUBACK/PUBREC responses are 4 bytes).
     // This prevents readPacket() and handlePacket() from ever running with a null or
     // undersized buffer. Note: MQTT_MAX_HEADER_SIZE (5) covers the worst-case fixed header.
-    if (!_buffer || _bufferSize < MQTT_MAX_HEADER_SIZE) {
+    if ((!_buffer) || (_bufferSize < MQTT_MAX_HEADER_SIZE)) {
         return false;
     }
     bool ret = true;
@@ -953,7 +953,7 @@ bool PubSubClient::setBufferSize(size_t size) {
     } else {
         newBuffer = (uint8_t*)realloc(_buffer, size);
     }
-    if (newBuffer == nullptr) {
+    if (!newBuffer) {
         // Allocation failed: _buffer and _bufferSize are left unchanged to keep a consistent state
         return false;
     }
