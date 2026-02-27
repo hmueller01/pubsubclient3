@@ -10,8 +10,6 @@
 
 #include "PubSubClient.h"
 
-#include <algorithm>
-
 /**
  * @brief Macro to check if a string 's' can be safely added to the MQTT _buffer.
  *
@@ -688,7 +686,7 @@ size_t PubSubClient::write(const uint8_t* buf, size_t size) {
             space = _bufferSize - _bufferWritePos;
         }
 
-        chunk = std::min(size - written, space);
+        chunk = (size - written < space) ? (size - written) : space;
         memcpy(_buffer + _bufferWritePos, buf + written, chunk);
         _bufferWritePos += chunk;
         written += chunk;
