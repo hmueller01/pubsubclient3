@@ -668,26 +668,23 @@ size_t PubSubClient::write(const uint8_t* buf, size_t size) {
     size_t written = 0;
 
     while (written < size) {
-        size_t chunk;
         size_t space = _bufferSize - _bufferWritePos;
 
         if (space == 0) {
+            size_t toFlush = _bufferWritePos;
             size_t flushed = flushBuffer();
-            if (flushed == 0) {
-                return written;  // network error
+
+            if (flushed != toFlush) {
+                return written;  // error
             }
 
-            if (flushed < _bufferWritePos) {
-                // Move remaining data to beginning of buffer
-                memmove(_buffer, _buffer + flushed, _bufferWritePos - flushed);
-            }
-
-            _bufferWritePos -= flushed;
-            space = _bufferSize - _bufferWritePos;
+            space = _bufferSize;
         }
 
-        chunk = (size - written < space) ? (size - written) : space;
+        size_t chunk = (size - written < space) ? (size - written) : space;
+
         memcpy(_buffer + _bufferWritePos, buf + written, chunk);
+
         _bufferWritePos += chunk;
         written += chunk;
     }
@@ -699,28 +696,25 @@ size_t PubSubClient::write_P(const uint8_t* buf, size_t size) {
     size_t written = 0;
 
     while (written < size) {
-        size_t chunk;
         size_t space = _bufferSize - _bufferWritePos;
 
-        // If no space left, flush existing buffer
+        // If buffer is full, flush it
         if (space == 0) {
+            size_t toFlush = _bufferWritePos;
             size_t flushed = flushBuffer();
-            if (flushed == 0) {
+
+            // In PubSubClient, flushBuffer() is expected to send
+            // the whole buffer or fail.
+            if (flushed != toFlush) {
                 return written;  // network error
             }
 
-            if (flushed < _bufferWritePos) {
-                // Move remaining unsent data to beginning of buffer
-                memmove(_buffer, _buffer + flushed, _bufferWritePos - flushed);
-            }
-
-            _bufferWritePos -= flushed;
-            space = _bufferSize - _bufferWritePos;
+            space = _bufferSize;
         }
 
-        chunk = (size - written < space) ? (size - written) : space;
+        size_t chunk = (size - written < space) ? (size - written) : space;
 
-        // Read from PROGMEM
+        // Copy from PROGMEM into RAM buffer
         memcpy_P(_buffer + _bufferWritePos, buf + written, chunk);
 
         _bufferWritePos += chunk;
@@ -870,8 +864,17 @@ size_t PubSubClient::flushBuffer() {
     size_t rc = 0;
     if (connected()) {
         rc = writeBuffer(0, _bufferWritePos);
+        if (rc > 0) {
+            // Only clear buffer if bytes were actually written
+            _bufferWritePos = 0;
+        }
+        // If partial flush, move remaining data to start
+        else if (rc < _bufferWritePos && rc > 0) {
+            memmove(_buffer, _buffer + rc, _bufferWritePos - rc);
+            _bufferWritePos -= rc;
+        }
+        // If nothing was written, keep buffer as is
     }
-    _bufferWritePos = 0;
     return rc;
 }
 
