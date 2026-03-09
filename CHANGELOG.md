@@ -28,6 +28,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 * `disconnect()`: added null-buffer guard to the write block for the same reason
 * `loop()`: added upfront guard `if (!_buffer || _bufferSize < MQTT_MAX_HEADER_SIZE) return false` so that `readPacket()` and `handlePacket()` are never reached with a null or undersized buffer
 * `handlePacket()` MQTTPUBLISH: added three ordered boundary checks against broker-supplied lengths: (1) ensures the 2-byte topic-length field is readable before access; (2) ensures the full topic fits within both the received data and the buffer, preventing a `size_t` underflow when computing `payloadLen`; (3) ensures both msgId bytes are addressable for QoS 1/2 messages
+* `flushBuffer()`: `_bufferWritePos` is now reset to 0 only after a successful write; previously it was always reset, silently discarding data on network failure
+* `write()` / `write_P()`: fixed `size_t` underflow of `_bufferWritePos` after calling `flushBuffer()` (which already resets the position internally); the subtraction `_bufferWritePos -= flushed` was producing a near-maximal `size_t` value, causing `write()` to return 0 immediately and making `endPublish()` fail for any payload larger than the buffer
 
 
 ## [3.3.0] - 2025-12-14
