@@ -986,10 +986,12 @@ bool PubSubClient::setBufferSize(size_t size) {
     if (_bufferSize == 0) {
         newBuffer = (uint8_t*)malloc(size);
     } else {
+        // Per the C standard: "If realloc() fails the original block is left untouched;
+        // it is not freed or moved." So _buffer remains valid on failure.
         newBuffer = (uint8_t*)realloc(_buffer, size);
     }
     if (!newBuffer) {
-        // Allocation failed: _buffer and _bufferSize are left unchanged to keep a consistent state
+        // Allocation failed: _buffer and _bufferSize are left unchanged, keeping a consistent state.
         return false;
     }
     _buffer = newBuffer;
