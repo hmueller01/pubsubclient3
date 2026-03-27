@@ -379,9 +379,9 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                                        _bufferSize);
                     return false;
                 }
-                uint16_t topicLen = (uint16_t)((_buffer[topicLenOffset] << 8) + _buffer[topicLenOffset + 1u]);
-                char* topic = (char*)(_buffer + hdrLen + 3 - 1);        // topic will be moved 1 byte earlier (overwrites LSB of topic length field)
-                size_t payloadOffset = (size_t)hdrLen + 3u + topicLen;  // payload starts after header and topic (if there is no packet identifier)
+                const uint16_t topicLen = (uint16_t)((_buffer[topicLenOffset] << 8) + _buffer[topicLenOffset + 1u]);
+                char* const topic = (char*)(_buffer + hdrLen + 3 - 1);        // topic will be moved 1 byte earlier (overwrites LSB of topic length field)
+                const size_t payloadOffset = (size_t)hdrLen + 3u + topicLen;  // payload starts after header and topic (if there is no packet identifier)
 
                 // Guard 2: ensure the full topic fits inside the received data AND inside the buffer
                 // (payloadOffset is also the null-terminator slot for the topic string)
@@ -390,8 +390,8 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                                        topicLen, payloadOffset, _bufferSize, length);
                     return false;
                 }
-                size_t payloadLen = length - payloadOffset;  // safe: payloadOffset <= length guaranteed by Guard 2
-                uint8_t* payload = _buffer + payloadOffset;
+                const size_t payloadLen = length - payloadOffset;  // safe: payloadOffset <= length guaranteed by Guard 2
+                uint8_t* const payload = _buffer + payloadOffset;
                 memmove(topic, topic + 1, topicLen);  // move topic 1 byte to the front inside the buffer
                 topic[topicLen] = '\0';               // null-terminate the topic C-string
 
@@ -406,9 +406,9 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                                            payloadLen, _bufferSize);
                         return false;
                     }
-                    uint8_t publishQos = MQTT_HDR_GET_QOS(_buffer[0]);  // save QoS before _buffer[0] is overwritten
+                    const uint8_t publishQos = MQTT_HDR_GET_QOS(_buffer[0]);  // save QoS before _buffer[0] is overwritten
                     // Note: _bufferSize >= 4 is guaranteed by loop() guard (_bufferSize >= MQTT_MAX_HEADER_SIZE = 5)
-                    uint16_t msgId = (uint16_t)((_buffer[payloadOffset] << 8) + _buffer[payloadOffset + 1u]);
+                    const uint16_t msgId = (uint16_t)((_buffer[payloadOffset] << 8) + _buffer[payloadOffset + 1u]);
                     callback(topic, payload + 2, payloadLen - 2);  // strip the msgId before calling callback
 
                     // QoS 1: respond with PUBACK
@@ -865,15 +865,11 @@ size_t PubSubClient::flushBuffer() {
     if (connected()) {
         rc = writeBuffer(0, _bufferWritePos);
         if (rc > 0) {
-            // Only clear buffer if bytes were actually written
+            // writeBuffer() is all-or-nothing: rc is either _bufferWritePos (full success) or 0 (failure).
+            // Only clear the write position on success.
             _bufferWritePos = 0;
         }
-        // If partial flush, move remaining data to start
-        else if (rc < _bufferWritePos && rc > 0) {
-            memmove(_buffer, _buffer + rc, _bufferWritePos - rc);
-            _bufferWritePos -= rc;
-        }
-        // If nothing was written, keep buffer as is
+        // On failure (rc == 0) _bufferWritePos is left unchanged.
     }
     return rc;
 }
