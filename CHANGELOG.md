@@ -16,7 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 * Improved test coverage for all QoS levels (0, 1, 2)
 * Increased robustness and correctness in client-side handling of QoS 1 and QoS 2 messages (proper handling of PUBACK, PUBREC, PUBREL, PUBCOMP sequences)
 * Merged and cleaned up tests to ensure MQTT protocol compliance for all QoS scenarios
-* `write()` and `write_P()`: replaced byte-by-byte `appendBuffer()` loop with `memcpy`/`memcpy_P` block copy, reducing virtual function call overhead from O(N) to O(N / bufferSize) for large payloads
+* `write()` and `write_P()`: replaced byte-by-byte `appendBuffer()` loop with `memcpy`/`memcpy_P` block copy into the internal buffer, reducing per-byte processing overhead for large payloads while keeping the same flush-time virtual writes
 * `writeBuffer()` with `MQTT_MAX_TRANSFER_SIZE`: moved `_lastOutActivity = millis()` outside the chunk loop so it is called once per complete send instead of once per chunk
 * `subscribeImpl()` / `unsubscribeImpl()`: changed internal `length` variable from `uint16_t` to `size_t` to prevent implicit narrowing from `writeStringImpl()` and `writeNextMsgId()` return values
 * `handlePacket()` MQTTPUBLISH: changed `payloadOffset` from `uint16_t` to `size_t` to prevent integer overflow when `topicLen` is large
@@ -30,6 +30,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 * `handlePacket()` MQTTPUBLISH: added three ordered boundary checks against broker-supplied lengths: (1) ensures the 2-byte topic-length field is readable before access; (2) ensures the full topic fits within both the received data and the buffer, preventing a `size_t` underflow when computing `payloadLen`; (3) ensures both msgId bytes are addressable for QoS 1/2 messages
 * `flushBuffer()`: `_bufferWritePos` is now reset to 0 only after a successful write; previously it was always reset, silently discarding data on network failure
 * `write()` / `write_P()`: fixed `size_t` underflow of `_bufferWritePos` after calling `flushBuffer()` (which already resets the position internally); the subtraction `_bufferWritePos -= flushed` was producing a near-maximal `size_t` value, causing `write()` to return 0 immediately and making `endPublish()` fail for any payload larger than the buffer
+* `appendBuffer()`: corrected evaluation order — buffer is now flushed **before** writing the new byte, preventing an out-of-bounds write when a previous flush failed and left `_bufferWritePos == _bufferSize`
+* `write()` / `write_P()`: added upfront guard (`_buffer != nullptr && _bufferWritePos <= _bufferSize`) to prevent `size_t` underflow in the `space` calculation if the invariant was violated (e.g. after a failed flush via `appendBuffer()`)
+* `setBufferSize()`: `_bufferWritePos` is now clamped to the new buffer size after a successful reallocation, preventing out-of-bounds writes when the buffer is shrunk while a publish is in progress
+* `handlePacket()` Guard 2: relaxed `payloadOffset >= _bufferSize` to `payloadOffset > _bufferSize`, allowing a valid zero-length PUBLISH whose payload offset lands exactly at `_bufferSize`
 
 
 ## [3.3.0] - 2025-12-14

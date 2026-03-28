@@ -383,9 +383,10 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 char* const topic = (char*)(_buffer + hdrLen + 3 - 1);        // topic will be moved 1 byte earlier (overwrites LSB of topic length field)
                 const size_t payloadOffset = (size_t)hdrLen + 3u + topicLen;  // payload starts after header and topic (if there is no packet identifier)
 
-                // Guard 2: ensure the full topic fits inside the received data AND inside the buffer
-                // (payloadOffset is also the null-terminator slot for the topic string)
-                if ((payloadOffset >= _bufferSize) || (payloadOffset > length)) {
+                // Guard 2: ensure the full topic fits inside the received data AND inside the buffer.
+                // Note: payloadOffset == _bufferSize is allowed when payloadLen == 0 (zero-length PUBLISH payload);
+                // in that case payload points one-past-end but is never dereferenced.
+                if ((payloadOffset > _bufferSize) || (payloadOffset > length)) {
                     ERROR_PSC_PRINTF_P("handlePacket(): topicLen (%u) places payloadOffset (%zu) outside buffer/data (bufferSize=%zu, length=%zu)\n",
                                        topicLen, payloadOffset, _bufferSize, length);
                     return false;
@@ -665,6 +666,10 @@ size_t PubSubClient::write(uint8_t data) {
 }
 
 size_t PubSubClient::write(const uint8_t* buf, size_t size) {
+    // Defensive guard: _bufferWritePos must not exceed _bufferSize or the
+    // subtraction below would underflow and memcpy() would write out of bounds.
+    if (!_buffer || _bufferWritePos > _bufferSize) return 0;
+
     size_t written = 0;
 
     while (written < size) {
@@ -693,6 +698,9 @@ size_t PubSubClient::write(const uint8_t* buf, size_t size) {
 }
 
 size_t PubSubClient::write_P(const uint8_t* buf, size_t size) {
+    // Defensive guard: same invariant as write().
+    if (!_buffer || _bufferWritePos > _bufferSize) return 0;
+
     size_t written = 0;
 
     while (written < size) {
@@ -847,10 +855,11 @@ size_t PubSubClient::writeNextMsgId(size_t pos) {
  * @return Number of bytes appended to the _buffer (0 or 1). If 0 is returned a write error occurred.
  */
 size_t PubSubClient::appendBuffer(uint8_t data) {
-    _buffer[_bufferWritePos++] = data;
+    // Flush first if the buffer is full, so we never write out of bounds.
     if (_bufferWritePos >= _bufferSize) {
         if (flushBuffer() == 0) return 0;
     }
+    _buffer[_bufferWritePos++] = data;
     return 1;
 }
 
@@ -992,6 +1001,10 @@ bool PubSubClient::setBufferSize(size_t size) {
     }
     _buffer = newBuffer;
     _bufferSize = size;
+    // Clamp the write position so it never exceeds the (possibly smaller) new buffer size.
+    if (_bufferWritePos > _bufferSize) {
+        _bufferWritePos = _bufferSize;
+    }
     return true;
 }
 
