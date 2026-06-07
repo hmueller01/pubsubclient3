@@ -113,6 +113,7 @@ PubSubClient::~PubSubClient() {
 bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
                            const char* willMessage, bool cleanSession) {
     if (!_client) return false;  // do not crash if client not set
+    if (!_buffer) return false;  // do not crash if buffer allocation failed at construction
     if (!connected()) {
         int result = 0;
 
@@ -231,7 +232,7 @@ bool PubSubClient::connected() {
 void PubSubClient::disconnect() {
     DEBUG_PSC_PRINTF("disconnect called\n");
     _state = MQTT_DISCONNECTED;
-    if (_client) {
+    if (_client && _buffer) {  // guard against null buffer if allocation failed at construction
         _buffer[0] = MQTTDISCONNECT;
         _buffer[1] = 0;
         _client->write(_buffer, 2);
@@ -371,38 +372,52 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 // - Payload (for QoS = 0): length - (hdrLen + 3 + topicLen) bytes (starts at _buffer[hdrLen + 3 + topicLen])
                 // - Payload (for QoS > 0): length - (hdrLen + 5 + topicLen) bytes (starts at _buffer[hdrLen + 5 + topicLen])
                 // To get a null reminated 'C' topic string we move the topic 1 byte to the front (overwriting the LSB of the topic lenght)
-                uint16_t topicLen = (_buffer[hdrLen + 1] << 8) + _buffer[hdrLen + 2];  // topic length in bytes
-                char* topic = (char*)(_buffer + hdrLen + 3 - 1);                       // set the topic in the LSB of the topic lenght, as we move it there
-                uint16_t payloadOffset = hdrLen + 3 + topicLen;  // payload starts after header and topic (if there is no packet identifier)
-                size_t payloadLen = length - payloadOffset;      // this might change by 2 if we have a QoS 1 or 2 message
-                uint8_t* payload = _buffer + payloadOffset;
-
-                if (length < payloadOffset) {  // do not move outside the max bufferSize
-                    ERROR_PSC_PRINTF_P("handlePacket(): Suspicious topicLen (%u) points outside of received buffer length (%zu)\n", topicLen, length);
+                // Guard 1: ensure _buffer[hdrLen+1] and _buffer[hdrLen+2] (topic length bytes) are both readable
+                const size_t topicLenOffset = (size_t)hdrLen + 1u;
+                if (((topicLenOffset + 1u) >= length) || ((topicLenOffset + 1u) >= _bufferSize)) {
+                    ERROR_PSC_PRINTF_P("handlePacket(): Packet too short to contain topic length field (length=%zu, bufferSize=%zu)\n", length,
+                                       _bufferSize);
                     return false;
                 }
-                memmove(topic, topic + 1, topicLen);  // move topic inside buffer 1 byte to front
-                topic[topicLen] = '\0';               // end the topic as a 'C' string with \x00
+                const uint16_t topicLen = (uint16_t)((_buffer[topicLenOffset] << 8) + _buffer[topicLenOffset + 1u]);
+                char* const topic = (char*)(_buffer + hdrLen + 3 - 1);        // topic will be moved 1 byte earlier (overwrites LSB of topic length field)
+                const size_t payloadOffset = (size_t)hdrLen + 3u + topicLen;  // payload starts after header and topic (if there is no packet identifier)
+
+                // Guard 2: ensure the full topic fits inside the received data AND inside the buffer.
+                // Note: payloadOffset == _bufferSize is allowed when payloadLen == 0 (zero-length PUBLISH payload);
+                // in that case payload points one-past-end but is never dereferenced.
+                if ((payloadOffset > _bufferSize) || (payloadOffset > length)) {
+                    ERROR_PSC_PRINTF_P("handlePacket(): topicLen (%u) places payloadOffset (%zu) outside buffer/data (bufferSize=%zu, length=%zu)\n",
+                                       topicLen, payloadOffset, _bufferSize, length);
+                    return false;
+                }
+                const size_t payloadLen = length - payloadOffset;  // safe: payloadOffset <= length guaranteed by Guard 2
+                uint8_t* const payload = _buffer + payloadOffset;
+                memmove(topic, topic + 1, topicLen);  // move topic 1 byte to the front inside the buffer
+                topic[topicLen] = '\0';               // null-terminate the topic C-string
 
                 if (MQTT_HDR_GET_QOS(_buffer[0]) == MQTT_QOS0) {
-                    // No msgId for QOS == 0
+                    // QoS 0: no Packet Identifier
                     callback(topic, payload, payloadLen);
                 } else {
-                    // For QOS 1 and 2 we have a msgId (packet identifier) after the topic at the current payloadOffset
-                    if (payloadLen < 2) {  // payload must be >= 2, as we have the msgId before
-                        ERROR_PSC_PRINTF_P("handlePacket(): Missing msgId in QoS 1/2 message\n");
+                    // QoS 1 and 2: a 2-byte Packet Identifier (msgId) precedes the actual payload
+                    // Guard 3: msgId bytes must be present in the received data AND addressable in the buffer
+                    if ((payloadLen < 2u) || ((payloadOffset + 1u) >= _bufferSize)) {
+                        ERROR_PSC_PRINTF_P("handlePacket(): Missing or out-of-bounds msgId in QoS 1/2 message (payloadLen=%zu, bufferSize=%zu)\n",
+                                           payloadLen, _bufferSize);
                         return false;
                     }
-                    uint8_t publishQos = MQTT_HDR_GET_QOS(_buffer[0]);  // save QoS before _buffer[0] is overwritten
-                    uint16_t msgId = (_buffer[payloadOffset] << 8) + _buffer[payloadOffset + 1];
-                    callback(topic, payload + 2, payloadLen - 2);  // remove the msgId from the callback payload
+                    const uint8_t publishQos = MQTT_HDR_GET_QOS(_buffer[0]);  // save QoS before _buffer[0] is overwritten
+                    // Note: _bufferSize >= 4 is guaranteed by loop() guard (_bufferSize >= MQTT_MAX_HEADER_SIZE = 5)
+                    const uint16_t msgId = (uint16_t)((_buffer[payloadOffset] << 8) + _buffer[payloadOffset + 1u]);
+                    callback(topic, payload + 2, payloadLen - 2);  // strip the msgId before calling callback
 
                     // QoS 1: respond with PUBACK
                     // QoS 2: respond with PUBREC (first step of the QoS 2 subscriber handshake)
                     _buffer[0] = (publishQos == MQTT_QOS1) ? MQTTPUBACK : MQTTPUBREC;
                     _buffer[1] = 2;
-                    _buffer[2] = (msgId >> 8);
-                    _buffer[3] = (msgId & 0xFF);
+                    _buffer[2] = (uint8_t)(msgId >> 8);
+                    _buffer[3] = (uint8_t)(msgId & 0xFF);
                     if (_client->write(_buffer, 4) == 4) {
                         _lastOutActivity = millis();
                     }
@@ -473,6 +488,13 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
 
 bool PubSubClient::loop() {
     if (!connected()) {
+        return false;
+    }
+    // Guard: buffer must exist and be large enough to hold any minimal MQTT packet
+    // (e.g. PINGREQ is 2 bytes, PUBACK/PUBREC responses are 4 bytes).
+    // This prevents readPacket() and handlePacket() from ever running with a null or
+    // undersized buffer. Note: MQTT_MAX_HEADER_SIZE (5) covers the worst-case fixed header.
+    if ((!_buffer) || (_bufferSize < MQTT_MAX_HEADER_SIZE)) {
         return false;
     }
     bool ret = true;
@@ -644,17 +666,70 @@ size_t PubSubClient::write(uint8_t data) {
 }
 
 size_t PubSubClient::write(const uint8_t* buf, size_t size) {
-    for (size_t i = 0; i < size; i++) {
-        if (appendBuffer(buf[i]) == 0) return i;
+    // Defensive guard: _bufferWritePos must not exceed _bufferSize or the
+    // subtraction below would underflow and memcpy() would write out of bounds.
+    if (!_buffer || _bufferWritePos > _bufferSize) return 0;
+
+    size_t written = 0;
+
+    while (written < size) {
+        size_t space = _bufferSize - _bufferWritePos;
+
+        if (space == 0) {
+            size_t toFlush = _bufferWritePos;
+            size_t flushed = flushBuffer();
+
+            if (flushed != toFlush) {
+                return written;  // error
+            }
+
+            space = _bufferSize;
+        }
+
+        size_t chunk = (size - written < space) ? (size - written) : space;
+
+        memcpy(_buffer + _bufferWritePos, buf + written, chunk);
+
+        _bufferWritePos += chunk;
+        written += chunk;
     }
-    return size;
+
+    return written;
 }
 
 size_t PubSubClient::write_P(const uint8_t* buf, size_t size) {
-    for (size_t i = 0; i < size; i++) {
-        if (appendBuffer((uint8_t)pgm_read_byte_near(buf + i)) == 0) return i;
+    // Defensive guard: same invariant as write().
+    if (!_buffer || _bufferWritePos > _bufferSize) return 0;
+
+    size_t written = 0;
+
+    while (written < size) {
+        size_t space = _bufferSize - _bufferWritePos;
+
+        // If buffer is full, flush it
+        if (space == 0) {
+            size_t toFlush = _bufferWritePos;
+            size_t flushed = flushBuffer();
+
+            // In PubSubClient, flushBuffer() is expected to send
+            // the whole buffer or fail.
+            if (flushed != toFlush) {
+                return written;  // network error
+            }
+
+            space = _bufferSize;
+        }
+
+        size_t chunk = (size - written < space) ? (size - written) : space;
+
+        // Copy from PROGMEM into RAM buffer
+        memcpy_P(_buffer + _bufferWritePos, buf + written, chunk);
+
+        _bufferWritePos += chunk;
+        written += chunk;
     }
-    return size;
+
+    return written;
 }
 
 /**
@@ -692,10 +767,10 @@ size_t PubSubClient::writeBuffer(size_t pos, size_t size) {
             result = (bytesWritten == bytesToWrite);
             bytesRemaining -= bytesWritten;
             writeBuf += bytesWritten;
-            if (result) {
-                _lastOutActivity = millis();
-            }
             yield();
+        }
+        if (result) {
+            _lastOutActivity = millis();  // updated only once after the full send
         }
         rc = result ? size : 0;  // if result is false indicate a write error
 #else
@@ -780,10 +855,11 @@ size_t PubSubClient::writeNextMsgId(size_t pos) {
  * @return Number of bytes appended to the _buffer (0 or 1). If 0 is returned a write error occurred.
  */
 size_t PubSubClient::appendBuffer(uint8_t data) {
-    _buffer[_bufferWritePos++] = data;
+    // Flush first if the buffer is full, so we never write out of bounds.
     if (_bufferWritePos >= _bufferSize) {
         if (flushBuffer() == 0) return 0;
     }
+    _buffer[_bufferWritePos++] = data;
     return 1;
 }
 
@@ -797,8 +873,13 @@ size_t PubSubClient::flushBuffer() {
     size_t rc = 0;
     if (connected()) {
         rc = writeBuffer(0, _bufferWritePos);
+        if (rc > 0) {
+            // writeBuffer() is all-or-nothing: rc is either _bufferWritePos (full success) or 0 (failure).
+            // Only clear the write position on success.
+            _bufferWritePos = 0;
+        }
+        // On failure (rc == 0) _bufferWritePos is left unchanged.
     }
-    _bufferWritePos = 0;
     return rc;
 }
 
@@ -822,7 +903,7 @@ bool PubSubClient::subscribeImpl(bool progmem, const char* topic, uint8_t qos) {
     }
     if (connected()) {
         // Leave room in the _buffer for header and variable length field
-        uint16_t length = MQTT_MAX_HEADER_SIZE;
+        size_t length = MQTT_MAX_HEADER_SIZE;
         length = writeNextMsgId(length);  // _buffer size is checked before
         length = writeStringImpl(progmem, topic, length);
         _buffer[length++] = qos;
@@ -848,7 +929,7 @@ bool PubSubClient::unsubscribeImpl(bool progmem, const char* topic) {
         return false;
     }
     if (connected()) {
-        uint16_t length = MQTT_MAX_HEADER_SIZE;
+        size_t length = MQTT_MAX_HEADER_SIZE;
         length = writeNextMsgId(length);  // _buffer size is checked before
         length = writeStringImpl(progmem, topic, length);
         return writeControlPacket(MQTTUNSUBSCRIBE | MQTT_QOS_GET_HDR(MQTT_QOS1), length - MQTT_MAX_HEADER_SIZE);
@@ -906,18 +987,25 @@ bool PubSubClient::setBufferSize(size_t size) {
         // Cannot set it back to 0
         return false;
     }
+    uint8_t* newBuffer;
     if (_bufferSize == 0) {
-        _buffer = (uint8_t*)malloc(size);
+        newBuffer = (uint8_t*)malloc(size);
     } else {
-        uint8_t* newBuffer = (uint8_t*)realloc(_buffer, size);
-        if (newBuffer) {
-            _buffer = newBuffer;
-        } else {
-            return false;
-        }
+        // Per the C standard: "If realloc() fails the original block is left untouched;
+        // it is not freed or moved." So _buffer remains valid on failure.
+        newBuffer = (uint8_t*)realloc(_buffer, size);
     }
+    if (!newBuffer) {
+        // Allocation failed: _buffer and _bufferSize are left unchanged, keeping a consistent state.
+        return false;
+    }
+    _buffer = newBuffer;
     _bufferSize = size;
-    return (_buffer != nullptr);
+    // Clamp the write position so it never exceeds the (possibly smaller) new buffer size.
+    if (_bufferWritePos > _bufferSize) {
+        _bufferWritePos = _bufferSize;
+    }
+    return true;
 }
 
 size_t PubSubClient::getBufferSize() {
