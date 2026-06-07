@@ -113,6 +113,7 @@ PubSubClient::~PubSubClient() {
 bool PubSubClient::connect(const char* id, const char* user, const char* pass, const char* willTopic, uint8_t willQos, bool willRetain,
                            const char* willMessage, bool cleanSession) {
     if (!_client) return false;  // do not crash if client not set
+    if (!_buffer) return false;  // do not crash if buffer allocation failed at construction
     if (!connected()) {
         int result = 0;
 
@@ -231,7 +232,7 @@ bool PubSubClient::connected() {
 void PubSubClient::disconnect() {
     DEBUG_PSC_PRINTF("disconnect called\n");
     _state = MQTT_DISCONNECTED;
-    if (_client) {
+    if (_client && _buffer) {  // guard against null buffer if allocation failed at construction
         _buffer[0] = MQTTDISCONNECT;
         _buffer[1] = 0;
         _client->write(_buffer, 2);
@@ -371,14 +372,20 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 // - Payload (for QoS = 0): length - (hdrLen + 3 + topicLen) bytes (starts at _buffer[hdrLen + 3 + topicLen])
                 // - Payload (for QoS > 0): length - (hdrLen + 5 + topicLen) bytes (starts at _buffer[hdrLen + 5 + topicLen])
                 // To get a null reminated 'C' topic string we move the topic 1 byte to the front (overwriting the LSB of the topic lenght)
+                // Guard 1: ensure topic length bytes are readable
+                if ((hdrLen + 2ul >= length) || (hdrLen + 2ul >= _bufferSize)) {
+                    ERROR_PSC_PRINTF_P("handlePacket(): Packet too short to contain topic length field\n");
+                    return false;
+                }
                 uint16_t topicLen = (_buffer[hdrLen + 1] << 8) + _buffer[hdrLen + 2];  // topic length in bytes
                 char* topic = (char*)(_buffer + hdrLen + 3 - 1);                       // set the topic in the LSB of the topic lenght, as we move it there
-                uint16_t payloadOffset = hdrLen + 3 + topicLen;  // payload starts after header and topic (if there is no packet identifier)
+                size_t payloadOffset = hdrLen + 3ul + topicLen;  // payload starts after header and topic (if there is no packet identifier)
                 size_t payloadLen = length - payloadOffset;      // this might change by 2 if we have a QoS 1 or 2 message
                 uint8_t* payload = _buffer + payloadOffset;
 
-                if (length < payloadOffset) {  // do not move outside the max bufferSize
-                    ERROR_PSC_PRINTF_P("handlePacket(): Suspicious topicLen (%u) points outside of received buffer length (%zu)\n", topicLen, length);
+                // Guard 2: ensure topic and payload fit in buffer
+                if ((payloadOffset > _bufferSize) || (payloadOffset > length)) {
+                    ERROR_PSC_PRINTF_P("handlePacket(): Topic extends outside buffer/data\n");
                     return false;
                 }
                 memmove(topic, topic + 1, topicLen);  // move topic inside buffer 1 byte to front
@@ -389,8 +396,9 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                     callback(topic, payload, payloadLen);
                 } else {
                     // For QOS 1 and 2 we have a msgId (packet identifier) after the topic at the current payloadOffset
-                    if (payloadLen < 2) {  // payload must be >= 2, as we have the msgId before
-                        ERROR_PSC_PRINTF_P("handlePacket(): Missing msgId in QoS 1/2 message\n");
+                    // Guard 3: msgId must be addressable
+                    if ((payloadLen < 2) || (payloadOffset + 1 >= _bufferSize)) {
+                        ERROR_PSC_PRINTF_P("handlePacket(): Missing or out-of-bounds msgId in QoS 1/2\n");
                         return false;
                     }
                     uint8_t publishQos = MQTT_HDR_GET_QOS(_buffer[0]);  // save QoS before _buffer[0] is overwritten
@@ -473,6 +481,13 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
 
 bool PubSubClient::loop() {
     if (!connected()) {
+        return false;
+    }
+    // Guard: buffer must exist and be large enough to hold any minimal MQTT packet
+    // (e.g. PINGREQ is 2 bytes, PUBACK/PUBREC responses are 4 bytes).
+    // This prevents readPacket() and handlePacket() from ever running with a null or
+    // undersized buffer. Note: MQTT_MAX_HEADER_SIZE (5) covers the worst-case fixed header.
+    if ((!_buffer) || (_bufferSize < MQTT_MAX_HEADER_SIZE)) {
         return false;
     }
     bool ret = true;
