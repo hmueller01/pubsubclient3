@@ -401,9 +401,8 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                     callback(topic, payload, payloadLen);
                 } else {
                     // For QOS 1 and 2 we have a msgId (packet identifier) after the topic at the current payloadOffset
-                    // Guard 3: msgId must be addressable
-                    if (payloadLen < 2) {
-                        DEBUG_PSC_PRINTF("handlePacket(): Missing or out-of-bounds msgId in QoS 1/2\n");
+                    if (payloadLen < 2) {  // payload must be >= 2, as we have the msgId
+                        DEBUG_PSC_PRINTF("handlePacket(): Missing msgId in QoS 1/2 message\n");
                         return false;
                     }
                     uint8_t publishQos = MQTT_HDR_GET_QOS(_buffer[0]);  // save QoS before _buffer[0] is overwritten
