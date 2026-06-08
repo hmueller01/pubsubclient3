@@ -402,7 +402,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 } else {
                     // For QOS 1 and 2 we have a msgId (packet identifier) after the topic at the current payloadOffset
                     // Guard 3: msgId must be addressable
-                    if ((payloadLen < 2) || (payloadOffset + 2 + payloadLen > length)) {
+                    if (payloadLen < 2) {
                         DEBUG_PSC_PRINTF("handlePacket(): Missing or out-of-bounds msgId in QoS 1/2\n");
                         return false;
                     }
