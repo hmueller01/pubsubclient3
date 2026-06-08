@@ -359,7 +359,12 @@ size_t PubSubClient::readPacket(uint8_t* hdrLen) {
  */
 bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
     uint8_t type = _buffer[0] & 0xF0;
-    DEBUG_PSC_PRINTF("received message of type %u\n", type);
+    DEBUG_PSC_PRINTF("handlePacket(): received message of type %u\n", type);
+    if (length > _bufferSize) {
+        // This should never happen as readPacket() prevents buffer overflow, but we check again here to be sure and prevent any buffer overflows in the handling code.
+        DEBUG_PSC_PRINTF("handlePacket(): packet length %zu exceeds buffer size %zu\n", length, _bufferSize);
+        return false;
+    }
     switch (type) {
         case MQTTPUBLISH:
             if (callback) {
@@ -373,8 +378,8 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 // - Payload (for QoS > 0): length - (hdrLen + 5 + topicLen) bytes (starts at _buffer[hdrLen + 5 + topicLen])
                 // To get a null reminated 'C' topic string we move the topic 1 byte to the front (overwriting the LSB of the topic lenght)
                 // Guard 1: ensure topic length bytes are readable
-                if ((hdrLen + 2ul >= length) || (hdrLen + 2ul >= _bufferSize)) {
-                    ERROR_PSC_PRINTF_P("handlePacket(): Packet too short to contain topic length field\n");
+                if (hdrLen + 3ul > length) {
+                    DEBUG_PSC_PRINTF("handlePacket(): Packet too short to contain topic length field\n");
                     return false;
                 }
                 uint16_t topicLen = (_buffer[hdrLen + 1] << 8) + _buffer[hdrLen + 2];  // topic length in bytes
@@ -384,8 +389,8 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 uint8_t* payload = _buffer + payloadOffset;
 
                 // Guard 2: ensure topic and payload fit in buffer
-                if ((payloadOffset > _bufferSize) || (payloadOffset > length)) {
-                    ERROR_PSC_PRINTF_P("handlePacket(): Topic extends outside buffer/data\n");
+                if (payloadOffset + payloadLen > length) {
+                    DEBUG_PSC_PRINTF("handlePacket(): Topic and payload extend outside buffer\n");
                     return false;
                 }
                 memmove(topic, topic + 1, topicLen);  // move topic inside buffer 1 byte to front
@@ -397,8 +402,8 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 } else {
                     // For QOS 1 and 2 we have a msgId (packet identifier) after the topic at the current payloadOffset
                     // Guard 3: msgId must be addressable
-                    if ((payloadLen < 2) || (payloadOffset + 1 >= _bufferSize)) {
-                        ERROR_PSC_PRINTF_P("handlePacket(): Missing or out-of-bounds msgId in QoS 1/2\n");
+                    if ((payloadLen < 2) || (payloadOffset + 2 + payloadLen > length)) {
+                        DEBUG_PSC_PRINTF("handlePacket(): Missing or out-of-bounds msgId in QoS 1/2\n");
                         return false;
                     }
                     uint8_t publishQos = MQTT_HDR_GET_QOS(_buffer[0]);  // save QoS before _buffer[0] is overwritten
