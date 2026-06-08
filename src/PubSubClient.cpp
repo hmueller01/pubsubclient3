@@ -361,7 +361,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
     uint8_t type = _buffer[0] & 0xF0;
     DEBUG_PSC_PRINTF("handlePacket(): received message of type %u\n", type);
     if (length > _bufferSize) {
-        // This should never happen as readPacket() prevents buffer overflow, but we check again here to be sure and prevent any buffer overflows in the handling code.
+        // This should never happen as readPacket() prevents buffer overflow, but we check again here to be sure and prevent any buffer overflows.
         DEBUG_PSC_PRINTF("handlePacket(): packet length %zu exceeds buffer size %zu\n", length, _bufferSize);
         return false;
     }
