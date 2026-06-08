@@ -401,7 +401,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                     callback(topic, payload, payloadLen);
                 } else {
                     // For QOS 1 and 2 we have a msgId (packet identifier) after the topic at the current payloadOffset
-                    if (payloadLen < 2) {  // payload must be >= 2, as we have the msgId
+                    if (payloadLen < 2) {  // payload must be >= 2, as we have the msgId before the actual payload
                         DEBUG_PSC_PRINTF("handlePacket(): Missing msgId in QoS 1/2 message\n");
                         return false;
                     }
