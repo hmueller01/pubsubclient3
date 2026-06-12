@@ -388,9 +388,9 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 size_t payloadLen = length - payloadOffset;      // this might change by 2 if we have a QoS 1 or 2 message
                 uint8_t* payload = _buffer + payloadOffset;
 
-                // Guard 2: ensure topic and payload fit in buffer
-                if (payloadOffset + payloadLen > length) {
-                    DEBUG_PSC_PRINTF("handlePacket(): Topic and payload extend outside buffer\n");
+                // Guard 2: ensure topic fits in buffer
+                if (length < payloadOffset) {
+                    ERROR_PSC_PRINTF_P("handlePacket(): Suspicious topicLen (%u) points outside of received buffer length (%zu)\n", topicLen, length);
                     return false;
                 }
                 memmove(topic, topic + 1, topicLen);  // move topic inside buffer 1 byte to front
@@ -484,16 +484,9 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
 }
 
 bool PubSubClient::loop() {
-    if (!connected()) {
-        return false;
-    }
-    // Guard: buffer must exist and be large enough to hold any minimal MQTT packet
-    // (e.g. PINGREQ is 2 bytes, PUBACK/PUBREC responses are 4 bytes).
-    // This prevents readPacket() and handlePacket() from ever running with a null or
-    // undersized buffer. Note: MQTT_MAX_HEADER_SIZE (5) covers the worst-case fixed header.
-    if ((!_buffer) || (_bufferSize < MQTT_MAX_HEADER_SIZE)) {
-        return false;
-    }
+    if (!connected()) return false;
+    if (!_buffer) return false;  // do not crash if buffer allocation failed at construction
+
     bool ret = true;
     const unsigned long t = millis();
     if (_keepAliveMillis && ((t - _lastInActivity > _keepAliveMillis) || (t - _lastOutActivity > _keepAliveMillis))) {
@@ -921,8 +914,9 @@ PubSubClient& PubSubClient::setStream(Stream& stream) {
 }
 
 bool PubSubClient::setBufferSize(size_t size) {
-    if (size == 0) {
-        // Cannot set it back to 0
+    // Buffer must be large enough to hold at least a minimal MQTT packet.
+    // Note: MQTT_MAX_HEADER_SIZE (5) + protocol (9) + flags (1) + keepalive (2) covers a minmal CONNECT message.
+    if (size < MQTT_MAX_HEADER_SIZE + 9 + 1 + 2) {
         return false;
     }
     if (_bufferSize == 0) {
