@@ -217,6 +217,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
 
 bool PubSubClient::connected() {
     if (!_client) return false;
+    if (!_buffer) return false;  // we can't be connected if we don't have a buffer to read into
 
     if (_client->connected()) {
         return (_state == MQTT_CONNECTED);
@@ -485,7 +486,6 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
 
 bool PubSubClient::loop() {
     if (!connected()) return false;
-    if (!_buffer) return false;  // do not crash if buffer allocation failed at construction
 
     bool ret = true;
     const unsigned long t = millis();
@@ -915,8 +915,13 @@ PubSubClient& PubSubClient::setStream(Stream& stream) {
 
 bool PubSubClient::setBufferSize(size_t size) {
     // Buffer must be large enough to hold at least a minimal MQTT packet.
-    // Note: MQTT_MAX_HEADER_SIZE (5) + protocol (9) + flags (1) + keepalive (2) covers a minmal CONNECT message.
-    if (size < MQTT_MAX_HEADER_SIZE + 9 + 1 + 2) {
+    if (size < MQTT_MIN_BUFFER_SIZE) {
+        if (_state == MQTT_DISCONNECTED && size == 0) {
+            free(_buffer);
+            _buffer = nullptr;
+            _bufferSize = 0;
+            return true;
+        }
         return false;
     }
     if (_bufferSize == 0) {
