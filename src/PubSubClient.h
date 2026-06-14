@@ -128,8 +128,12 @@
 /// \endcond
 /** @} */
 
-/// \cond Maximum size of fixed header and variable length size header
+/// \cond
+// Maximum size of fixed header and variable length size header
 #define MQTT_MAX_HEADER_SIZE 5
+// Minimal buffer size that can be handled, used to check if the buffer size is sufficient in setBufferSize().
+// MQTT_MAX_HEADER_SIZE (5) + protocol (9) + flags (1) + keepalive (2) covers a minmal CONNECT message
+#define MQTT_MIN_BUFFER_SIZE (MQTT_MAX_HEADER_SIZE + 9 + 1 + 2)
 /// \endcond
 
 /// \anchor callback
