@@ -376,7 +376,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 // - Packet Identifier (msgId): 0 bytes for QoS 0, 2 bytes for QoS 1 and 2 (starts at _buffer[hdrLen + 3 + topicLen])
                 // - Payload (for QoS = 0): length - (hdrLen + 3 + topicLen) bytes (starts at _buffer[hdrLen + 3 + topicLen])
                 // - Payload (for QoS > 0): length - (hdrLen + 5 + topicLen) bytes (starts at _buffer[hdrLen + 5 + topicLen])
-                // To get a null reminated 'C' topic string we move the topic 1 byte to the front (overwriting the LSB of the topic lenght)
+                // To get a null terminated 'C' topic string we move the topic 1 byte to the front (overwriting the LSB of the topic lenght)
                 // Guard 1: ensure topic length bytes are readable
                 if (hdrLen + 3ul > length) {
                     DEBUG_PSC_PRINTF("handlePacket(): Packet too short to contain topic length field\n");
