@@ -386,7 +386,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 const uint16_t topicLen = (_buffer[hdrLen + 1] << 8) + _buffer[hdrLen + 2];  // topic length in bytes
                 char* const topic = (char*)(_buffer + hdrLen + 3 - 1);  // set the topic in the LSB of the topic lenght, as we move it there
                 const uint16_t payloadOffset = hdrLen + 3 + topicLen;   // payload starts after header and topic (if there is no packet identifier)
-                const size_t payloadLen = length - payloadOffset;       // this might change by 2 if we have a QoS 1 or 2 message
+                const size_t payloadLen = length - payloadOffset;
                 uint8_t* const payload = _buffer + payloadOffset;
 
                 // Guard 2: ensure topic fits in buffer
