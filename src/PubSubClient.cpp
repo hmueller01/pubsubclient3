@@ -916,6 +916,7 @@ PubSubClient& PubSubClient::setStream(Stream& stream) {
 bool PubSubClient::setBufferSize(size_t size) {
     // Buffer must be large enough to hold at least a minimal MQTT packet.
     if (size < MQTT_MIN_BUFFER_SIZE) {
+        // to save memory, allow to free the buffer if the client is disconnected and the size is set to 0
         if (_state == MQTT_DISCONNECTED && size == 0) {
             free(_buffer);
             _buffer = nullptr;
