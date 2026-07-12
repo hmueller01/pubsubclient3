@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
 
     - name: Install deps
       # need Ubuntu clang-format version 19.1.1 (1ubuntu1~24.04.2)
