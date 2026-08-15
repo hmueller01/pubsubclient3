@@ -921,22 +921,15 @@ bool PubSubClient::setBufferSize(size_t size) {
             free(_buffer);
             _buffer = nullptr;
             _bufferSize = 0;
-            return true;
         }
-        return false;
-    }
-    if (_bufferSize == 0) {
-        _buffer = (uint8_t*)malloc(size);
     } else {
         uint8_t* newBuffer = (uint8_t*)realloc(_buffer, size);
         if (newBuffer) {
             _buffer = newBuffer;
-        } else {
-            return false;
+            _bufferSize = size;
         }
     }
-    _bufferSize = size;
-    return (_buffer != nullptr);
+    return (_bufferSize == size);
 }
 
 size_t PubSubClient::getBufferSize() {
