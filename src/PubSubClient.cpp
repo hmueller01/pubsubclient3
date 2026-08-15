@@ -384,8 +384,8 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                     return false;
                 }
                 const uint16_t topicLen = (_buffer[hdrLen + 1] << 8) + _buffer[hdrLen + 2];  // topic length in bytes
-                char* const topic = (char*)(_buffer + hdrLen + 3 - 1);  // set the topic in the LSB of the topic lenght, as we move it there
-                const uint16_t payloadOffset = hdrLen + 3 + topicLen;   // payload starts after header and topic (if there is no packet identifier)
+                char* topic = (char*)(_buffer + hdrLen + 3 - 1);       // set the topic in the LSB of the topic lenght, as we move it there later
+                const uint16_t payloadOffset = hdrLen + 3 + topicLen;  // payload starts after header and topic (if there is no packet identifier)
                 const size_t payloadLen = length - payloadOffset;
                 uint8_t* const payload = _buffer + payloadOffset;
 
@@ -394,8 +394,8 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                     ERROR_PSC_PRINTF_P("handlePacket(): Suspicious topicLen (%u) points outside of received buffer length (%zu)\n", topicLen, length);
                     return false;
                 }
-                memmove(topic, topic + 1, topicLen);  // move topic inside buffer 1 byte to front
-                topic[topicLen] = '\0';               // end the topic as a 'C' string with \x00
+                memmove(topic, topic + 1, topicLen);  // move topic inside buffer 1 byte to front to get space for null termination
+                topic[topicLen] = '\0';               // end the topic as a 'C' string with null termination
 
                 if (MQTT_HDR_GET_QOS(_buffer[0]) == MQTT_QOS0) {
                     // No msgId for QOS == 0
