@@ -3,7 +3,7 @@
  * @brief A simple client for MQTT.
  * @author Nicholas O'Leary - http://knolleary.net
  * @author Holger Mueller - https://github.com/hmueller01/pubsubclient3
- * @copyright MIT License 2008-2025
+ * @copyright MIT License 2008-2026
  *
  * This file is part of the PubSubClient library.
  */
@@ -914,17 +914,16 @@ PubSubClient& PubSubClient::setStream(Stream& stream) {
 }
 
 bool PubSubClient::setBufferSize(size_t size) {
-    if (_bufferSize == size) return true;  // if size is unchanged, do nothing and return true
-    // Buffer must be large enough to hold at least a minimal MQTT packet.
-    if (size < MQTT_MIN_BUFFER_SIZE) {
-        // to save memory, allow to free the buffer if the client is disconnected and the size is set to 0
-        if (_state == MQTT_DISCONNECTED && size == 0) {
-            free(_buffer);
-            _buffer = nullptr;
-            _bufferSize = 0;
-        }
-    } else {
-        uint8_t* newBuffer = (uint8_t*)realloc(_buffer, size);  // realloc() is nullptr safe, so it will allocate a new buffer in this case
+    if (_bufferSize == size) return true;           // if size is unchanged, do nothing and return true
+    if (_state != MQTT_DISCONNECTED) return false;  // only allow to change the buffer size if the client is disconnected
+    if (size == 0) {
+        // allow to free the buffer if the size is set to 0
+        free(_buffer);
+        _buffer = nullptr;
+        _bufferSize = 0;
+    } else if (size >= MQTT_MIN_BUFFER_SIZE) {
+        // buffer must be large enough to hold at least a minimal MQTT packet
+        uint8_t* newBuffer = (uint8_t*)realloc(_buffer, size);  // realloc() is nullptr safe, so it will allocate a new buffer in this case‚
         if (newBuffer) {
             _buffer = newBuffer;
             _bufferSize = size;
