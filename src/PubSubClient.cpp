@@ -914,6 +914,7 @@ PubSubClient& PubSubClient::setStream(Stream& stream) {
 }
 
 bool PubSubClient::setBufferSize(size_t size) {
+    if (_bufferSize == size) return true;  // if size is unchanged, do nothing and return true
     // Buffer must be large enough to hold at least a minimal MQTT packet.
     if (size < MQTT_MIN_BUFFER_SIZE) {
         // to save memory, allow to free the buffer if the client is disconnected and the size is set to 0
@@ -923,7 +924,7 @@ bool PubSubClient::setBufferSize(size_t size) {
             _bufferSize = 0;
         }
     } else {
-        uint8_t* newBuffer = (uint8_t*)realloc(_buffer, size);
+        uint8_t* newBuffer = (uint8_t*)realloc(_buffer, size);  // realloc() is nullptr safe, so it will allocate a new buffer in this case
         if (newBuffer) {
             _buffer = newBuffer;
             _bufferSize = size;
