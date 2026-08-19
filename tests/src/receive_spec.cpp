@@ -223,7 +223,7 @@ int test_resize_buffer1() {
 
     // test to resize the buffer before connecting
     IS_TRUE(client.setBufferSize(MQTT_MIN_BUFFER_SIZE));
-    IS_TRUE(client.setBufferSize(0));  // test to free the buffer
+    IS_TRUE(client.setBufferSize(0));   // test to free the buffer
     IS_FALSE(client.setBufferSize(1));  // test to set the buffer size below the minimum
     IS_TRUE(client.setBufferSize(PUBLISH_LEN - 1));
 
