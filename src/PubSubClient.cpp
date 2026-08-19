@@ -914,13 +914,16 @@ PubSubClient& PubSubClient::setStream(Stream& stream) {
 }
 
 bool PubSubClient::setBufferSize(size_t size) {
-    if (_bufferSize == size) return true;           // if size is unchanged, do nothing and return true
-    if (_state != MQTT_DISCONNECTED) return false;  // only allow to change the buffer size if the client is disconnected
+    if (_bufferSize == size) return true;  // if size is unchanged, do nothing and return true
+    // TODO: Adding a check for MQTT_CONNECTED would break the current setBufferSize() behavior. Implement with PubSubClient3 V4.
+    // if (_state == MQTT_CONNECTED) return false;  // only allow to change the buffer size if the client is not connected
     if (size == 0) {
         // allow to free the buffer if the size is set to 0
-        free(_buffer);
-        _buffer = nullptr;
-        _bufferSize = 0;
+        if (_state != MQTT_CONNECTED) {  // only if disconnected, otherwise we would free the buffer while it is still in use
+            free(_buffer);
+            _buffer = nullptr;
+            _bufferSize = 0;
+        }
     } else if (size >= MQTT_MIN_BUFFER_SIZE) {
         // buffer must be large enough to hold at least a minimal MQTT packet
         uint8_t* newBuffer = (uint8_t*)realloc(_buffer, size);  // realloc() is nullptr safe, so it will allocate a new buffer in this case‚
