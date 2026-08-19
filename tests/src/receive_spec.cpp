@@ -229,9 +229,10 @@ int test_resize_buffer1() {
 
     IS_TRUE(client.connect("client_test1"));
 
-    // TODO: Resize the buffer after connecting should fail (if the buffer size is changed)
+    // Setting the same buffer size again should always succeed
     IS_TRUE(client.setBufferSize(PUBLISH_LEN - 1));
-    // IS_FALSE(client.setBufferSize(PUBLISH_LEN));
+    // Resize the buffer after connecting should fail (if the buffer size is changed)
+    // IS_FALSE(client.setBufferSize(PUBLISH_LEN));  // TODO: Not yet implemented in PubSubClient3 V3. Implement with PubSubClient3 V4.
 
     IS_FALSE(shimClient.error());
 
