@@ -3,7 +3,7 @@
  * @brief A simple client for MQTT.
  * @author Nicholas O'Leary - http://knolleary.net
  * @author Holger Mueller - https://github.com/hmueller01/pubsubclient3
- * @copyright MIT License 2008-2025
+ * @copyright MIT License 2008-2026
  *
  * This file is part of the PubSubClient library.
  */
@@ -914,29 +914,25 @@ PubSubClient& PubSubClient::setStream(Stream& stream) {
 }
 
 bool PubSubClient::setBufferSize(size_t size) {
-    // Buffer must be large enough to hold at least a minimal MQTT packet.
-    if (size < MQTT_MIN_BUFFER_SIZE) {
-        // to save memory, allow to free the buffer if the client is disconnected and the size is set to 0
-        if (_state == MQTT_DISCONNECTED && size == 0) {
+    if (_bufferSize == size) return true;  // if size is unchanged, do nothing and return true
+    // TODO: Adding a check for MQTT_CONNECTED would break the current setBufferSize() behavior. Implement with PubSubClient3 V4.
+    // if (_state == MQTT_CONNECTED) return false;  // only allow to change the buffer size if the client is not connected
+    if (size == 0) {
+        // allow to free the buffer if the size is set to 0
+        if (_state != MQTT_CONNECTED) {  // only if disconnected, otherwise we would free the buffer while it is still in use
             free(_buffer);
             _buffer = nullptr;
             _bufferSize = 0;
-            return true;
         }
-        return false;
-    }
-    if (_bufferSize == 0) {
-        _buffer = (uint8_t*)malloc(size);
-    } else {
-        uint8_t* newBuffer = (uint8_t*)realloc(_buffer, size);
+    } else if (size >= MQTT_MIN_BUFFER_SIZE) {
+        // buffer must be large enough to hold at least a minimal MQTT packet
+        uint8_t* newBuffer = (uint8_t*)realloc(_buffer, size);  // realloc() is nullptr safe, so it will allocate a new buffer in this case‚
         if (newBuffer) {
             _buffer = newBuffer;
-        } else {
-            return false;
+            _bufferSize = size;
         }
     }
-    _bufferSize = size;
-    return (_buffer != nullptr);
+    return (_bufferSize == size);
 }
 
 size_t PubSubClient::getBufferSize() {

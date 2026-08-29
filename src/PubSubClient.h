@@ -3,7 +3,7 @@
  * @brief A simple client for MQTT.
  * @author Nicholas O'Leary - http://knolleary.net
  * @author Holger Mueller - https://github.com/hmueller01/pubsubclient3
- * @copyright MIT License 2008-2025
+ * @copyright MIT License 2008-2026
  *
  * This file is part of the PubSubClient library.
  */
@@ -420,6 +420,12 @@ class PubSubClient : public Print {
      * @param size The size, in bytes, for the internal buffer.
      * @return true If the buffer was resized.
      * false If the buffer could not be resized.
+     * @note Changing the buffer size while the client is still connected may result in undefined behavior. It is recommended to change the buffer size
+     * only when the client is disconnected.
+     * @note The buffer size must be at least #MQTT_MIN_BUFFER_SIZE bytes. Otherwise this function will return false and the buffer size will remain
+     * unchanged.
+     * @note In case MQTT is not needed and to save memory, the buffer can be freed by setting the size to 0.
+     * @note If not explicitly set/called, the buffer size will default to #MQTT_MAX_PACKET_SIZE bytes.
      */
     bool setBufferSize(size_t size);
 
