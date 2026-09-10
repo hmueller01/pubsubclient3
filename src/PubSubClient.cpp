@@ -184,7 +184,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
             _pingOutstanding = false;
 
             while (!_client->available()) {
-                yield();
+                delay(1);
                 unsigned long t = millis();
                 if (t - _lastInActivity >= _socketTimeoutMillis) {
                     DEBUG_PSC_PRINTF("connect aborting due to timeout\n");
@@ -255,7 +255,7 @@ bool PubSubClient::readByte(uint8_t* result) {
 
     unsigned long previousMillis = millis();
     while (!_client->available()) {
-        yield();
+        delay(1);
         unsigned long currentMillis = millis();
         if (currentMillis - previousMillis >= _socketTimeoutMillis) {
             return false;
