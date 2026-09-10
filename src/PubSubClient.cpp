@@ -11,6 +11,23 @@
 #include "PubSubClient.h"
 
 /**
+ * @brief Give other tasks a chance to run while waiting for data.
+ *
+ * On FreeRTOS a yield only reschedules a task of equal or higher priority, which is
+ * what a real time scheduler has to promise. A task spinning in a wait loop therefore
+ * never lets the idle task run, and a watchdog fed from that idle task fires. Blocking
+ * for a single tick is what actually hands the CPU over.
+ *
+ * vTaskDelay(1) rather than delay(1): the intent is one tick, and delay(ms) maps to
+ * vTaskDelay(ms / portTICK_PERIOD_MS), which rounds down to zero below a 1 kHz tick.
+ */
+#if defined(ARDUINO_ARCH_ESP32) || defined(ESP32)
+#define PUBSUB_WAIT_YIELD() vTaskDelay(1)
+#else
+#define PUBSUB_WAIT_YIELD() yield()
+#endif
+
+/**
  * @brief Macro to check if a string 's' can be safely added to the MQTT _buffer.
  *
  * If either check fails, the client connection is stopped and the function returns false.
@@ -184,7 +201,7 @@ bool PubSubClient::connect(const char* id, const char* user, const char* pass, c
             _pingOutstanding = false;
 
             while (!_client->available()) {
-                delay(1);
+                PUBSUB_WAIT_YIELD();
                 unsigned long t = millis();
                 if (t - _lastInActivity >= _socketTimeoutMillis) {
                     DEBUG_PSC_PRINTF("connect aborting due to timeout\n");
@@ -255,7 +272,7 @@ bool PubSubClient::readByte(uint8_t* result) {
 
     unsigned long previousMillis = millis();
     while (!_client->available()) {
-        delay(1);
+        PUBSUB_WAIT_YIELD();
         unsigned long currentMillis = millis();
         if (currentMillis - previousMillis >= _socketTimeoutMillis) {
             return false;
