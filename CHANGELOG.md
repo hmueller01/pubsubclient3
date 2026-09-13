@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
-## [3.3.1] - 2026-09-12
+## [3.3.1] - 2026-09-13
 
 Thanks to @MarcAntoineCRUE and @irrwisch1 for the contribution and inputs of this release.
 
@@ -15,6 +15,8 @@ Thanks to @MarcAntoineCRUE and @irrwisch1 for the contribution and inputs of thi
 
 * Add comprehensive buffer safety checks to prevent out-of-bounds memory access
 * Fixed client-side handling of QoS 1 and QoS 2 messages with proper handling of PUBACK, PUBREC, PUBREL, and PUBCOMP sequences
+* Prevent possible bug in setBufferSize()
+* Various compiler type improvements
 * Replace yield with delay on ESP32/FreeRTOS based environments
 
 ### Changed
