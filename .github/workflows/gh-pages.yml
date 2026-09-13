@@ -1,11 +1,11 @@
 # This workflow generates Doxygen API documentation and deploys it to GitHub Pages.
 # I didn't manage to build a Jekyll site and deploy the content to GitHub Pages.
 # So now I use a static index.html file in the gh-pages branch.
-# It runs on pushes to the master branch and can also be triggered manually.
+# It runs on pushes to the release branch and can also be triggered manually.
 name: Generate Doxygen API and deploy content to GitHub Pages
 
 on:
-  # Runs on pushes targeting the default branch
+  # Runs on pushes targeting the release branch
   push:
     branches: ["release"]
 
@@ -28,6 +28,8 @@ jobs:
   # Single deploy job since we're just deploying
   deploy:
     if: github.repository == 'hmueller01/pubsubclient3'
+    # The github-pages environment must allow the release branch in its
+    # deployment branch policy (Repository Settings > Environments).
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
