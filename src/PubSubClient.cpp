@@ -401,7 +401,7 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                     return false;
                 }
                 const uint16_t topicLen = (_buffer[hdrLen + 1] << 8) + _buffer[hdrLen + 2];  // topic length in bytes
-                char* topic = (char*)(_buffer + hdrLen + 3 - 1);       // set the topic in the LSB of the topic lenght, as we move it there later
+                char* topic = (char*)(_buffer + hdrLen + 3 - 1);  // set the topic in the LSB of the topic lenght, as we move it there later
                 // Use size_t here: hdrLen + 3 + topicLen can reach 65539, which
                 // wraps a uint16_t (e.g. topicLen = 0xFFFF wraps to 3), silently
                 // defeating Guard 2 below and letting an attacker-chosen topicLen
@@ -855,7 +855,7 @@ bool PubSubClient::subscribeImpl(bool progmem, const char* topic, uint8_t qos) {
     }
     if (connected()) {
         // Leave room in the _buffer for header and variable length field
-        uint16_t length = MQTT_MAX_HEADER_SIZE;
+        size_t length = MQTT_MAX_HEADER_SIZE;
         length = writeNextMsgId(length);  // _buffer size is checked before
         length = writeStringImpl(progmem, topic, length);
         _buffer[length++] = qos;
@@ -881,7 +881,7 @@ bool PubSubClient::unsubscribeImpl(bool progmem, const char* topic) {
         return false;
     }
     if (connected()) {
-        uint16_t length = MQTT_MAX_HEADER_SIZE;
+        size_t length = MQTT_MAX_HEADER_SIZE;
         length = writeNextMsgId(length);  // _buffer size is checked before
         length = writeStringImpl(progmem, topic, length);
         return writeControlPacket(MQTTUNSUBSCRIBE | MQTT_QOS_GET_HDR(MQTT_QOS1), length - MQTT_MAX_HEADER_SIZE);
