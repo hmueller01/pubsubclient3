@@ -402,7 +402,11 @@ bool PubSubClient::handlePacket(uint8_t hdrLen, size_t length) {
                 }
                 const uint16_t topicLen = (_buffer[hdrLen + 1] << 8) + _buffer[hdrLen + 2];  // topic length in bytes
                 char* topic = (char*)(_buffer + hdrLen + 3 - 1);       // set the topic in the LSB of the topic lenght, as we move it there later
-                const uint16_t payloadOffset = hdrLen + 3 + topicLen;  // payload starts after header and topic (if there is no packet identifier)
+                // Use size_t here: hdrLen + 3 + topicLen can reach 65539, which
+                // wraps a uint16_t (e.g. topicLen = 0xFFFF wraps to 3), silently
+                // defeating Guard 2 below and letting an attacker-chosen topicLen
+                // reach the memmove/write further down.
+                const size_t payloadOffset = (size_t)hdrLen + 3 + topicLen;  // payload starts after header and topic (if there is no packet identifier)
                 const size_t payloadLen = length - payloadOffset;
                 uint8_t* const payload = _buffer + payloadOffset;
 
