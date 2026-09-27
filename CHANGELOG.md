@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [3.3.2] - 2026-09-27
+
+### Fixed
+
+* Prevent `uint16_t payloadOffset` truncation regression in `handlePacket()` and `uint16_t length` in `subscribeImpl()`/`unsubscribeImpl()` by @router0mail in [#104](https://github.com/hmueller01/pubsubclient3/pull/104)
+
 ## [3.3.1] - 2026-09-13
 
 Thanks to @MarcAntoineCRUE and @irrwisch1 for the contribution and inputs of this release.
