@@ -38,13 +38,13 @@ Full API documentation is available here: https://hmueller01.github.io/pubsubcli
   the publish QoS. Consider that MQTT runs over TCP, so retransmission isn't really required in most cases, especially when publishing to the broker.
 - It can subscribe at QoS 0 or QoS 1.
 - The maximum message size, including header, is __256 bytes__ by default. This
-  is configurable via `MQTT_MAX_PACKET_SIZE` define (see [PubSubClient.h](https://github.com/search?q=repo%3Ahmueller01/pubsubclient3%20path%3APubSubClient.h%20MQTT_MAX_PACKET_SIZE&type=code)) or can be changed
+  is configurable via `MQTT_MAX_PACKET_SIZE` define (see [PubSubClient.h](https://github.com/search?q=repo%3Ahmueller01/pubsubclient3%20path%3Asrc/PubSubClient.h%20MQTT_MAX_PACKET_SIZE&type=code)) or can be changed
   by calling `PubSubClient::setBufferSize(size)`.
 - The keepalive interval is set to 15 seconds by default. This is configurable
-  via `MQTT_KEEPALIVE` define (see [PubSubClient.h](https://github.com/search?q=repo%3Ahmueller01/pubsubclient3%20path%3APubSubClient.h%20MQTT_KEEPALIVE&type=code)) or can be changed by calling
+  via `MQTT_KEEPALIVE` define (see [PubSubClient.h](https://github.com/search?q=repo%3Ahmueller01/pubsubclient3%20path%3Asrc/PubSubClient.h%20MQTT_KEEPALIVE&type=code)) or can be changed by calling
   `PubSubClient::setKeepAlive(keepAlive)`.
 - The client uses MQTT 3.1.1 by default. It can be changed to use MQTT 3.1 by
-  changing value of `MQTT_VERSION` define (see [PubSubClient.h](https://github.com/search?q=repo%3Ahmueller01/pubsubclient3%20path%3APubSubClient.h%20MQTT_VERSION&type=code)).
+  changing value of `MQTT_VERSION` define (see [PubSubClient.h](https://github.com/search?q=repo%3Ahmueller01/pubsubclient3%20path%3Asrc/PubSubClient.h%20MQTT_VERSION&type=code)).
 - Since [v3.3.0](https://github.com/hmueller01/pubsubclient3/releases/tag/v3.3.0) it can publish and subscribe to `PROGMEM` or `__FlashStringHelper` topics.
   Details see [mqtt_progmem](https://github.com/hmueller01/pubsubclient3/blob/aae84e4d1aa65e752e19e30239b5796b4fe2705b/examples/mqtt_progmem/src/mqtt_progmem.cpp#L39-L48) example.
   If you like to publish `PROGMEM` topics you can't use `PubSubClient::publish_P(...)`, instead you have to use
