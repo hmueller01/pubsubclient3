@@ -15,7 +15,7 @@ I evaluated several other MQTT libraries, but none met my requirements for both 
 - https://github.com/arduino-libraries/ArduinoMqttClient
 - https://github.com/thingsboard/pubsubclient
 
-With no suitable alternative, I decided to manually merge the most important PR changes and release them as a new major version. I renamed the library __PubSubClient3__ to distinguish from the original while keeping a similar name.
+With no suitable alternative, I decided to manually merge the most important PR changes and release them as a new major version. I renamed the library <abbr title="still using the PubSubClient namespace, no code change required">PubSubClient3</abbr> to distinguish from the original while keeping a similar name.
 
 Contributions are welcome.
 
